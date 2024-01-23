@@ -1,0 +1,16 @@
+package com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "contract_max_power_constraint", indexes = {@Index(name = "idx_contract_max_power_constraint_revision_id", columnList = "revision_id")})
+public class ContractMaxPowerConstraint extends ContractConstraint {
+
+    @ManyToOne
+    @JoinColumn(name = "revision_id")
+    private ContractRevision contractRevision;
+}

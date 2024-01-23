@@ -1,0 +1,42 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: "process"
+      bindings:
+        process-in-0:
+          destination: pv-postprocessor-taskData
+        process-in-1:
+          destination: pv-optimizer-result
+        process-out-0:
+          destination: pv-backend-result
+      kafka:
+        streams:
+          binder:
+            applicationId: result-postprocessor
+            brokers: broker:29092
+            configuration:
+              specific.avro.reader: true
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+              schema.registry.url: http://schema-registry:8081
+          bindings:
+            process-in-0:
+              consumer:
+                configuration:
+                  keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+                  configuration:
+                    specific.avro.reader: true
+            process-in-1:
+              consumer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+                configuration:
+                  specific.avro.reader: true
+            process-out-0:
+              producer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+                configuration:
+                  specific.avro.reader: true

@@ -1,0 +1,43 @@
+optimizer:
+  maxAllowedTimeOut: 600
+  numericalZero: 1e-11
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/pvoptimizer
+    username: pvoptimizer
+    password: pvoptimizer
+  jpa:
+    properties:
+      hibernate:
+        default_schema: backend
+
+  kafka:
+    consumer:
+      groupId: pvoptimizer-backend
+      validationTopic: pv-preprocessor-validation
+      resultTopic: pv-backend-result
+      backoff:
+        interval: 10000
+        maxAttempts: 5
+      bootstrapServers: broker:29092
+      properties:
+        schema.registry.url: http://schema-registry:8081
+    producer:
+      topic: pv-backend-task
+      bootstrap-servers: broker:29092
+      properties:
+        schema.registry.url: http://schema-registry:8081
+
+  flyway:
+    schemas: backend
+
+server:
+  port: 0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://eurekaserver:8761/eureka}
+  instance:
+    instanceId: ${spring.application.name}:${random.value}

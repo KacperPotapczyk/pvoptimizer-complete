@@ -1,0 +1,11 @@
+{
+  "id":3,
+  "optimizationStatus":"SOLUTION_NOT_FOUND",
+  "objectiveFunctionValue":0,
+  "relativeGap":0,
+  "elapsedTime":0,
+  "errorMessage":"Solution could not be found.",
+  "contractResults":[],
+  "storageResults":[],
+  "movableDemandResults":[]
+}

@@ -1,0 +1,79 @@
+{
+  "id": 5,
+  "dateTimeStart": "2023-01-01T10:00",
+  "dateTimeEnd": "2023-01-01T10:30",
+  "contracts": [
+    {
+      "id": 1,
+      "name": "contract1",
+      "revisionNumber": 1,
+      "contractType": "PURCHASE",
+      "tariffName": "tariff1",
+      "minPowerConstraints": [],
+      "maxPowerConstraints": [],
+      "minEnergyConstraints": [],
+      "maxEnergyConstraints": []
+    },
+    {
+      "id": 1,
+      "name": "contract2",
+      "revisionNumber": 2,
+      "contractType": "SELL",
+      "tariffName": "tariff2",
+      "minPowerConstraints": [],
+      "maxPowerConstraints": [],
+      "minEnergyConstraints": [],
+      "maxEnergyConstraints": []
+    }
+  ],
+  "demands": [
+    {
+      "id": 4,
+      "name": "duplicate1",
+      "revisionNumber": 1,
+      "demandValues": [
+        {
+          "value": 10,
+          "dateTime": "2023-01-01T10:00:00"
+        },
+        {
+          "value": 20,
+          "dateTime": "2023-01-01T10:15:00"
+        },
+        {
+          "value": 30,
+          "dateTime": "2023-01-01T10:25:00"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "duplicate2",
+      "revisionNumber": 1,
+      "demandValues": [
+        {
+          "value": 5,
+          "dateTime": "2023-01-01T10:20:00"
+        },
+        {
+          "value": 10,
+          "dateTime": "2023-01-01T10:30:00"
+        }
+      ]
+    }
+  ],
+  "tariffs": [
+    {
+      "id": 2,
+      "name": "tariff1",
+      "revisionNumber": 1,
+      "defaultPrice": 0.05
+    },
+    {
+      "id": 2,
+      "name": "tariff2",
+      "revisionNumber": 2,
+      "defaultPrice": 0.15
+    }
+  ]
+}

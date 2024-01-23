@@ -1,0 +1,15 @@
+spring:
+  kafka:
+    consumer:
+      groupId: pvoptimizer-preprocessor
+      topic: pv-backend-task
+      bootstrapServers: broker:29092
+      properties:
+        schema.registry.url: http://schema-registry:8081
+    producer:
+      taskTopic: pv-optimizer-task
+      postprocessorTopic: pv-postprocessor-taskData
+      validationTopic: pv-preprocessor-validation
+      bootstrapServers: broker:29092
+      properties:
+        schema.registry.url: http://schema-registry:8081

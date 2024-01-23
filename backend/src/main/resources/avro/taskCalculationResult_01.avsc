@@ -1,0 +1,114 @@
+{
+  "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result",
+  "type": "record",
+  "name": "TaskCalculationResultDto",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "doc": "Task identifier"
+    },
+    {
+      "name": "dateTimeStart",
+      "type": "string",
+      "doc": "Task start date and time"
+    },
+    {
+      "name": "dateTimeEnd",
+      "type": "string",
+      "doc": "Task end date and time"
+    },
+    {
+      "name": "resultStatus",
+      "type": {
+        "type": "enum",
+        "name": "TaskCalculationResultStatusDto",
+        "symbols": ["SOLUTION_FOUND", "SOLUTION_NOT_FOUND", "OPTIMIZER_ERROR"]
+      },
+      "doc": "Defines result status"
+    },
+    {
+      "name": "objectiveFunctionValue",
+      "type": ["null", "double"],
+      "doc": "Result objective function value",
+      "default": null
+    },
+    {
+      "name": "relativeGap",
+      "type": ["null", "double"],
+      "doc": "Relative gap between best continuous solution and current integer solution",
+      "default": null
+    },
+    {
+      "name": "elapsedTime",
+      "type": ["null", "double"],
+      "doc": "Optimization time",
+      "default": null
+    },
+    {
+      "name": "optimizerMessage",
+      "type": "string",
+      "doc": "Error messages returned by optimizer",
+      "default": ""
+    },
+    {
+      "name": "contractResults",
+      "type": {
+        "type": "array",
+        "items": {
+          "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result",
+          "name": "TaskCalculationContractResultDto",
+          "type": "record",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Contract identifier"
+            },
+            {
+              "name": "contractResultValues",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskCalculationContractResultValueDto",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "dateTimeStart",
+                      "type": "string",
+                      "doc": "Interval start date time"
+                    },
+                    {
+                      "name": "dateTimeEnd",
+                      "type": "string",
+                      "doc": "Interval end date time"
+                    },
+                    {
+                      "name": "power",
+                      "type": "double",
+                      "doc": "Interval power value"
+                    },
+                    {
+                      "name": "energy",
+                      "type": "double",
+                      "doc": "Interval energy value"
+                    },
+                    {
+                      "name": "cost",
+                      "type": "double",
+                      "doc": "Interval cost/income value"
+                    }
+                  ]
+                },
+                "doc": "Contract results for each interval"
+              },
+              "doc": "Result values of contract"
+            }
+          ]
+        },
+        "doc": "List of results for contracts"
+      },
+      "default": []
+    }
+  ]
+}

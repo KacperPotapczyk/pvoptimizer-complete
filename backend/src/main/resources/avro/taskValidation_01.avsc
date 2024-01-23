@@ -1,0 +1,70 @@
+{
+  "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.calculationpreprocessor.validation",
+  "type": "record",
+  "name": "TaskValidationMessagesDto",
+  "fields": [
+    {
+      "name": "taskId",
+      "type": "long",
+      "doc": "Task identifier"
+    },
+    {
+      "name": "validationSummary",
+      "type": "string",
+      "doc": "Short summary of validation",
+      "default": ""
+    },
+    {
+      "name": "messages",
+      "doc": "List of validation messages",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "TaskValidationMessageDto",
+          "type": "record",
+          "fields": [
+            {
+              "name": "level",
+              "type": {
+                "type": "enum",
+                "name": "TaskValidationMessageLevelDto",
+                "symbols": ["DEBUG", "INFO", "WARN", "ERROR"]
+              },
+              "doc": "Message level. Error messages will result in calculation process abort"
+            },
+            {
+              "name": "objectType",
+              "type": {
+                "type": "enum",
+                "name": "ObjectTypeDto",
+                "symbols": ["CONTRACT", "DEMAND", "TARIFF"]
+              },
+              "doc": "Type of object that message concerns"
+            },
+            {
+              "name": "baseObjectName",
+              "type": "string",
+              "doc": "Base object name"
+            },
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Base object ID"
+            },
+            {
+              "name": "revisionId",
+              "type": "long",
+              "doc": "Revision ID"
+            },
+            {
+              "name": "message",
+              "type": "string",
+              "doc": "Validation message explanation"
+            }
+          ]
+        }
+      },
+      "default": []
+    }
+  ]
+}

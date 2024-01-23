@@ -1,0 +1,37 @@
+spring:
+  cloud.config.enabled: false
+  datasource:
+    url: jdbc:h2:mem:pvoptimizer;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driverClassName: org.h2.Driver
+    username: pvoptimizer
+    password: pvoptimizer
+    initialization-mode: always
+  kafka:
+    consumer:
+      groupId: pvoptimizer-backend
+      validationTopic: pvoptimizer-validation
+      resultTopic: pvoptimizer-task-result
+      backoff:
+        interval: 10000
+        maxAttempts: 5
+      properties:
+        schema.registry.url: mock://test-schema
+    producer:
+      topic: pvoptimizer-task
+      bootstrap-servers: ${spring.embedded.kafka.brokers}
+      properties:
+        schema.registry.url: mock://test-schema
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: create-drop
+    show-sql :  true
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+  flyway:
+    enabled: false
+    schema: public

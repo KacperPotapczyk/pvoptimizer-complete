@@ -1,0 +1,4 @@
+spring:
+  cloud.config.enabled: true
+  config.import: configserver:http://configserver:8888
+  application.name: resultpostprocessor

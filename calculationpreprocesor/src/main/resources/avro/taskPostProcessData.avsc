@@ -1,0 +1,45 @@
+{
+  "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor",
+  "name": "TaskPostProcessDataDto",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "doc": "Task identifier"
+    },
+    {
+      "name": "dateTimeStart",
+      "type": "string",
+      "doc": "Task start date and time"
+    },
+    {
+      "name": "dateTimeEnd",
+      "type": "string",
+      "doc": "Task end date and time"
+    },
+    {
+      "name": "intervals",
+      "doc": "List of intervals",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "IntervalDto",
+          "type": "record",
+          "fields": [
+            {
+              "name": "dateTimeStart",
+              "type": "string",
+              "doc": "Interval start date and time"
+            },
+            {
+              "name": "dateTimeEnd",
+              "type": "string",
+              "doc": "Interval end date and time"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

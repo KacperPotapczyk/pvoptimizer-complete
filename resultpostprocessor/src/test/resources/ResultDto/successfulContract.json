@@ -1,0 +1,19 @@
+{
+  "id":5,
+  "optimizationStatus":"SOLUTION_FOUND",
+  "objectiveFunctionValue":0.41666666666666663,
+  "relativeGap":1e-10,
+  "elapsedTime":0,
+  "errorMessage":"",
+  "contractResults":[
+    {
+      "id":2,
+      "name":"simplePurchase",
+      "power":[10,23.333333333344],
+      "energy":[2.5,5.833333333336],
+      "cost":[0.125,0.2916666666668]
+    }
+  ],
+  "storageResults":[],
+  "movableDemandResults":[]
+}

@@ -1,0 +1,43 @@
+{
+  "id": 2,
+  "dateTimeStart": "2023-01-01T10:00",
+  "dateTimeEnd": "2023-01-01T10:30",
+  "contracts": [],
+  "demands": [
+    {
+      "id": 2,
+      "name": "demand1",
+      "revisionNumber": 1,
+      "demandValues": [
+        {
+          "value": 10,
+          "dateTime": "2023-01-01T10:00:00"
+        },
+        {
+          "value": 20,
+          "dateTime": "2023-01-01T10:15:00"
+        },
+        {
+          "value": 30,
+          "dateTime": "2023-01-01T10:25:00"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "demand2",
+      "revisionNumber": 1,
+      "demandValues": [
+        {
+          "value": 5,
+          "dateTime": "2023-01-01T10:20:00"
+        },
+        {
+          "value": 10,
+          "dateTime": "2023-01-01T10:30:00"
+        }
+      ]
+    }
+  ],
+  "tariffs": []
+}

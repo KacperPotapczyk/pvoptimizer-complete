@@ -1,0 +1,5 @@
+spring:
+  cloud.config.enabled: true
+  application.name: apigateway
+eureka:
+  client.serviceUrl.defaultZone: ${EUREKA_URI:http://eurekaserver:8761/eureka}

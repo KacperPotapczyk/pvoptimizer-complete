@@ -1,0 +1,210 @@
+{
+  "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task",
+  "type": "record",
+  "name": "TaskCalculationDto",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "doc": "Task identifier"
+    },
+    {
+      "name": "dateTimeStart",
+      "type": "string",
+      "doc": "Task start date and time"
+    },
+    {
+      "name": "dateTimeEnd",
+      "type": "string",
+      "doc": "Task end date and time"
+    },
+    {
+      "name": "contracts",
+      "doc": "List of electricity purchase and sell contracts.",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "TaskContractDto",
+          "type": "record",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Contract id"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "doc": "Contract name"
+            },
+            {
+              "name": "revisionNumber",
+              "type": "long",
+              "doc": "Revision number of contract"
+            },
+            {
+              "name": "contractType",
+              "type": {
+                "type": "enum",
+                "name": "TaskContractTypeDto",
+                "symbols": ["PURCHASE", "SELL"]
+              },
+              "doc": "Defines if it is purchase or sell contract"
+            },
+            {
+              "name": "tariffName",
+              "type": "string",
+              "doc": "Contract tariff"
+            },
+            {
+              "name": "minPowerConstraints",
+              "doc": "Minimal power constraints of contract",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskContractConstraintDto",
+                  "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "constraintValue",
+                      "type": "double",
+                      "doc": "Constraint value"
+                    },
+                    {
+                      "name": "dateTimeStart",
+                      "type": "string",
+                      "doc": "Date and time of constraint start"
+                    },
+                    {
+                      "name": "dateTimeEnd",
+                      "type": "string",
+                      "doc": "Date and time of constraint end"
+                    }
+                  ]
+                }
+              },
+              "default": []
+            },
+            {
+              "name": "maxPowerConstraints",
+              "doc": "Maximal power constraints of contract",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractConstraintDto"
+              },
+              "default": []
+            },
+            {
+              "name": "minEnergyConstraints",
+              "doc": "Minimal energy constraints of contract",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractConstraintDto"
+              },
+              "default": []
+            },
+            {
+              "name": "maxEnergyConstraints",
+              "doc": "Maximal energy constraints of contract",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractConstraintDto"
+              },
+              "default": []
+            }
+          ]
+        }
+      },
+      "default": []
+    },
+    {
+      "name": "demands",
+      "doc": "List of household demands.",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "TaskDemandDto",
+          "type": "record",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Demand Id"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "doc": "Demand name"
+            },
+            {
+              "name": "revisionNumber",
+              "type": "long",
+              "doc": "Demand revision number"
+            },
+            {
+              "name": "demandValues",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskDemandValueDto",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "type": "double",
+                      "doc": "Demand value on timestamp"
+                    },
+                    {
+                      "name": "dateTime",
+                      "type": "string",
+                      "doc": "Demand value timestamp"
+                    }
+                  ]
+                }
+              },
+              "default": [],
+              "doc": "Demand values on timestamp list"
+            }
+          ]
+        }
+      },
+      "default": []
+    },
+    {
+      "name": "tariffs",
+      "doc": "List of task tariffs",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "TaskTariffDto",
+          "doc": "Contract tariff",
+          "type": "record",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Tariff id"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "doc": "Tariff name"
+            },
+            {
+              "name": "revisionNumber",
+              "type": "long",
+              "doc": "Tariff revision number"
+            },
+            {
+              "name": "defaultPrice",
+              "type": "double",
+              "doc": "Default unit price"
+            }
+          ]
+        }
+      },
+      "default": []
+    }
+  ]
+}

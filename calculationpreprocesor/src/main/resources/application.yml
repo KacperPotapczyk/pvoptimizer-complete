@@ -1,0 +1,19 @@
+spring:
+  cloud.config.enabled: false
+  kafka:
+    bootstrapServers: localhost:9092
+    consumer:
+      groupId: pvoptimizer-preprocessor
+      topic: pv-backend-task
+      bootstrapServers: localhost:9092
+      properties:
+        schema.registry.url: http://localhost:8081
+    producer:
+      taskTopic: pv-optimizer-task
+      postprocessorTopic: pv-postprocessor-taskData
+      validationTopic: pv-preprocessor-validation
+      bootstrapServers: localhost:9092
+      properties:
+        schema.registry.url: http://localhost:8081
+server:
+  port : 8083

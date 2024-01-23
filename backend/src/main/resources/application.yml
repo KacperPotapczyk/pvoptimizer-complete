@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: backend
+  cloud.config.enabled: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/pvoptimizer
+    username: pvoptimizer
+    password: pvoptimizer
+  jpa:
+    properties:
+      hibernate:
+        default_schema: backend
+  kafka:
+    consumer:
+      groupId: pvoptimizer-backend
+      validationTopic: pv-preprocessor-validation
+      resultTopic: pv-backend-result
+      backoff:
+        interval: 10000
+        maxAttempts: 5
+      bootstrapServers: localhost:9092
+      properties:
+        schema.registry.url: http://localhost:8081
+    producer:
+      topic: pv-backend-task
+      bootstrapServers: localhost:9092
+      properties:
+        schema.registry.url: http://localhost:8081
+
+  flyway:
+    schemas: backend
+server:
+  port: 0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
