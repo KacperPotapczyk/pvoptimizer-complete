@@ -2,6 +2,7 @@ package com.github.kacperpotapczyk.pvoptimizer.backend.entity.task;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -51,6 +52,10 @@ public class Task {
     private Set<DemandRevision> demandRevisions;
 
     @ManyToMany
+    @JoinTable(name = "task_production_revisions", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "revision_id"))
+    private Set<ProductionRevision> productionRevisions;
+
+    @ManyToMany
     @JoinTable(name = "task_tariff_revisions", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "revision_id"))
     private Set<TariffRevision> tariffRevisions;
 
@@ -69,6 +74,14 @@ public class Task {
             this.demandRevisions = new HashSet<>();
         }
         this.demandRevisions.add(demandRevision);
+    }
+
+    public void addProductionRevision(ProductionRevision productionRevision) {
+
+        if (this.productionRevisions == null) {
+            this.productionRevisions = new HashSet<>();
+        }
+        this.productionRevisions.add(productionRevision);
     }
 
     public void addTariffRevision(TariffRevision tariffRevision) {

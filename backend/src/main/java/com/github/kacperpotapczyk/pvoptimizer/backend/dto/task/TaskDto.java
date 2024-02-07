@@ -8,6 +8,7 @@ public record TaskDto(
         LocalDateTime dateTimeStart,
         LocalDateTime dateTimeEnd,
         Set<TaskBaseObjectRevisionDto> demandRevisions,
+        Set<TaskBaseObjectRevisionDto> productionRevisions,
         Set<TaskBaseObjectRevisionDto> tariffRevisions,
         Set<TaskBaseObjectRevisionDto> contractRevisions
 ) {}

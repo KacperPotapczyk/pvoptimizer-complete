@@ -4,10 +4,12 @@ import com.github.kacperpotapczyk.pvoptimizer.backend.dto.task.TaskBaseObjectRev
 import com.github.kacperpotapczyk.pvoptimizer.backend.dto.task.TaskDto;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
 import com.github.kacperpotapczyk.pvoptimizer.backend.service.ContractService;
 import com.github.kacperpotapczyk.pvoptimizer.backend.service.DemandService;
+import com.github.kacperpotapczyk.pvoptimizer.backend.service.ProductionService;
 import com.github.kacperpotapczyk.pvoptimizer.backend.service.TariffService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,6 +22,9 @@ public abstract class TaskMapper {
     DemandService demandService;
 
     @Autowired
+    ProductionService productionService;
+
+    @Autowired
     TariffService tariffService;
 
     @Autowired
@@ -28,6 +33,8 @@ public abstract class TaskMapper {
     public abstract TaskDto mapTaskToTaskDto(Task task);
     @Mapping(source = "demand.name", target = "baseName")
     public abstract TaskBaseObjectRevisionDto mapDemandRevisionToTaskBaseObjectRevisionDto(DemandRevision demandRevision);
+    @Mapping(source = "production.name", target = "baseName")
+    public abstract TaskBaseObjectRevisionDto mapProductionRevisionToTaskBaseObjectRevisionDto(ProductionRevision productionRevision);
     @Mapping(source = "tariff.name", target = "baseName")
     public abstract TaskBaseObjectRevisionDto mapTariffRevisionToTaskBaseObjectRevisionDto(TariffRevision tariffRevision);
     @Mapping(source = "contract.name", target = "baseName")
@@ -41,6 +48,10 @@ public abstract class TaskMapper {
 
     public DemandRevision mapTaskBaseObjectRevisionDtoToDemandRevision(TaskBaseObjectRevisionDto dto) {
         return demandService.getBaseObjectRevision(dto.baseName(), dto.revisionNumber());
+    }
+
+    public ProductionRevision mapTaskBaseObjectRevisionDtoToProductionRevision(TaskBaseObjectRevisionDto dto) {
+        return productionService.getBaseObjectRevision(dto.baseName(), dto.revisionNumber());
     }
 
     public TariffRevision mapTaskBaseObjectRevisionDtoToTariffRevision(TaskBaseObjectRevisionDto dto) {

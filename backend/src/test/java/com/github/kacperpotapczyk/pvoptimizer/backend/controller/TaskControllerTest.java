@@ -56,6 +56,9 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("demandRevisions", hasSize(1)))
                 .andExpect(jsonPath("demandRevisions[0].baseName", is("queryOnly")))
                 .andExpect(jsonPath("demandRevisions[0].revisionNumber", is(1)))
+                .andExpect(jsonPath("productionRevisions", hasSize(1)))
+                .andExpect(jsonPath("productionRevisions[0].baseName", is("queryOnly")))
+                .andExpect(jsonPath("productionRevisions[0].revisionNumber", is(1)))
                 .andExpect(jsonPath("tariffRevisions", hasSize(1)))
                 .andExpect(jsonPath("contractRevisions", hasSize(2)))
                 .andExpect(jsonPath("dateTimeStart", is("2023-12-24T14:00:00")))
@@ -84,6 +87,7 @@ public class TaskControllerTest {
                 taskName,
                 dateTimeStart,
                 dateTimeEnd,
+                Collections.emptySet(),
                 Collections.emptySet(),
                 Collections.emptySet(),
                 contractRevisionsDto
@@ -128,6 +132,7 @@ public class TaskControllerTest {
                 dateTimeEnd,
                 demandRevisionsDto,
                 Collections.emptySet(),
+                Collections.emptySet(),
                 contractRevisionsDto
         );
 
@@ -144,6 +149,7 @@ public class TaskControllerTest {
         assertEquals(dateTimeStart, updatedTask.getDateTimeStart());
         assertEquals(dateTimeEnd, updatedTask.getDateTimeEnd());
         assertEquals(1, updatedTask.getDemandRevisions().size());
+        assertEquals(0, updatedTask.getProductionRevisions().size());
         assertEquals(0, updatedTask.getTariffRevisions().size());
         assertEquals(1, updatedTask.getContractRevisions().size());
     }

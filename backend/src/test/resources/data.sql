@@ -194,6 +194,7 @@ INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_t
             VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #1
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(1, 1);
+INSERT INTO task_production_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 3);
