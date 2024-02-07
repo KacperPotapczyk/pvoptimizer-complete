@@ -2,6 +2,7 @@ package com.github.kacperpotapczyk.pvoptimizer.backend.service;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.ResultStatus;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.TaskResult;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
@@ -27,14 +28,16 @@ public class TaskServiceTest {
     private final ContractService contractService;
     private final TariffService tariffService;
     private final DemandService demandService;
+    private final ProductionService productionService;
 
     @Autowired
-    public TaskServiceTest(TaskService taskService, TaskResultService resultService, ContractService contractService, TariffService tariffService, DemandService demandService) {
+    public TaskServiceTest(TaskService taskService, TaskResultService resultService, ContractService contractService, TariffService tariffService, DemandService demandService, ProductionService productionService) {
         this.taskService = taskService;
         this.resultService = resultService;
         this.contractService = contractService;
         this.tariffService = tariffService;
         this.demandService = demandService;
+        this.productionService = productionService;
     }
 
     @Test
@@ -48,12 +51,14 @@ public class TaskServiceTest {
         TariffRevision tariffRevision = tariffService.getBaseObjectRevision("queryOnly", 1);
         DemandRevision demandRevision1 = demandService.getBaseObjectRevision("queryOnly", 1);
         DemandRevision demandRevision2 = demandService.getBaseObjectRevision("addRevisionTest", 1);
+        ProductionRevision productionRevision = productionService.getBaseObjectRevision("queryOnly", 1);
 
         Task task = new Task(taskName, dateTimeStart, dateTimeEnd);
         task.addContractRevision(contractRevision);
         task.addTariffRevision(tariffRevision);
         task.addDemandRevision(demandRevision1);
         task.addDemandRevision(demandRevision2);
+        task.addProductionRevision(productionRevision);
 
         Task addedTask = taskService.newTask(task);
 
@@ -61,6 +66,7 @@ public class TaskServiceTest {
         assertEquals(1, addedTask.getContractRevisions().size());
         assertEquals(1, addedTask.getTariffRevisions().size());
         assertEquals(2, addedTask.getDemandRevisions().size());
+        assertEquals(1, addedTask.getProductionRevisions().size());
 
         Task dbTask = taskService.findByName(taskName);
 
@@ -120,6 +126,7 @@ public class TaskServiceTest {
         assertEquals(taskName, task.getName());
         assertFalse(task.isReadOnly());
         assertEquals(1, task.getDemandRevisions().size());
+        assertEquals(1, task.getProductionRevisions().size());
         assertEquals(1, task.getTariffRevisions().size());
         assertEquals(2, task.getContractRevisions().size());
     }

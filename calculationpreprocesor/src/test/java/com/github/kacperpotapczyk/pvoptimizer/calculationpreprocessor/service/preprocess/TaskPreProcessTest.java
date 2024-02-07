@@ -107,6 +107,10 @@ class TaskPreProcessTest {
         }
         assertEquals(2, taskDto.getDemand().getDemandProfile().size());
 
+        assertEquals(2, taskDto.getProduction().getProductionProfile().size());
+        assertEquals(6.666666667, taskDto.getProduction().getProductionProfile().get(0), 1e-6);
+        assertEquals(13.333333333, taskDto.getProduction().getProductionProfile().get(1), 1e-6);
+
         assertEquals(1, taskDto.getContracts().size());
         ContractDto contractDto = taskDto.getContracts().get(0);
         assertEquals("contract1", contractDto.getName().toString());

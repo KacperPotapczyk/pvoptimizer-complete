@@ -82,7 +82,7 @@ class ValidationServiceTest {
         ValidationMessages validationMessages = validationService.validate(taskCalculationDto);
         assertEquals(5, validationMessages.getTaskId());
         assertTrue(validationMessages.hasErrorMessage());
-        assertEquals(3, validationMessages.getMessages().size());
+        assertEquals(4, validationMessages.getMessages().size());
 
         ValidationMessage errorDemand = validationMessages.getMessages().stream()
                 .filter(validationMessage -> validationMessage.objectType() == ObjectType.DEMAND)
@@ -93,6 +93,16 @@ class ValidationServiceTest {
         assertEquals(4, errorDemand.id());
         assertEquals(1, errorDemand.revisionId());
         assertEquals("Not unique base object id: 4", errorDemand.message());
+
+        ValidationMessage errorProduction = validationMessages.getMessages().stream()
+                .filter(validationMessage -> validationMessage.objectType() == ObjectType.PRODUCTION)
+                .findAny()
+                .orElseThrow();
+
+        assertEquals(ObjectType.PRODUCTION, errorProduction.objectType());
+        assertEquals(10, errorProduction.id());
+        assertEquals(1, errorProduction.revisionId());
+        assertEquals("Not unique base object id: 10", errorProduction.message());
 
         ValidationMessage errorContract = validationMessages.getMessages().stream()
                 .filter(validationMessage -> validationMessage.objectType() == ObjectType.CONTRACT)

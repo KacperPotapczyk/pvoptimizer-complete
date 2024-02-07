@@ -70,6 +70,27 @@
       ]
     }
   ],
+  "productions": [
+    {
+      "id": 1,
+      "name": "production1",
+      "revisionNumber": 1,
+      "productionsValues": [
+        {
+          "dateTime": "2023-01-01T10:00:00",
+          "value": 5.0
+        },
+        {
+          "dateTime": "2023-01-01T10:10:00",
+          "value": 10.0
+        },
+        {
+          "dateTime": "2023-01-01T10:20:00",
+          "value": 15.0
+        }
+      ]
+    }
+  ],
   "tariffs": [
     {
       "id": 2,

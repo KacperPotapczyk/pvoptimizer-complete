@@ -48,6 +48,56 @@ INSERT INTO demand_revision(revision_number, created_date, base_id) VALUES(1, '2
 INSERT INTO demand_value(revision_id, date_time, demand) VALUES(10, '2023-10-06T13:00:00', 1.1);
 
 
+------------------------------------------------------------------------ Productions
+INSERT INTO production(name) VALUES('queryOnly');   -- production #1
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 1);  -- productionRevision #1
+INSERT INTO production_value(revision_id, date_time, production) VALUES(1, '2023-10-05T12:00:00', 4.5);
+INSERT INTO production_value(revision_id, date_time, production) VALUES(1, '2023-10-05T13:00:00', 4.1);
+
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(2, '2023-10-06T12:00:00', 1);  -- productionRevision #2
+INSERT INTO production_value(revision_id, date_time, production) VALUES(2, '2023-10-05T12:00:00', 4.4);
+INSERT INTO production_value(revision_id, date_time, production) VALUES(2, '2023-10-05T13:00:00', 4.0);
+INSERT INTO production_value(revision_id, date_time, production) VALUES(2, '2023-10-05T14:00:00', 3.2);
+INSERT INTO production_value(revision_id, date_time, production) VALUES(2, '2023-10-05T15:00:00', 6.8);
+
+INSERT INTO production_revision(revision_number, created_date, base_id, is_deleted) VALUES(3, '2023-10-05T12:00:00', 1, TRUE);  -- productionRevision #3
+INSERT INTO production_value(revision_id, date_time, production) VALUES(3, '2023-09-01T12:00:00', 2.1);
+
+
+INSERT INTO production(name) VALUES('addRevisionTest');  -- production #2
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-07T12:00:00', 2);  -- productionRevision #4
+INSERT INTO production_value(revision_id, date_time, production) VALUES(4, '2023-10-06T12:00:00', 1.5);
+INSERT INTO production_value(revision_id, date_time, production) VALUES(4, '2023-10-06T13:00:00', 1.1);
+
+
+INSERT INTO production(name, is_deleted) VALUES('deleted', TRUE);  -- production #3 deleted
+INSERT INTO production_revision(revision_number, created_date, base_id, is_deleted) VALUES(1, '2023-10-07T12:00:00', 3, TRUE);  -- productionRevision #5
+INSERT INTO production_value(revision_id, date_time, production) VALUES(5, '2023-10-06T13:00:00', 1.1);
+
+
+INSERT INTO production(name) VALUES('toBeDeleted');  -- production #4
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-07T12:00:00', 4);  -- productionRevision #6
+INSERT INTO production_value(revision_id, date_time, production) VALUES(6, '2023-10-06T13:00:00', 1.1);
+
+
+INSERT INTO production(name) VALUES('revisionToBeDeleted');  -- production #5
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-07T12:00:00', 5);  -- productionRevision #7
+INSERT INTO production_value(revision_id, date_time, production) VALUES(7, '2023-10-06T13:00:00', 1.1);
+
+
+INSERT INTO production(name) VALUES('revisionToBeDeletedHttpRequest');  -- production #6
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-07T12:00:00', 6);  -- productionRevision #8
+INSERT INTO production_value(revision_id, date_time, production) VALUES(8, '2023-10-06T13:00:00', 1.1);
+
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(2, '2023-10-07T12:00:00', 6);  -- productionRevision #9
+INSERT INTO production_value(revision_id, date_time, production) VALUES(9, '2023-10-06T14:00:00', 5.1);
+
+
+INSERT INTO production(name) VALUES('toBeDeletedHttpRequest');  -- production #7
+INSERT INTO production_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-07T12:00:00', 7);  -- productionRevision #10
+INSERT INTO production_value(revision_id, date_time, production) VALUES(10, '2023-10-06T13:00:00', 1.1);
+
+
 ------------------------------------------------------------------------ Tariffs
 INSERT INTO tariff(name) VALUES('queryOnly');   -- Tariff #1
 INSERT INTO tariff_revision(revision_number, created_date, base_id, default_price) VALUES(1, '2023-10-15T12:00:00', 1, 0.02);  -- TariffRevision #1
@@ -58,7 +108,7 @@ INSERT INTO tariff(name) VALUES('addRevisionTest');   -- Tariff #2
 INSERT INTO tariff_revision(revision_number, created_date, base_id, default_price) VALUES(1, '2023-10-15T12:00:00', 2, 0.02);  -- TariffRevision #3
 
 
-INSERT INTO tariff(name, is_deleted) VALUES('deleted', TRUE);  -- Demand #3 deleted
+INSERT INTO tariff(name, is_deleted) VALUES('deleted', TRUE);  -- Tariff #3 deleted
 INSERT INTO tariff_revision(revision_number, created_date, base_id, is_deleted) VALUES(1, '2023-10-07T12:00:00', 3, TRUE);  -- TariffRevision #4
 
 
@@ -144,6 +194,7 @@ INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_t
             VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #1
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(1, 1);
+INSERT INTO task_production_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 3);

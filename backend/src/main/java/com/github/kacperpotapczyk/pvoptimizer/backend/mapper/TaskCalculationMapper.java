@@ -7,6 +7,8 @@ import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRe
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractType;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandValue;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
 import org.mapstruct.Mapper;
@@ -24,6 +26,8 @@ public abstract class TaskCalculationMapper {
 
     public abstract TaskDemandValueDto mapDemandValueToTaskDemandValueDto(DemandValue demandValue);
 
+    public abstract TaskProductionValueDto mapProductionValueToTaskProductionValueDto(ProductionValue productionValue);
+
     public TaskCalculationDto mapTaskToTaskCalculationDto(Task task) {
 
         LocalDateTime taskDateTimeStart = task.getDateTimeStart();
@@ -37,7 +41,10 @@ public abstract class TaskCalculationMapper {
                         .map(contractRevision -> this.mapContractRevisionToTaskContractDto(contractRevision, taskDateTimeStart, taskDateTimeEnd))
                         .toList(),
                 task.getDemandRevisions().stream()
-                        .map(demandRevision -> this.mapDemandRevisionToTaskDemandDto(demandRevision, taskDateTimeStart,taskDateTimeEnd))
+                        .map(demandRevision -> this.mapDemandRevisionToTaskDemandDto(demandRevision, taskDateTimeStart, taskDateTimeEnd))
+                        .toList(),
+                task.getProductionRevisions().stream()
+                        .map(productionRevision -> this.mapProductionRevisionToTaskProductionDto(productionRevision, taskDateTimeStart, taskDateTimeEnd))
                         .toList(),
                 task.getTariffRevisions().stream()
                         .map(this::mapTariffRevisionToTaskTariffDto)
@@ -70,6 +77,20 @@ public abstract class TaskCalculationMapper {
                         .toList().stream()
                         .sorted(Comparator.comparing(DemandValue::getDateTime))
                         .map(this::mapDemandValueToTaskDemandValueDto)
+                        .toList()
+        );
+    }
+
+    private TaskProductionDto mapProductionRevisionToTaskProductionDto(ProductionRevision productionRevision, LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return new TaskProductionDto(
+                productionRevision.getProduction().getId(),
+                productionRevision.getProduction().getName(),
+                productionRevision.getRevisionNumber(),
+                productionRevision.getProductionValuesInTimeWindow(windowStart, windowEnd).stream()
+                        .toList().stream()
+                        .sorted(Comparator.comparing(ProductionValue::getDateTime))
+                        .map(this::mapProductionValueToTaskProductionValueDto)
                         .toList()
         );
     }

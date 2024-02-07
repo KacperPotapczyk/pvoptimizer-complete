@@ -172,6 +172,59 @@
       "default": []
     },
     {
+      "name": "productions",
+      "doc": "List of household production sources.",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "TaskProductionDto",
+          "type": "record",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Production Id"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "doc": "Production name"
+            },
+            {
+              "name": "revisionNumber",
+              "type": "long",
+              "doc": "Production revision number"
+            },
+            {
+              "name": "productionsValues",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskProductionValueDto",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "type": "double",
+                      "doc": "Production value on timestamp"
+                    },
+                    {
+                      "name": "dateTime",
+                      "type": "string",
+                      "doc": "Production value timestamp"
+                    }
+                  ]
+                }
+              },
+              "default": [],
+              "doc": "Production values on timestamp list"
+            }
+          ]
+        }
+      },
+      "default": []
+    },
+    {
       "name": "tariffs",
       "doc": "List of task tariffs",
       "type": {
