@@ -90,7 +90,7 @@ public class TaskPreProcessImp implements TaskPreProcess {
         );
 
         taskDtoBuilder.setProduction(
-                setDefaultProduction(intervals)
+                mapTaskProductionDtoListToProductionDto(taskCalculationDto.getProductions(), intervals)
         );
 
         return taskDtoBuilder.build();
@@ -330,17 +330,83 @@ public class TaskPreProcessImp implements TaskPreProcess {
         return demandIntervalValues;
     }
 
-    private ProductionDto setDefaultProduction(List<Interval> intervals) {
+    private ProductionDto mapTaskProductionDtoListToProductionDto(List<TaskProductionDto> productions, List<Interval> intervals) {
 
-        List<Double> productionProfile = intervals.stream()
-                .map(dummy -> 0.0)
-                .toList();
+        List<Double> productionProfile = new ArrayList<>(intervals.size());
+
+        for (Interval interval : intervals) {
+
+            List<IntervalValue> productionIntervalValues = buildProductionIntervalValuesAtInterval(productions, interval);
+            List<Interval> subIntervals = splitIntervalOnIntervalValues(interval, productionIntervalValues);
+            List<IntervalValue> subIntervalsValue = findSumOnSubIntervals(subIntervals, productionIntervalValues);
+
+            productionProfile.add(averageService.weighted(subIntervalsValue));
+        }
 
         return new ProductionDto(
                 1L,
-                "Dummy production",
+                "Production",
                 productionProfile
         );
+    }
+
+    private List<IntervalValue> buildProductionIntervalValuesAtInterval(List<TaskProductionDto> productions, Interval interval) {
+
+        List<IntervalValue> productionIntervalValues = new ArrayList<>();
+        for (TaskProductionDto production : productions) {
+
+            List<TaskProductionValueDto> demandValues = production.getProductionsValues();
+
+            List<TaskProductionValueDto> productionValuesActiveInInterval = new ArrayList<>(
+                    demandValues.stream()
+                            .filter(demandValue -> isBetweenLeftClosedRange(
+                                    dateTimeMapper.mapToLocalDateTime(demandValue.getDateTime()),
+                                    interval.dateTimeStart(),
+                                    interval.dateTimeEnd()))
+                            .toList()
+            );
+
+            boolean startDateTimeCovered = productionValuesActiveInInterval.stream()
+                    .anyMatch(productionValue -> dateTimeMapper.mapToLocalDateTime(productionValue.getDateTime()).isEqual(interval.dateTimeStart()));
+
+            if (!startDateTimeCovered) {
+                productionValuesActiveInInterval.add(demandValues.stream()
+                        .filter(productionValue -> dateTimeMapper.mapToLocalDateTime(productionValue.getDateTime()).isBefore(interval.dateTimeStart()))
+                        .max((pv1, pv2) -> dateTimeMapper.mapToLocalDateTime(pv1.getDateTime()).compareTo(dateTimeMapper.mapToLocalDateTime(pv2.getDateTime())))
+                        .orElse(new TaskProductionValueDto(0.0, interval.dateTimeStart().format(DateTimeFormatter.ISO_DATE_TIME)))
+                );
+            }
+
+            List<TaskProductionValueDto> productionValuesActiveInIntervalSorted = productionValuesActiveInInterval.stream()
+                    .sorted((pv1, pv2) -> dateTimeMapper.mapToLocalDateTime(pv1.getDateTime()).compareTo(dateTimeMapper.mapToLocalDateTime(pv2.getDateTime())))
+                    .toList();
+
+            for (int i=0; i<productionValuesActiveInIntervalSorted.size()-1; i++) {
+                productionIntervalValues.add(new IntervalValue(
+                        i,
+                        dateTimeMapper.mapToLocalDateTime(productionValuesActiveInIntervalSorted.get(i).getDateTime()),
+                        dateTimeMapper.mapToLocalDateTime(productionValuesActiveInIntervalSorted.get(i+1).getDateTime()),
+                        Duration.between(
+                                dateTimeMapper.mapToLocalDateTime(productionValuesActiveInIntervalSorted.get(i).getDateTime()),
+                                dateTimeMapper.mapToLocalDateTime(productionValuesActiveInIntervalSorted.get(i+1).getDateTime())
+                        ),
+                        productionValuesActiveInIntervalSorted.get(i).getValue()
+                ));
+            }
+
+            int lastIndex = productionValuesActiveInIntervalSorted.size()-1;
+            productionIntervalValues.add(new IntervalValue(
+                    lastIndex,
+                    dateTimeMapper.mapToLocalDateTime(productionValuesActiveInIntervalSorted.get(lastIndex).getDateTime()),
+                    interval.dateTimeEnd(),
+                    Duration.between(
+                            dateTimeMapper.mapToLocalDateTime(productionValuesActiveInIntervalSorted.get(lastIndex).getDateTime()),
+                            interval.dateTimeEnd()
+                    ),
+                    productionValuesActiveInIntervalSorted.get(lastIndex).getValue()
+            ));
+        }
+        return productionIntervalValues;
     }
 
     private List<Interval> splitIntervalOnIntervalValues(Interval interval, List<IntervalValue> demandIntervalValues) {

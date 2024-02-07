@@ -37,7 +37,7 @@
               "type": {
                 "type": "enum",
                 "name": "ObjectTypeDto",
-                "symbols": ["CONTRACT", "DEMAND", "TARIFF"]
+                "symbols": ["CONTRACT", "DEMAND", "TARIFF", "PRODUCTION"]
               },
               "doc": "Type of object that message concerns"
             },

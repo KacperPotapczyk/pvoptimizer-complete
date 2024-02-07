@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class TaskValidationMessageDto extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 4774566270011421429L;
+  private static final long serialVersionUID = -3333490468381645563L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskValidationMessageDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.calculationpreprocessor.validation\",\"fields\":[{\"name\":\"level\",\"type\":{\"type\":\"enum\",\"name\":\"TaskValidationMessageLevelDto\",\"symbols\":[\"DEBUG\",\"INFO\",\"WARN\",\"ERROR\"]},\"doc\":\"Message level. Error messages will result in calculation process abort\"},{\"name\":\"objectType\",\"type\":{\"type\":\"enum\",\"name\":\"ObjectTypeDto\",\"symbols\":[\"CONTRACT\",\"DEMAND\",\"TARIFF\"]},\"doc\":\"Type of object that message concerns\"},{\"name\":\"baseObjectName\",\"type\":\"string\",\"doc\":\"Base object name\"},{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Base object ID\"},{\"name\":\"revisionId\",\"type\":\"long\",\"doc\":\"Revision ID\"},{\"name\":\"message\",\"type\":\"string\",\"doc\":\"Validation message explanation\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskValidationMessageDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.calculationpreprocessor.validation\",\"fields\":[{\"name\":\"level\",\"type\":{\"type\":\"enum\",\"name\":\"TaskValidationMessageLevelDto\",\"symbols\":[\"DEBUG\",\"INFO\",\"WARN\",\"ERROR\"]},\"doc\":\"Message level. Error messages will result in calculation process abort\"},{\"name\":\"objectType\",\"type\":{\"type\":\"enum\",\"name\":\"ObjectTypeDto\",\"symbols\":[\"CONTRACT\",\"DEMAND\",\"TARIFF\",\"PRODUCTION\"]},\"doc\":\"Type of object that message concerns\"},{\"name\":\"baseObjectName\",\"type\":\"string\",\"doc\":\"Base object name\"},{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Base object ID\"},{\"name\":\"revisionId\",\"type\":\"long\",\"doc\":\"Revision ID\"},{\"name\":\"message\",\"type\":\"string\",\"doc\":\"Validation message explanation\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
