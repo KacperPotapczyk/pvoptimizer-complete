@@ -126,6 +126,7 @@ public class TaskServiceTest {
         assertEquals(taskName, task.getName());
         assertFalse(task.isReadOnly());
         assertEquals(1, task.getDemandRevisions().size());
+        assertEquals(1, task.getProductionRevisions().size());
         assertEquals(1, task.getTariffRevisions().size());
         assertEquals(2, task.getContractRevisions().size());
     }

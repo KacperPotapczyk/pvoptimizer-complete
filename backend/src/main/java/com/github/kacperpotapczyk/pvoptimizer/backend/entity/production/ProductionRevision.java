@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -23,6 +25,13 @@ public class ProductionRevision extends Revision {
 
     @OneToMany(mappedBy = "productionRevision", cascade = CascadeType.ALL)
     private Set<ProductionValue> productionValues = new HashSet<>();
+
+    public Set<ProductionValue> getProductionValuesInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return productionValues.stream()
+                .filter(productionValue -> productionValue.isActiveInTimeWindow(windowStart, windowEnd))
+                .collect(Collectors.toSet());
+    }
 
     @Override
     public boolean equals(Object o) {
