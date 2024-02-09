@@ -2,7 +2,7 @@ package com.github.kacperpotapczyk.pvoptimizer.backend.mapper;
 
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.*;
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractConstraintDto;
-import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractConstraint;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint.TimeWindowConstraint;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractType;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
@@ -22,7 +22,7 @@ public abstract class TaskCalculationMapper {
 
     public abstract TaskContractTypeDto mapContractTypeToTaskContractTypeDto(ContractType contractType);
 
-    public abstract TaskContractConstraintDto mapContractConstraintToTaskContractConstraintDto(ContractConstraint contractConstraint);
+    public abstract TaskContractConstraintDto mapContractConstraintToTaskContractConstraintDto(TimeWindowConstraint timeWindowConstraint);
 
     public abstract TaskDemandValueDto mapDemandValueToTaskDemandValueDto(DemandValue demandValue);
 

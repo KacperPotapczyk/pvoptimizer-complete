@@ -1,5 +1,6 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract;
 
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint.TimeWindowConstraint;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "contract_max_energy_constraint", indexes = {@Index(name = "idx_contract_max_energy_constraint_revision_id", columnList = "revision_id")})
-public class ContractMaxEnergyConstraint extends ContractConstraint {
+public class ContractMaxEnergyConstraint extends TimeWindowConstraint {
 
     @ManyToOne
     @JoinColumn(name = "revision_id")
