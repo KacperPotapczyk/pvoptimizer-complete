@@ -90,7 +90,8 @@ public class TaskControllerTest {
                 Collections.emptySet(),
                 Collections.emptySet(),
                 Collections.emptySet(),
-                contractRevisionsDto
+                contractRevisionsDto,
+                Collections.emptySet()
         );
 
         mockMvc.perform(
@@ -133,7 +134,8 @@ public class TaskControllerTest {
                 demandRevisionsDto,
                 Collections.emptySet(),
                 Collections.emptySet(),
-                contractRevisionsDto
+                contractRevisionsDto,
+                Collections.emptySet()
         );
 
         mockMvc.perform(
