@@ -1,12 +1,14 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.Revision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint.TimeWindowConstraint;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -42,6 +44,36 @@ public class StorageRevision extends Revision {
     @OneToMany(mappedBy = "storageRevision", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StorageMaxEnergyConstraint> storageMaxEnergyConstraints;
 
+    public List<TimeWindowConstraint> getMinChargeConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return getConstraintsInTimeWindow(storageMinChargeConstraints, windowStart, windowEnd);
+    }
+
+    public List<TimeWindowConstraint> getMaxChargeConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return getConstraintsInTimeWindow(storageMaxChargeConstraints, windowStart, windowEnd);
+    }
+
+    public List<TimeWindowConstraint> getMinDischargeConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return getConstraintsInTimeWindow(storageMinDischargeConstraints, windowStart, windowEnd);
+    }
+
+    public List<TimeWindowConstraint> getMaxDischargeConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return getConstraintsInTimeWindow(storageMaxDischargeConstraints, windowStart, windowEnd);
+    }
+
+    public List<TimeWindowConstraint> getMinEnergyConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return getConstraintsInTimeWindow(storageMinEnergyConstraints, windowStart, windowEnd);
+    }
+
+    public List<TimeWindowConstraint> getMaxEnergyConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return getConstraintsInTimeWindow(storageMaxEnergyConstraints, windowStart, windowEnd);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,5 +93,13 @@ public class StorageRevision extends Revision {
     @Override
     public void softDelete() {
         this.setDeleted(true);
+    }
+
+    private List<TimeWindowConstraint> getConstraintsInTimeWindow(List<? extends TimeWindowConstraint> contractConstraints, LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return contractConstraints.stream()
+                .filter(contractConstraint -> contractConstraint.isActiveInTimeWindow(windowStart, windowEnd))
+                .map(TimeWindowConstraint::new)
+                .toList();
     }
 }

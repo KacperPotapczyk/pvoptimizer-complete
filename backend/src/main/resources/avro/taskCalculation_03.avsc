@@ -258,6 +258,131 @@
         }
       },
       "default": []
+    },
+    {
+      "name": "storages",
+      "doc": "List of task storages",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "TaskStorageDto",
+          "doc": "Storage object",
+          "type": "record",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Storage id"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "doc": "Storage name"
+            },
+            {
+              "name": "revisionNumber",
+              "type": "long",
+              "doc": "Storage revision number"
+            },
+            {
+              "name": "capacity",
+              "type": "double",
+              "doc": "Capacity of storage"
+            },
+            {
+              "name": "maxCharge",
+              "type": "double",
+              "doc": "Maximal charging power"
+            },
+            {
+              "name": "maxDischarge",
+              "type": "double",
+              "doc": "Maximal discharging power"
+            },
+            {
+              "name": "initialEnergy",
+              "type": "double",
+              "doc": "Initial amount of stored energy at the beginning of optimization horizon"
+            },
+            {
+              "name": "minChargeConstraints",
+              "doc": "Minimal charging power constraints of storage",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskStorageConstraintDto",
+                  "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "constraintValue",
+                      "type": "double",
+                      "doc": "Constraint value"
+                    },
+                    {
+                      "name": "dateTimeStart",
+                      "type": "string",
+                      "doc": "Date and time of constraint start"
+                    },
+                    {
+                      "name": "dateTimeEnd",
+                      "type": "string",
+                      "doc": "Date and time of constraint end"
+                    }
+                  ]
+                }
+              },
+              "default": []
+            },
+            {
+              "name": "maxChargeConstraints",
+              "doc": "Maximal charging power constraints of storage",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageConstraintDto"
+              },
+              "default": []
+            },
+            {
+              "name": "minDischargeConstraints",
+              "doc": "Minimal discharging power constraints of storage",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageConstraintDto"
+              },
+              "default": []
+            },
+            {
+              "name": "maxDischargeConstraints",
+              "doc": "Maximal discharging power constraints of storage",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageConstraintDto"
+              },
+              "default": []
+            },
+            {
+              "name": "minEnergyConstraints",
+              "doc": "Minimal energy constraints of storage",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageConstraintDto"
+              },
+              "default": []
+            },
+            {
+              "name": "maxEnergyConstraints",
+              "doc": "Maximal energy constraints of storage",
+              "type": {
+                "type": "array",
+                "items": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageConstraintDto"
+              },
+              "default": []
+            }
+          ]
+        }
+      },
+      "default": []
     }
   ]
 }

@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,11 +37,29 @@ public class DemandRevision extends Revision {
         this.demandValues = demandValues;
     }
 
-    public Set<DemandValue> getDemandValuesInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+    public Set<DemandValue> getDemandValuesForTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
 
-        return demandValues.stream()
+        Set<DemandValue> demandValueSet = new HashSet<>();
+
+        Optional<DemandValue> windowStartDemandValue = demandValues.stream()
+                .filter(demandValue -> demandValue.getDateTime().isEqual(windowStart))
+                .findAny();
+
+        if (windowStartDemandValue.isPresent()) {
+            demandValueSet.add(windowStartDemandValue.get());
+        } else {
+            Optional<DemandValue> demandValueBeforeWindowStart = demandValues.stream()
+                    .filter(demandValue -> demandValue.getDateTime().isBefore(windowStart))
+                    .max(Comparator.comparing(DemandValue::getDateTime));
+            demandValueBeforeWindowStart.ifPresent(demandValueSet::add);
+        }
+
+        demandValueSet.addAll(demandValues.stream()
                 .filter(demandValue -> demandValue.isActiveInTimeWindow(windowStart, windowEnd))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet())
+        );
+
+        return demandValueSet;
     }
 
     @Override
