@@ -4,5 +4,7 @@ public enum ValidationMessageObjectType {
     CONTRACT,
     DEMAND,
     TARIFF,
-    PRODUCTION
+    PRODUCTION,
+    STORAGE,
+    MOVABLE_DEMAND
 }

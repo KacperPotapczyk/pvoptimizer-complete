@@ -85,6 +85,12 @@ public class TaskPreProcessImp implements TaskPreProcess {
                         .toList()
         );
 
+        taskDtoBuilder.setStorages(
+                taskCalculationDto.getStorages().stream()
+                        .map(taskStorageDto -> mapTaskStorageDtoToStorageDto(taskStorageDto, intervals))
+                        .toList()
+        );
+
         taskDtoBuilder.setDemand(
                 mapTaskDemandDtoListToDemandDto(taskCalculationDto.getDemands(), intervals)
         );
@@ -247,6 +253,76 @@ public class TaskPreProcessImp implements TaskPreProcess {
                         interval,
                         intervalValue.dateTimeStart(),
                         intervalValue.dateTimeEnd()
+                ))
+                .toList();
+    }
+
+    private StorageDto mapTaskStorageDtoToStorageDto(TaskStorageDto taskStorageDto, List<Interval> intervals) {
+
+        StorageDto.Builder storageBuilder = StorageDto.newBuilder();
+
+        storageBuilder
+                .setId(taskStorageDto.getId())
+                .setName(taskStorageDto.getName())
+                .setMaxCapacity(taskStorageDto.getCapacity())
+                .setMaxCharge(taskStorageDto.getMaxCharge())
+                .setMaxDischarge(taskStorageDto.getMaxDischarge())
+                .setInitialEnergy(taskStorageDto.getInitialEnergy());
+
+        storageBuilder
+                .setMinChargeConstraints(mapMinStorageConstraints(intervals, taskStorageDto.getMinChargeConstraints()))
+                .setMaxChargeConstraints(mapMaxStorageConstraints(intervals, taskStorageDto.getMaxChargeConstraints()))
+                .setMinDischargeConstraints(mapMinStorageConstraints(intervals, taskStorageDto.getMinDischargeConstraints()))
+                .setMaxDischargeConstraints(mapMaxStorageConstraints(intervals, taskStorageDto.getMaxDischargeConstraints()))
+                .setMinEnergyConstraints(mapMinStorageConstraints(intervals, taskStorageDto.getMinEnergyConstraints()))
+                .setMaxEnergyConstraints(mapMaxStorageConstraints(intervals, taskStorageDto.getMaxEnergyConstraints()));
+
+        return storageBuilder.build();
+    }
+
+    private Map<CharSequence, Double> mapMinStorageConstraints(List<Interval> intervals, List<TaskStorageConstraintDto> constraintDtoList) {
+
+        Map<CharSequence, Double> constraintMap = new HashMap<>();
+        List<IntervalValue> constraints = mapStorageConstraintsToIntervalValue(constraintDtoList);
+
+        for (Interval interval : intervals) {
+
+            List<IntervalValue> intervalConstraints = findActiveIntervalValuesAtInterval(constraints, interval);
+            if (!intervalConstraints.isEmpty()) {
+                List<Interval> subIntervals = splitIntervalOnIntervalValues(interval, intervalConstraints);
+                List<OptionalIntervalValue> subIntervalsValue = findMaxValuesOnSubIntervals(intervalConstraints, subIntervals);
+                constraintMap.put(Long.toString(interval.index()), averageService.mvpContinue(subIntervalsValue));
+            }
+        }
+        return constraintMap;
+    }
+
+    private Map<CharSequence, Double> mapMaxStorageConstraints(List<Interval> intervals, List<TaskStorageConstraintDto> constraintDtoList) {
+
+        Map<CharSequence, Double> constraintMap = new HashMap<>();
+        List<IntervalValue> constraints = mapStorageConstraintsToIntervalValue(constraintDtoList);
+
+        for (Interval interval : intervals) {
+
+            List<IntervalValue> intervalConstraints = findActiveIntervalValuesAtInterval(constraints, interval);
+            if (!intervalConstraints.isEmpty()) {
+                List<Interval> subIntervals = splitIntervalOnIntervalValues(interval, intervalConstraints);
+                List<OptionalIntervalValue> subIntervalsValue = findMinValuesOnSubIntervals(intervalConstraints, subIntervals);
+
+                Optional<Double> average = averageService.mvpBreak(subIntervalsValue);
+                average.ifPresent(value -> constraintMap.put(Long.toString(interval.index()), value));
+            }
+        }
+        return constraintMap;
+    }
+
+    private List<IntervalValue> mapStorageConstraintsToIntervalValue(List<TaskStorageConstraintDto> constraints) {
+
+        return constraints.stream()
+                .map(constraint -> new IntervalValue(
+                        dateTimeMapper.mapToLocalDateTime(constraint.getDateTimeStart()),
+                        dateTimeMapper.mapToLocalDateTime(constraint.getDateTimeEnd()),
+                        constraint.getConstraintValue()
                 ))
                 .toList();
     }

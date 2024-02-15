@@ -82,7 +82,7 @@ class ValidationServiceTest {
         ValidationMessages validationMessages = validationService.validate(taskCalculationDto);
         assertEquals(5, validationMessages.getTaskId());
         assertTrue(validationMessages.hasErrorMessage());
-        assertEquals(4, validationMessages.getMessages().size());
+        assertEquals(5, validationMessages.getMessages().size());
 
         ValidationMessage errorDemand = validationMessages.getMessages().stream()
                 .filter(validationMessage -> validationMessage.objectType() == ObjectType.DEMAND)
@@ -121,6 +121,14 @@ class ValidationServiceTest {
         assertEquals(ObjectType.TARIFF, errorTariff.objectType());
         assertEquals(2, errorTariff.id());
         assertEquals("Not unique base object id: 2", errorTariff.message());
+
+        ValidationMessage errorStorage = validationMessages.getMessages().stream()
+                .filter(validationMessage -> validationMessage.objectType() == ObjectType.STORAGE)
+                .findAny()
+                .orElseThrow();
+        assertEquals(ObjectType.STORAGE, errorStorage.objectType());
+        assertEquals(44, errorStorage.id());
+        assertEquals("Not unique base object id: 44", errorStorage.message());
     }
 
     private TaskCalculationDto getTaskCalculationDtoFromFile(String fileName) throws IOException {

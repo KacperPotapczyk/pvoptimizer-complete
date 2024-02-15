@@ -23,13 +23,15 @@ public class ValidationServiceImp implements ValidationService {
     private final ContractValidation contractValidationService;
     private final TariffValidation tariffValidationService;
     private final ProductionValidation productionValidation;
+    private final StorageValidation storageValidation;
 
     @Autowired
-    public ValidationServiceImp(DemandValidation demandValidation, ContractValidation contractValidation, TariffValidation tariffValidation, ProductionValidation productionValidation) {
+    public ValidationServiceImp(DemandValidation demandValidation, ContractValidation contractValidation, TariffValidation tariffValidation, ProductionValidation productionValidation, StorageValidation storageValidation) {
         this.demandValidationService = demandValidation;
         this.contractValidationService = contractValidation;
         this.tariffValidationService =  tariffValidation;
         this.productionValidation = productionValidation;
+        this.storageValidation = storageValidation;
     }
 
     @Override
@@ -45,6 +47,7 @@ public class ValidationServiceImp implements ValidationService {
         productionValidation.validate(taskCalculationDto.getProductions(), builder);
         contractValidationService.validate(taskCalculationDto.getContracts(), builder);
         tariffValidationService.validate(taskCalculationDto.getTariffs(), builder);
+        storageValidation.validate(taskCalculationDto.getStorages(), builder);
         validateContractTariffMatching(taskCalculationDto.getContracts(), taskCalculationDto.getTariffs(), builder);
 
         return builder.build();

@@ -1,11 +1,8 @@
 package com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.service.preprocess;
 
+import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.task.*;
 import com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.TaskPostProcessDataDto;
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.task.ContractDirectionDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.task.ContractDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.task.SumConstraintDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.task.TaskDto;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
@@ -144,6 +141,37 @@ class TaskPreProcessTest {
         assertEquals("2023-01-01T10:00", taskPostProcessDataDto.getDateTimeStart().toString());
         assertEquals("2023-01-01T10:30", taskPostProcessDataDto.getDateTimeEnd().toString());
         assertEquals(2, taskPostProcessDataDto.getIntervals().size());
+    }
+
+    @Test
+    public void mapTaskWithStorage() throws IOException {
+
+        TaskCalculationDto taskCalculationDto = getTaskCalculationDtoFromFile("TaskCalculationDto/TaskWithStorage.json");
+        PreProcessResult preProcessResult = taskPreProcess.preProcess(taskCalculationDto);
+
+        TaskDto taskDto = preProcessResult.taskDto();
+        assertEquals(1, taskDto.getStorages().size());
+
+        StorageDto storageDto = taskDto.getStorages().get(0);
+        assertEquals(44, storageDto.getId());
+        assertEquals("storage1", storageDto.getName().toString());
+        assertEquals(100.0, storageDto.getMaxCapacity());
+        assertEquals(10.0, storageDto.getMaxCharge());
+        assertEquals(20.0, storageDto.getMaxDischarge());
+        assertEquals(40.0, storageDto.getInitialEnergy());
+
+        assertEquals(1, storageDto.getMinChargeConstraints().size());
+        assertEquals(0.5, storageDto.getMinChargeConstraints().get("0"), 1e-9);
+
+        assertEquals(0, storageDto.getMaxChargeConstraints().size());
+        assertEquals(0, storageDto.getMinDischargeConstraints().size());
+        assertEquals(0, storageDto.getMaxDischargeConstraints().size());
+
+        assertEquals(1, storageDto.getMinEnergyConstraints().size());
+        assertEquals(10.0, storageDto.getMinEnergyConstraints().get("0"), 1e-9);
+
+        assertEquals(1, storageDto.getMaxEnergyConstraints().size());
+        assertEquals(80.0, storageDto.getMaxEnergyConstraints().get("1"), 1e-9);
     }
 
     private TaskCalculationDto getTaskCalculationDtoFromFile(String fileName) throws IOException {
