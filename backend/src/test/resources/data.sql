@@ -333,6 +333,13 @@ INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(13, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(13, 1);
 
 
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
+            VALUES('getTaskResultWithStorageResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #14
+
+INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(14, 1);
+INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(14, 1);
+
+
 ------------------------------------------------------------------------ Task results
 INSERT INTO task_result(task_id, result_status, created_date_time, update_date_time)
             VALUES(2, 1, '2023-12-24T14:00:00', '2023-12-24T17:00:00');  -- taskResult #1
@@ -371,3 +378,16 @@ INSERT INTO contract_result_value(contract_result_id, date_time_start, date_time
 
 INSERT INTO contract_result_value(contract_result_id, date_time_start, date_time_end, power, energy, cost)
             VALUES(1, '2023-01-01T10:15:00', '2023-01-01T10:30:00', 20.0, 5.0, 0.5); -- ContractResultValue #2
+
+
+INSERT INTO task_result(task_id, result_status, created_date_time, update_date_time, objective_function_value, relative_gap, elapsed_time, optimizer_message)
+            VALUES(14, 5, '2023-12-23T17:01:00', '2023-12-23T17:01:00', 0.0, 0.01, 1.1, 'Optimal solution found');  -- taskResult #7
+
+INSERT INTO storage_result(storage_revision_id, task_result_id)
+            VALUES(1, 7);  -- StorageResult #1
+
+INSERT INTO storage_result_value(storage_result_id, date_time_start, date_time_end, charge, discharge, energy, storage_mode)
+            VALUES(1, '2023-01-01T10:00:00', '2023-01-01T10:15:00', 10.0, 0.0, 30, 1); -- StorageResultValue #1
+
+INSERT INTO storage_result_value(storage_result_id, date_time_start, date_time_end, charge, discharge, energy, storage_mode)
+            VALUES(1, '2023-01-01T10:15:00', '2023-01-01T10:30:00', 0.0, 5, 25, 2); -- StorageResultValue #2

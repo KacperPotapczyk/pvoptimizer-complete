@@ -10,5 +10,6 @@ public record TaskResultDto(
         Double relativeGap,
         Double elapsedTime,
         String optimizerMessage,
-        List<ContractResultDto> contractResults
+        List<ContractResultDto> contractResults,
+        List<StorageResultDto> storageResults
 ) {}
