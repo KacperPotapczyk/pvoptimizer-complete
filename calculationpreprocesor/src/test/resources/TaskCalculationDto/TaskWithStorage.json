@@ -1,0 +1,100 @@
+{
+  "id": 3,
+  "dateTimeStart": "2023-01-01T10:00",
+  "dateTimeEnd": "2023-01-01T10:30",
+  "contracts": [],
+  "demands":[
+    {
+      "id":2,
+      "name":"demand1",
+      "revisionNumber":1,
+      "demandValues":[
+        {
+          "value":10,
+          "dateTime":"2023-01-01T10:00:00"
+        },
+        {
+          "value":20,
+          "dateTime":"2023-01-01T10:15:00"
+        },
+        {
+          "value":30,
+          "dateTime":"2023-01-01T10:25:00"
+        }
+      ]
+    }
+  ],
+  "productions": [
+    {
+      "id": 1,
+      "name": "production1",
+      "revisionNumber": 1,
+      "productionsValues": [
+        {
+          "dateTime": "2023-01-01T10:00:00",
+          "value": 5.0
+        },
+        {
+          "dateTime": "2023-01-01T10:10:00",
+          "value": 10.0
+        },
+        {
+          "dateTime": "2023-01-01T10:20:00",
+          "value": 15.0
+        }
+      ]
+    }
+  ],
+  "tariffs": [],
+  "storages": [
+    {
+      "id": 44,
+      "name": "storage1",
+      "revisionNumber": 1,
+      "capacity": 100.0,
+      "maxCharge": 10.0,
+      "maxDischarge": 20.0,
+      "initialEnergy": 40.0,
+      "minChargeConstraints": [
+        {
+          "constraintValue": 0.5,
+          "dateTimeStart": "2023-01-01T10:00:00",
+          "dateTimeEnd": "2023-01-01T10:05:00"
+        },
+        {
+          "constraintValue": 0.25,
+          "dateTimeStart": "2023-01-01T10:05:00",
+          "dateTimeEnd": "2023-01-01T10:10:00"
+        },
+        {
+          "constraintValue": 0.75,
+          "dateTimeStart": "2023-01-01T10:10:00",
+          "dateTimeEnd": "2023-01-01T10:15:00"
+        }
+      ],
+      "maxChargeConstraints": [],
+      "minDischargeConstraints": [],
+      "maxDischargeConstraints": [
+        {
+          "constraintValue": 10,
+          "dateTimeStart": "2023-01-01T10:05:00",
+          "dateTimeEnd": "2023-01-01T10:10:00"
+        }
+      ],
+      "minEnergyConstraints": [
+        {
+          "constraintValue": 10,
+          "dateTimeStart": "2023-01-01T10:00:00",
+          "dateTimeEnd": "2023-01-01T10:05:00"
+        }
+      ],
+      "maxEnergyConstraints": [
+        {
+          "constraintValue": 80,
+          "dateTimeStart": "2023-01-01T10:15:00",
+          "dateTimeEnd": "2023-01-01T10:30:00"
+        }
+      ]
+    }
+  ]
+}

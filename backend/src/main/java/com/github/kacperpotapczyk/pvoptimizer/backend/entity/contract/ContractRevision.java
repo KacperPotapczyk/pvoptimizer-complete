@@ -1,6 +1,7 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.Revision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint.TimeWindowConstraint;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,22 +39,22 @@ public class ContractRevision extends Revision {
         super(revisionNumber);
     }
 
-    public List<ContractConstraint> getMinPowerConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+    public List<TimeWindowConstraint> getMinPowerConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
 
         return getConstraintsInTimeWindow(contractMinPowerConstraints, windowStart, windowEnd);
     }
 
-    public List<ContractConstraint> getMaxPowerConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+    public List<TimeWindowConstraint> getMaxPowerConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
 
         return getConstraintsInTimeWindow(contractMaxPowerConstraints, windowStart, windowEnd);
     }
 
-    public List<ContractConstraint> getMinEnergyConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+    public List<TimeWindowConstraint> getMinEnergyConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
 
         return getConstraintsInTimeWindow(contractMinEnergyConstraints, windowStart, windowEnd);
     }
 
-    public List<ContractConstraint> getMaxEnergyConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+    public List<TimeWindowConstraint> getMaxEnergyConstraintsInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
 
         return getConstraintsInTimeWindow(contractMaxEnergyConstraints, windowStart, windowEnd);
     }
@@ -79,11 +80,11 @@ public class ContractRevision extends Revision {
         setDeleted(true);
     }
 
-    private List<ContractConstraint> getConstraintsInTimeWindow(List<? extends ContractConstraint> contractConstraints, LocalDateTime windowStart, LocalDateTime windowEnd) {
+    private List<TimeWindowConstraint> getConstraintsInTimeWindow(List<? extends TimeWindowConstraint> contractConstraints, LocalDateTime windowStart, LocalDateTime windowEnd) {
 
         return contractConstraints.stream()
                 .filter(contractConstraint -> contractConstraint.isActiveInTimeWindow(windowStart, windowEnd))
-                .map(ContractConstraint::new)
+                .map(TimeWindowConstraint::new)
                 .toList();
     }
 }

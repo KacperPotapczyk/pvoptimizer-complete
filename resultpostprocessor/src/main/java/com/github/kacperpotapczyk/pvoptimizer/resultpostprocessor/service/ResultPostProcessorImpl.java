@@ -1,10 +1,8 @@
 package com.github.kacperpotapczyk.pvoptimizer.resultpostprocessor.service;
 
+import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.TaskPostProcessDataDto;
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.*;
-import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.result.ContractResultDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.result.OptimizationStatusDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.result.ResultDto;
 import com.github.kacperpotapczyk.pvoptimizer.resultpostprocessor.mapper.DateTimeMapper;
 import com.github.kacperpotapczyk.pvoptimizer.resultpostprocessor.util.Interval;
 import lombok.extern.slf4j.Slf4j;
@@ -54,8 +52,12 @@ public class ResultPostProcessorImpl implements ResultPostProcessor {
             List<TaskCalculationContractResultDto> taskCalculationContractResultDtoList = resultDto.getContractResults().stream()
                     .map(contractResultDto -> mapContractResult(contractResultDto, intervals))
                     .toList();
-
             builder.setContractResults(taskCalculationContractResultDtoList);
+
+            List<TaskCalculationStorageResultDto> taskCalculationStorageResultDtoList = resultDto.getStorageResults().stream()
+                    .map(storageResultDto -> mapStorageResult(storageResultDto, intervals))
+                    .toList();
+            builder.setStorageResults(taskCalculationStorageResultDtoList);
         }
 
         return builder.build();
@@ -91,5 +93,38 @@ public class ResultPostProcessorImpl implements ResultPostProcessor {
         builder.setContractResultValues(taskCalculationContractResultValueDtoList);
 
         return builder.build();
+    }
+
+    private TaskCalculationStorageResultDto mapStorageResult(StorageResultDto storageResultDto, List<Interval> intervals) {
+
+        TaskCalculationStorageResultDto.Builder builder = TaskCalculationStorageResultDto.newBuilder();
+        builder.setId(storageResultDto.getId());
+
+        int numberOfValues = storageResultDto.getStorageMode().size();
+        List<TaskCalculationStorageResultValueDto> taskCalculationStorageResultValueDtoList = new ArrayList<>(numberOfValues);
+
+        for (int i=0; i<numberOfValues; i++) {
+
+            taskCalculationStorageResultValueDtoList.add(new TaskCalculationStorageResultValueDto(
+                    dateTimeMapper.mapLocalDateTimeToCharSequence(intervals.get(i).dateTimeStart()),
+                    dateTimeMapper.mapLocalDateTimeToCharSequence(intervals.get(i).dateTimeEnd()),
+                    storageResultDto.getCharge().get(i),
+                    storageResultDto.getDischarge().get(i),
+                    storageResultDto.getEnergy().get(i),
+                    mapStorageMode(storageResultDto.getStorageMode().get(i))
+            ));
+        }
+        builder.setStorageResultValues(taskCalculationStorageResultValueDtoList);
+
+        return builder.build();
+    }
+
+    private TaskCalculationStorageModeDto mapStorageMode(StorageModeDto storageModeDto) {
+
+        return switch (storageModeDto) {
+            case DISABLED -> TaskCalculationStorageModeDto.DISABLED;
+            case CHARGING -> TaskCalculationStorageModeDto.CHARGING;
+            case DISCHARGING -> TaskCalculationStorageModeDto.DISCHARGING;
+        };
     }
 }

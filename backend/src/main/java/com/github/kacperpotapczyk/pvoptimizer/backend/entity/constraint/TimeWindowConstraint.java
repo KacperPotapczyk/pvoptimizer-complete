@@ -1,4 +1,4 @@
-package com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract;
+package com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public class ContractConstraint {
+public class TimeWindowConstraint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,11 @@ public class ContractConstraint {
     @Column(name = "date_time_end", nullable = false)
     private LocalDateTime dateTimeEnd;
 
-    public ContractConstraint(ContractConstraint contractConstraint) {
-        this.id = contractConstraint.getId();
-        this.constraintValue = contractConstraint.getConstraintValue();
-        this.dateTimeStart = contractConstraint.getDateTimeStart();
-        this.dateTimeEnd = contractConstraint.getDateTimeEnd();
+    public TimeWindowConstraint(TimeWindowConstraint timeWindowConstraint) {
+        this.id = timeWindowConstraint.getId();
+        this.constraintValue = timeWindowConstraint.getConstraintValue();
+        this.dateTimeStart = timeWindowConstraint.getDateTimeStart();
+        this.dateTimeEnd = timeWindowConstraint.getDateTimeEnd();
     }
 
     public boolean isActiveInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {

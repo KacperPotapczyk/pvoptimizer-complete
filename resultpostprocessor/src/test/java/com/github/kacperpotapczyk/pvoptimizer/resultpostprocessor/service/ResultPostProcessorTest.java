@@ -68,6 +68,40 @@ class ResultPostProcessorTest {
     }
 
     @Test
+    public void successfulStorage() throws IOException {
+
+        TaskPostProcessDataDto taskPostProcessDataDto = getTaskPostProcessDataDtoFromFile("TaskPostProcessDataDto/successfulStorage.json");
+        ResultDto resultDto = getResultDtoFromFile("ResultDto/successfulStorage.json");
+
+        TaskCalculationResultDto taskCalculationResult = resultPostProcessor.postProcess(taskPostProcessDataDto, resultDto);
+
+        assertEquals(6, taskCalculationResult.getId());
+        assertEquals("2023-01-01T10:00:00", taskCalculationResult.getDateTimeStart().toString());
+        assertEquals("2023-01-01T10:30:00", taskCalculationResult.getDateTimeEnd().toString());
+        assertEquals(1, taskCalculationResult.getStorageResults().size());
+
+        TaskCalculationStorageResultDto storageResult = taskCalculationResult.getStorageResults().get(0);
+        assertEquals(1, storageResult.getId());
+        assertEquals(2, storageResult.getStorageResultValues().size());
+
+        TaskCalculationStorageResultValueDto storageResultValue1 = storageResult.getStorageResultValues().get(0);
+        assertEquals("2023-01-01T10:00:00", storageResultValue1.getDateTimeStart().toString());
+        assertEquals("2023-01-01T10:15:00", storageResultValue1.getDateTimeEnd().toString());
+        assertEquals(0.0, storageResultValue1.getCharge(), 1e-6);
+        assertEquals(8.33333333333333, storageResultValue1.getDischarge(), 1e-6);
+        assertEquals(27.916666666666668, storageResultValue1.getEnergy(), 1e-6);
+        assertEquals(TaskCalculationStorageModeDto.DISCHARGING, storageResultValue1.getStorageMode());
+
+        TaskCalculationStorageResultValueDto storageResultValue2 = storageResult.getStorageResultValues().get(1);
+        assertEquals("2023-01-01T10:15:00", storageResultValue2.getDateTimeStart().toString());
+        assertEquals("2023-01-01T10:30:00", storageResultValue2.getDateTimeEnd().toString());
+        assertEquals(0.0, storageResultValue2.getCharge(), 1e-6);
+        assertEquals(20.0, storageResultValue2.getDischarge(), 1e-6);
+        assertEquals(22.916666666666668, storageResultValue2.getEnergy(), 1e-6);
+        assertEquals(TaskCalculationStorageModeDto.DISCHARGING, storageResultValue2.getStorageMode());
+    }
+
+    @Test
     public void solutionNotFound() throws IOException {
 
         TaskPostProcessDataDto taskPostProcessDataDto = getTaskPostProcessDataDtoFromFile("TaskPostProcessDataDto/solutionNotFound.json");

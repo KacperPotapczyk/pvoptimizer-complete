@@ -90,7 +90,8 @@ public class TaskControllerTest {
                 Collections.emptySet(),
                 Collections.emptySet(),
                 Collections.emptySet(),
-                contractRevisionsDto
+                contractRevisionsDto,
+                Collections.emptySet()
         );
 
         mockMvc.perform(
@@ -133,7 +134,8 @@ public class TaskControllerTest {
                 demandRevisionsDto,
                 Collections.emptySet(),
                 Collections.emptySet(),
-                contractRevisionsDto
+                contractRevisionsDto,
+                Collections.emptySet()
         );
 
         mockMvc.perform(
@@ -225,6 +227,7 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("optimizerMessage", is("Optimal solution found")))
                 .andExpect(jsonPath("validationMessages", hasSize(0)))
                 .andExpect(jsonPath("contractResults", hasSize(1)))
+                .andExpect(jsonPath("storageResults", hasSize(0)))
                 .andExpect(jsonPath("contractResults[0].contractName", is("queryOnly")))
                 .andExpect(jsonPath("contractResults[0].revisionNumber", is(1)))
                 .andExpect(jsonPath("contractResults[0].contractResultValues", hasSize(2)))
@@ -238,6 +241,39 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("contractResults[0].contractResultValues[1].power", is(20.0)))
                 .andExpect(jsonPath("contractResults[0].contractResultValues[1].energy", is(5.0)))
                 .andExpect(jsonPath("contractResults[0].contractResultValues[1].cost", is(0.5)));
+    }
+
+    @Test
+    public void getTaskResultWithStorageResult() throws Exception {
+
+        String taskName = "getTaskResultWithStorageResult";
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tasks/{name}/result", taskName))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("taskName", is(taskName)))
+                .andExpect(jsonPath("resultStatus", is(ResultStatusDto.SOLUTION_FOUND.name())))
+                .andExpect(jsonPath("objectiveFunctionValue", is(0.0)))
+                .andExpect(jsonPath("relativeGap", is(0.01)))
+                .andExpect(jsonPath("elapsedTime", is(1.1)))
+                .andExpect(jsonPath("optimizerMessage", is("Optimal solution found")))
+                .andExpect(jsonPath("validationMessages", hasSize(0)))
+                .andExpect(jsonPath("contractResults", hasSize(0)))
+                .andExpect(jsonPath("storageResults", hasSize(1)))
+                .andExpect(jsonPath("storageResults[0].storageName", is("queryOnly")))
+                .andExpect(jsonPath("storageResults[0].revisionNumber", is(1)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues", hasSize(2)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[0].dateTimeStart", is("2023-01-01T10:00:00")))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[0].dateTimeEnd", is("2023-01-01T10:15:00")))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[0].charge", is(10.0)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[0].discharge", is(0.0)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[0].energy", is(30.0)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[0].storageMode", is("CHARGING")))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[1].dateTimeStart", is("2023-01-01T10:15:00")))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[1].dateTimeEnd", is("2023-01-01T10:30:00")))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[1].charge", is(0.0)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[1].discharge", is(5.0)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[1].energy", is(25.0)))
+                .andExpect(jsonPath("storageResults[0].storageResultValues[1].storageMode", is("DISCHARGING")));
     }
 
     @Test

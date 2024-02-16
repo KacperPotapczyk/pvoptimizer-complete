@@ -189,6 +189,53 @@ INSERT INTO contract_max_energy_constraint(constraint_value, date_time_start, da
             VALUES(1.0, '2023-12-23T17:00:00', '2023-12-24T17:00:00', 10);
 
 
+------------------------------------------------------------------------ Storages
+INSERT INTO storage(name, capacity, max_charge, max_discharge) VALUES('queryOnly', 100, 10, 20);                   -- storage #1
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(1, 40.0, '2024-02-09T17:00:00', 1); -- storageRevision #1
+INSERT INTO storage_min_charge_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(2, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 1);
+INSERT INTO storage_max_energy_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(95, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 1);
+
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(2, 45.0, '2024-02-09T17:00:00', 1); -- storageRevision #2
+INSERT INTO storage_max_charge_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(8, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 2);
+INSERT INTO storage_max_discharge_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(15, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 2);
+INSERT INTO storage_min_energy_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(10, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 2);
+
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id, is_deleted) VALUES(3, 40.0, '2024-02-09T17:01:00', 1, TRUE); -- storageRevision #3
+
+
+INSERT INTO storage(name, capacity, max_charge, max_discharge) VALUES('addRevisionTest', 100, 10, 20);                   -- storage #2
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(1, 40.0, '2024-02-09T17:00:00', 2); -- storageRevision #4
+
+
+INSERT INTO storage(name, capacity, max_charge, max_discharge) VALUES('toBeDeleted', 110, 15, 26);                   -- storage #3
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(1, 42.0, '2024-02-09T17:00:00', 3); -- storageRevision #5
+
+
+INSERT INTO storage(name, capacity, max_charge, max_discharge) VALUES('revisionToBeDeleted', 110, 15, 26);                   -- storage #4
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(1, 42.0, '2024-02-09T17:00:00', 4); -- storageRevision #6
+INSERT INTO storage_max_charge_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(8, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 6);
+
+
+INSERT INTO storage(name, capacity, max_charge, max_discharge) VALUES('toBeDeletedHttpRequest', 110, 15, 26);                   -- storage #5
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(1, 42.0, '2024-02-09T17:00:00', 5); -- storageRevision #7
+
+
+INSERT INTO storage(name, capacity, max_charge, max_discharge) VALUES('revisionToBeDeletedHttpRequest', 110, 15, 26);                   -- storage #6
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(1, 42.0, '2024-02-09T17:00:00', 6); -- storageRevision #8
+INSERT INTO storage_min_energy_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(10, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 8);
+
+INSERT INTO storage_revision(revision_number, initial_energy, created_date, base_id) VALUES(2, 42.0, '2024-02-09T17:00:00', 6); -- storageRevision #9
+INSERT INTO storage_max_discharge_constraint(constraint_value, date_time_start, date_time_end, revision_id)
+            VALUES(15, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 9);
+
+
 ------------------------------------------------------------------------ Tasks
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
             VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #1
@@ -198,6 +245,7 @@ INSERT INTO task_production_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 3);
+INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(1, 1);
 
 
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
@@ -258,6 +306,7 @@ INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_t
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(10, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(10, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(10, 1);
+INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(10, 1);
 
 
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
@@ -282,6 +331,13 @@ INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_t
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(13, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(13, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(13, 1);
+
+
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
+            VALUES('getTaskResultWithStorageResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #14
+
+INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(14, 1);
+INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(14, 1);
 
 
 ------------------------------------------------------------------------ Task results
@@ -322,3 +378,16 @@ INSERT INTO contract_result_value(contract_result_id, date_time_start, date_time
 
 INSERT INTO contract_result_value(contract_result_id, date_time_start, date_time_end, power, energy, cost)
             VALUES(1, '2023-01-01T10:15:00', '2023-01-01T10:30:00', 20.0, 5.0, 0.5); -- ContractResultValue #2
+
+
+INSERT INTO task_result(task_id, result_status, created_date_time, update_date_time, objective_function_value, relative_gap, elapsed_time, optimizer_message)
+            VALUES(14, 5, '2023-12-23T17:01:00', '2023-12-23T17:01:00', 0.0, 0.01, 1.1, 'Optimal solution found');  -- taskResult #7
+
+INSERT INTO storage_result(storage_revision_id, task_result_id)
+            VALUES(1, 7);  -- StorageResult #1
+
+INSERT INTO storage_result_value(storage_result_id, date_time_start, date_time_end, charge, discharge, energy, storage_mode)
+            VALUES(1, '2023-01-01T10:00:00', '2023-01-01T10:15:00', 10.0, 0.0, 30, 1); -- StorageResultValue #1
+
+INSERT INTO storage_result_value(storage_result_id, date_time_start, date_time_end, charge, discharge, energy, storage_mode)
+            VALUES(1, '2023-01-01T10:15:00', '2023-01-01T10:30:00', 0.0, 5, 25, 2); -- StorageResultValue #2

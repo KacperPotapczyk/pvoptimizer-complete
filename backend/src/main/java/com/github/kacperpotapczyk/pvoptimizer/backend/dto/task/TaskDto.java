@@ -10,5 +10,6 @@ public record TaskDto(
         Set<TaskBaseObjectRevisionDto> demandRevisions,
         Set<TaskBaseObjectRevisionDto> productionRevisions,
         Set<TaskBaseObjectRevisionDto> tariffRevisions,
-        Set<TaskBaseObjectRevisionDto> contractRevisions
+        Set<TaskBaseObjectRevisionDto> contractRevisions,
+        Set<TaskBaseObjectRevisionDto> storageRevisions
 ) {}

@@ -2,13 +2,15 @@ package com.github.kacperpotapczyk.pvoptimizer.backend.mapper;
 
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.*;
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractConstraintDto;
-import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractConstraint;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint.TimeWindowConstraint;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractType;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionValue;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.Storage;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
 import org.mapstruct.Mapper;
@@ -22,7 +24,9 @@ public abstract class TaskCalculationMapper {
 
     public abstract TaskContractTypeDto mapContractTypeToTaskContractTypeDto(ContractType contractType);
 
-    public abstract TaskContractConstraintDto mapContractConstraintToTaskContractConstraintDto(ContractConstraint contractConstraint);
+    public abstract TaskContractConstraintDto mapContractConstraintToTaskContractConstraintDto(TimeWindowConstraint timeWindowConstraint);
+
+    public abstract TaskStorageConstraintDto mapStorageConstraintToTaskStorageConstraintDto(TimeWindowConstraint timeWindowConstraint);
 
     public abstract TaskDemandValueDto mapDemandValueToTaskDemandValueDto(DemandValue demandValue);
 
@@ -30,13 +34,14 @@ public abstract class TaskCalculationMapper {
 
     public TaskCalculationDto mapTaskToTaskCalculationDto(Task task) {
 
+        DateMapper dateMapper = new DateMapper();
         LocalDateTime taskDateTimeStart = task.getDateTimeStart();
         LocalDateTime taskDateTimeEnd = task.getDateTimeEnd();
 
         return new TaskCalculationDto(
                 task.getId(),
-                task.getDateTimeStart().toString(),
-                task.getDateTimeEnd().toString(),
+                dateMapper.asCharSequence(taskDateTimeStart),
+                dateMapper.asCharSequence(task.getDateTimeEnd()),
                 task.getContractRevisions().stream()
                         .map(contractRevision -> this.mapContractRevisionToTaskContractDto(contractRevision, taskDateTimeStart, taskDateTimeEnd))
                         .toList(),
@@ -48,6 +53,9 @@ public abstract class TaskCalculationMapper {
                         .toList(),
                 task.getTariffRevisions().stream()
                         .map(this::mapTariffRevisionToTaskTariffDto)
+                        .toList(),
+                task.getStorageRevisions().stream()
+                        .map(storageRevision -> this.mapStorageRevisionToTaskStorageDto(storageRevision, taskDateTimeStart, taskDateTimeEnd))
                         .toList()
         );
     }
@@ -67,13 +75,33 @@ public abstract class TaskCalculationMapper {
         );
     }
 
+    private TaskStorageDto mapStorageRevisionToTaskStorageDto(StorageRevision storageRevision, LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        Storage storage = storageRevision.getStorage();
+        return new TaskStorageDto(
+                storage.getId(),
+                storage.getName(),
+                storageRevision.getRevisionNumber(),
+                storage.getCapacity(),
+                storage.getMaxCharge(),
+                storage.getMaxDischarge(),
+                storageRevision.getInitialEnergy(),
+                storageRevision.getMinChargeConstraintsInTimeWindow(windowStart, windowEnd).stream().map(this::mapStorageConstraintToTaskStorageConstraintDto).toList(),
+                storageRevision.getMaxChargeConstraintsInTimeWindow(windowStart, windowEnd).stream().map(this::mapStorageConstraintToTaskStorageConstraintDto).toList(),
+                storageRevision.getMinDischargeConstraintsInTimeWindow(windowStart, windowEnd).stream().map(this::mapStorageConstraintToTaskStorageConstraintDto).toList(),
+                storageRevision.getMaxDischargeConstraintsInTimeWindow(windowStart, windowEnd).stream().map(this::mapStorageConstraintToTaskStorageConstraintDto).toList(),
+                storageRevision.getMinEnergyConstraintsInTimeWindow(windowStart, windowEnd).stream().map(this::mapStorageConstraintToTaskStorageConstraintDto).toList(),
+                storageRevision.getMaxEnergyConstraintsInTimeWindow(windowStart, windowEnd).stream().map(this::mapStorageConstraintToTaskStorageConstraintDto).toList()
+        );
+    }
+
     private TaskDemandDto mapDemandRevisionToTaskDemandDto(DemandRevision demandRevision, LocalDateTime windowStart, LocalDateTime windowEnd) {
 
         return new TaskDemandDto(
                 demandRevision.getDemand().getId(),
                 demandRevision.getDemand().getName(),
                 demandRevision.getRevisionNumber(),
-                demandRevision.getDemandValuesInTimeWindow(windowStart, windowEnd).stream()
+                demandRevision.getDemandValuesForTimeWindow(windowStart, windowEnd).stream()
                         .toList().stream()
                         .sorted(Comparator.comparing(DemandValue::getDateTime))
                         .map(this::mapDemandValueToTaskDemandValueDto)
@@ -87,7 +115,7 @@ public abstract class TaskCalculationMapper {
                 productionRevision.getProduction().getId(),
                 productionRevision.getProduction().getName(),
                 productionRevision.getRevisionNumber(),
-                productionRevision.getProductionValuesInTimeWindow(windowStart, windowEnd).stream()
+                productionRevision.getProductionValuesForTimeWindow(windowStart, windowEnd).stream()
                         .toList().stream()
                         .sorted(Comparator.comparing(ProductionValue::getDateTime))
                         .map(this::mapProductionValueToTaskProductionValueDto)

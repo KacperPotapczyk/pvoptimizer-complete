@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,11 +28,29 @@ public class ProductionRevision extends Revision {
     @OneToMany(mappedBy = "productionRevision", cascade = CascadeType.ALL)
     private Set<ProductionValue> productionValues = new HashSet<>();
 
-    public Set<ProductionValue> getProductionValuesInTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
+    public Set<ProductionValue> getProductionValuesForTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
 
-        return productionValues.stream()
+        Set<ProductionValue> productionValueSet = new HashSet<>();
+
+        Optional<ProductionValue> windowStartProductionValue = productionValues.stream()
+                .filter(productionValue -> productionValue.getDateTime().isEqual(windowStart))
+                .findAny();
+
+        if (windowStartProductionValue.isPresent()) {
+            productionValueSet.add(windowStartProductionValue.get());
+        } else {
+            Optional<ProductionValue> productionValueBeforeWindowStart = productionValues.stream()
+                    .filter(productionValue -> productionValue.getDateTime().isBefore(windowStart))
+                    .max(Comparator.comparing(ProductionValue::getDateTime));
+            productionValueBeforeWindowStart.ifPresent(productionValueSet::add);
+        }
+
+        productionValueSet.addAll(productionValues.stream()
                 .filter(productionValue -> productionValue.isActiveInTimeWindow(windowStart, windowEnd))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet())
+        );
+
+        return productionValueSet;
     }
 
     @Override

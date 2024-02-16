@@ -109,6 +109,74 @@
         "doc": "List of results for contracts"
       },
       "default": []
+    },
+    {
+      "name": "storageResults",
+      "type": {
+        "type": "array",
+        "items": {
+          "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result",
+          "name": "TaskCalculationStorageResultDto",
+          "type": "record",
+          "doc": "Result for storage",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Storage identifier"
+            },
+            {
+              "name": "storageResultValues",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskCalculationStorageResultValueDto",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "dateTimeStart",
+                      "type": "string",
+                      "doc": "Interval start date time"
+                    },
+                    {
+                      "name": "dateTimeEnd",
+                      "type": "string",
+                      "doc": "Interval end date time"
+                    },
+                    {
+                      "name": "charge",
+                      "type": "double",
+                      "doc": "Interval charging power"
+                    },
+                    {
+                      "name": "discharge",
+                      "type": "double",
+                      "doc": "Interval discharging power"
+                    },
+                    {
+                      "name": "energy",
+                      "type": "double",
+                      "doc": "Interval stored energy"
+                    },
+                    {
+                      "name": "storageMode",
+                      "type": {
+                        "name": "TaskCalculationStorageModeDto",
+                        "type": "enum",
+                        "symbols": ["DISABLED", "CHARGING", "DISCHARGING"]
+                      },
+                      "doc": "Interval storage mode"
+                    }
+                  ]
+                },
+                "doc": "Contract results for each interval"
+              },
+              "doc": "Result values of contract"
+            }
+          ]
+        }
+      },
+      "default": []
     }
   ]
 }

@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 7355402468454739711L;
+  private static final long serialVersionUID = -9074218341854345180L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskCalculationResultDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Task identifier\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Task start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Task end date and time\"},{\"name\":\"resultStatus\",\"type\":{\"type\":\"enum\",\"name\":\"TaskCalculationResultStatusDto\",\"symbols\":[\"SOLUTION_FOUND\",\"SOLUTION_NOT_FOUND\",\"OPTIMIZER_ERROR\"]},\"doc\":\"Defines result status\"},{\"name\":\"objectiveFunctionValue\",\"type\":[\"null\",\"double\"],\"doc\":\"Result objective function value\",\"default\":null},{\"name\":\"relativeGap\",\"type\":[\"null\",\"double\"],\"doc\":\"Relative gap between best continuous solution and current integer solution\",\"default\":null},{\"name\":\"elapsedTime\",\"type\":[\"null\",\"double\"],\"doc\":\"Optimization time\",\"default\":null},{\"name\":\"optimizerMessage\",\"type\":\"string\",\"doc\":\"Error messages returned by optimizer\",\"default\":\"\"},{\"name\":\"contractResults\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskCalculationContractResultDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Contract identifier\"},{\"name\":\"contractResultValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskCalculationContractResultValueDto\",\"fields\":[{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Interval start date time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Interval end date time\"},{\"name\":\"power\",\"type\":\"double\",\"doc\":\"Interval power value\"},{\"name\":\"energy\",\"type\":\"double\",\"doc\":\"Interval energy value\"},{\"name\":\"cost\",\"type\":\"double\",\"doc\":\"Interval cost/income value\"}]}},\"doc\":\"Result values of contract\"}]}},\"default\":[]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskCalculationResultDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Task identifier\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Task start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Task end date and time\"},{\"name\":\"resultStatus\",\"type\":{\"type\":\"enum\",\"name\":\"TaskCalculationResultStatusDto\",\"symbols\":[\"SOLUTION_FOUND\",\"SOLUTION_NOT_FOUND\",\"OPTIMIZER_ERROR\"]},\"doc\":\"Defines result status\"},{\"name\":\"objectiveFunctionValue\",\"type\":[\"null\",\"double\"],\"doc\":\"Result objective function value\",\"default\":null},{\"name\":\"relativeGap\",\"type\":[\"null\",\"double\"],\"doc\":\"Relative gap between best continuous solution and current integer solution\",\"default\":null},{\"name\":\"elapsedTime\",\"type\":[\"null\",\"double\"],\"doc\":\"Optimization time\",\"default\":null},{\"name\":\"optimizerMessage\",\"type\":\"string\",\"doc\":\"Error messages returned by optimizer\",\"default\":\"\"},{\"name\":\"contractResults\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskCalculationContractResultDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Contract identifier\"},{\"name\":\"contractResultValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskCalculationContractResultValueDto\",\"fields\":[{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Interval start date time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Interval end date time\"},{\"name\":\"power\",\"type\":\"double\",\"doc\":\"Interval power value\"},{\"name\":\"energy\",\"type\":\"double\",\"doc\":\"Interval energy value\"},{\"name\":\"cost\",\"type\":\"double\",\"doc\":\"Interval cost/income value\"}]}},\"doc\":\"Result values of contract\"}]}},\"default\":[]},{\"name\":\"storageResults\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskCalculationStorageResultDto\",\"doc\":\"Result for storage\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Storage identifier\"},{\"name\":\"storageResultValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskCalculationStorageResultValueDto\",\"fields\":[{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Interval start date time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Interval end date time\"},{\"name\":\"charge\",\"type\":\"double\",\"doc\":\"Interval charging power\"},{\"name\":\"discharge\",\"type\":\"double\",\"doc\":\"Interval discharging power\"},{\"name\":\"energy\",\"type\":\"double\",\"doc\":\"Interval stored energy\"},{\"name\":\"storageMode\",\"type\":{\"type\":\"enum\",\"name\":\"TaskCalculationStorageModeDto\",\"symbols\":[\"DISABLED\",\"CHARGING\",\"DISCHARGING\"]},\"doc\":\"Interval storage mode\"}]}},\"doc\":\"Result values of contract\"}]}},\"default\":[]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -90,6 +90,7 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
   /** Error messages returned by optimizer */
   private java.lang.CharSequence optimizerMessage;
   private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto> contractResults;
+  private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> storageResults;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -109,8 +110,9 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
    * @param elapsedTime Optimization time
    * @param optimizerMessage Error messages returned by optimizer
    * @param contractResults The new value for contractResults
+   * @param storageResults The new value for storageResults
    */
-  public TaskCalculationResultDto(java.lang.Long id, java.lang.CharSequence dateTimeStart, java.lang.CharSequence dateTimeEnd, com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultStatusDto resultStatus, java.lang.Double objectiveFunctionValue, java.lang.Double relativeGap, java.lang.Double elapsedTime, java.lang.CharSequence optimizerMessage, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto> contractResults) {
+  public TaskCalculationResultDto(java.lang.Long id, java.lang.CharSequence dateTimeStart, java.lang.CharSequence dateTimeEnd, com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultStatusDto resultStatus, java.lang.Double objectiveFunctionValue, java.lang.Double relativeGap, java.lang.Double elapsedTime, java.lang.CharSequence optimizerMessage, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto> contractResults, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> storageResults) {
     this.id = id;
     this.dateTimeStart = dateTimeStart;
     this.dateTimeEnd = dateTimeEnd;
@@ -120,6 +122,7 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
     this.elapsedTime = elapsedTime;
     this.optimizerMessage = optimizerMessage;
     this.contractResults = contractResults;
+    this.storageResults = storageResults;
   }
 
   @Override
@@ -141,6 +144,7 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
     case 6: return elapsedTime;
     case 7: return optimizerMessage;
     case 8: return contractResults;
+    case 9: return storageResults;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -159,6 +163,7 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
     case 6: elapsedTime = (java.lang.Double)value$; break;
     case 7: optimizerMessage = (java.lang.CharSequence)value$; break;
     case 8: contractResults = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto>)value$; break;
+    case 9: storageResults = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto>)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -325,6 +330,23 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
   }
 
   /**
+   * Gets the value of the 'storageResults' field.
+   * @return The value of the 'storageResults' field.
+   */
+  public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> getStorageResults() {
+    return storageResults;
+  }
+
+
+  /**
+   * Sets the value of the 'storageResults' field.
+   * @param value the value to set.
+   */
+  public void setStorageResults(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> value) {
+    this.storageResults = value;
+  }
+
+  /**
    * Creates a new TaskCalculationResultDto RecordBuilder.
    * @return A new TaskCalculationResultDto RecordBuilder
    */
@@ -382,6 +404,7 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
     /** Error messages returned by optimizer */
     private java.lang.CharSequence optimizerMessage;
     private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto> contractResults;
+    private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> storageResults;
 
     /** Creates a new Builder */
     private Builder() {
@@ -430,6 +453,10 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
         this.contractResults = data().deepCopy(fields()[8].schema(), other.contractResults);
         fieldSetFlags()[8] = other.fieldSetFlags()[8];
       }
+      if (isValidValue(fields()[9], other.storageResults)) {
+        this.storageResults = data().deepCopy(fields()[9].schema(), other.storageResults);
+        fieldSetFlags()[9] = other.fieldSetFlags()[9];
+      }
     }
 
     /**
@@ -473,6 +500,10 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
       if (isValidValue(fields()[8], other.contractResults)) {
         this.contractResults = data().deepCopy(fields()[8].schema(), other.contractResults);
         fieldSetFlags()[8] = true;
+      }
+      if (isValidValue(fields()[9], other.storageResults)) {
+        this.storageResults = data().deepCopy(fields()[9].schema(), other.storageResults);
+        fieldSetFlags()[9] = true;
       }
     }
 
@@ -867,6 +898,46 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
       return this;
     }
 
+    /**
+      * Gets the value of the 'storageResults' field.
+      * @return The value.
+      */
+    public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> getStorageResults() {
+      return storageResults;
+    }
+
+
+    /**
+      * Sets the value of the 'storageResults' field.
+      * @param value The value of 'storageResults'.
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultDto.Builder setStorageResults(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> value) {
+      validate(fields()[9], value);
+      this.storageResults = value;
+      fieldSetFlags()[9] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'storageResults' field has been set.
+      * @return True if the 'storageResults' field has been set, false otherwise.
+      */
+    public boolean hasStorageResults() {
+      return fieldSetFlags()[9];
+    }
+
+
+    /**
+      * Clears the value of the 'storageResults' field.
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultDto.Builder clearStorageResults() {
+      storageResults = null;
+      fieldSetFlags()[9] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public TaskCalculationResultDto build() {
@@ -881,6 +952,7 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
         record.elapsedTime = fieldSetFlags()[6] ? this.elapsedTime : (java.lang.Double) defaultValue(fields()[6]);
         record.optimizerMessage = fieldSetFlags()[7] ? this.optimizerMessage : (java.lang.CharSequence) defaultValue(fields()[7]);
         record.contractResults = fieldSetFlags()[8] ? this.contractResults : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto>) defaultValue(fields()[8]);
+        record.storageResults = fieldSetFlags()[9] ? this.storageResults : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto>) defaultValue(fields()[9]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -960,6 +1032,19 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
     if (actualSize0 != size0)
       throw new java.util.ConcurrentModificationException("Array-size written was " + size0 + ", but element count was " + actualSize0 + ".");
 
+    long size1 = this.storageResults.size();
+    out.writeArrayStart();
+    out.setItemCount(size1);
+    long actualSize1 = 0;
+    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto e1: this.storageResults) {
+      actualSize1++;
+      out.startItem();
+      e1.customEncode(out);
+    }
+    out.writeArrayEnd();
+    if (actualSize1 != size1)
+      throw new java.util.ConcurrentModificationException("Array-size written was " + size1 + ", but element count was " + actualSize1 + ".");
+
   }
 
   @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
@@ -1016,8 +1101,26 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
         }
       }
 
+      long size1 = in.readArrayStart();
+      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> a1 = this.storageResults;
+      if (a1 == null) {
+        a1 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto>((int)size1, SCHEMA$.getField("storageResults").schema());
+        this.storageResults = a1;
+      } else a1.clear();
+      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> ga1 = (a1 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto>)a1 : null);
+      for ( ; 0 < size1; size1 = in.arrayNext()) {
+        for ( ; size1 != 0; size1--) {
+          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto e1 = (ga1 != null ? ga1.peek() : null);
+          if (e1 == null) {
+            e1 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto();
+          }
+          e1.customDecode(in);
+          a1.add(e1);
+        }
+      }
+
     } else {
-      for (int i = 0; i < 9; i++) {
+      for (int i = 0; i < 10; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.id = in.readLong();
@@ -1082,6 +1185,26 @@ public class TaskCalculationResultDto extends org.apache.avro.specific.SpecificR
               }
               e0.customDecode(in);
               a0.add(e0);
+            }
+          }
+          break;
+
+        case 9:
+          long size1 = in.readArrayStart();
+          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> a1 = this.storageResults;
+          if (a1 == null) {
+            a1 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto>((int)size1, SCHEMA$.getField("storageResults").schema());
+            this.storageResults = a1;
+          } else a1.clear();
+          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto> ga1 = (a1 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto>)a1 : null);
+          for ( ; 0 < size1; size1 = in.arrayNext()) {
+            for ( ; size1 != 0; size1--) {
+              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto e1 = (ga1 != null ? ga1.peek() : null);
+              if (e1 == null) {
+                e1 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationStorageResultDto();
+              }
+              e1.customDecode(in);
+              a1.add(e1);
             }
           }
           break;

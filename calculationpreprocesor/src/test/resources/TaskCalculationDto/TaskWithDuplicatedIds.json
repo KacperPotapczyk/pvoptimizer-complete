@@ -111,5 +111,37 @@
       "revisionNumber": 2,
       "defaultPrice": 0.15
     }
+  ],
+  "storages": [
+    {
+      "id": 44,
+      "name": "storage1",
+      "revisionNumber": 1,
+      "capacity": 100.0,
+      "maxCharge": 10.0,
+      "maxDischarge": 20.0,
+      "initialEnergy": 40.0,
+      "minChargeConstraints": [],
+      "maxChargeConstraints": [],
+      "minDischargeConstraints": [],
+      "maxDischargeConstraints": [],
+      "minEnergyConstraints": [],
+      "maxEnergyConstraints": []
+    },
+    {
+      "id": 44,
+      "name": "storage2",
+      "revisionNumber": 1,
+      "capacity": 120.0,
+      "maxCharge": 15.0,
+      "maxDischarge": 15.0,
+      "initialEnergy": 30.0,
+      "minChargeConstraints": [],
+      "maxChargeConstraints": [],
+      "minDischargeConstraints": [],
+      "maxDischargeConstraints": [],
+      "minEnergyConstraints": [],
+      "maxEnergyConstraints": []
+    }
   ]
 }

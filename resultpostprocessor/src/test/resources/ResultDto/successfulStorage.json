@@ -1,0 +1,30 @@
+{
+  "id":6,
+  "optimizationStatus":"SOLUTION_FOUND",
+  "objectiveFunctionValue":0.04166666666666665,
+  "relativeGap":1e-10,
+  "elapsedTime":0,
+  "errorMessage":"",
+  "contractResults":
+  [
+    {
+      "id":1,
+      "name":"simplePurchase",
+      "power":[0, 1.666666666666666],
+      "energy":[0, 0.4166666666666665],
+      "cost":[0, 0.04166666666666666]
+    }
+  ],
+  "storageResults":
+  [
+    {
+      "id":1,
+      "name":"storage1",
+      "charge":[0, 0],
+      "discharge":[8.33333333333333, 20],
+      "energy":[27.916666666666668, 22.91666666666667],
+      "storageMode":["DISCHARGING", "DISCHARGING"]
+    }
+  ],
+  "movableDemandResults":[]
+}

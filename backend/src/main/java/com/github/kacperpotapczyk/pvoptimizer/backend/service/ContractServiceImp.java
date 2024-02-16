@@ -1,7 +1,7 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.service;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.Contract;
-import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractConstraint;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint.TimeWindowConstraint;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.repository.ContractRepository;
 import com.github.kacperpotapczyk.pvoptimizer.backend.repository.ContractRevisionRepository;
@@ -169,7 +169,7 @@ public class ContractServiceImp implements ContractService {
         return true;
     }
 
-    private boolean isConstraintValid(ContractConstraint constraint) {
+    private boolean isConstraintValid(TimeWindowConstraint constraint) {
 
         return constraint.getDateTimeStart().isBefore(constraint.getDateTimeEnd()) && constraint.getConstraintValue() >= 0.0;
     }

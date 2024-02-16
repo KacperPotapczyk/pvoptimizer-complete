@@ -4,5 +4,7 @@ public enum ObjectType {
     CONTRACT,
     DEMAND,
     PRODUCTION,
-    TARIFF
+    TARIFF,
+    STORAGE,
+    MOVABLE_DEMAND
 }

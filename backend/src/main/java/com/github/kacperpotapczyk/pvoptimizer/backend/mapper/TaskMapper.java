@@ -5,12 +5,10 @@ import com.github.kacperpotapczyk.pvoptimizer.backend.dto.task.TaskDto;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
-import com.github.kacperpotapczyk.pvoptimizer.backend.service.ContractService;
-import com.github.kacperpotapczyk.pvoptimizer.backend.service.DemandService;
-import com.github.kacperpotapczyk.pvoptimizer.backend.service.ProductionService;
-import com.github.kacperpotapczyk.pvoptimizer.backend.service.TariffService;
+import com.github.kacperpotapczyk.pvoptimizer.backend.service.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,8 @@ public abstract class TaskMapper {
 
     @Autowired
     ContractService contractService;
+    @Autowired
+    StorageService storageService;
 
     public abstract TaskDto mapTaskToTaskDto(Task task);
     @Mapping(source = "demand.name", target = "baseName")
@@ -39,6 +39,8 @@ public abstract class TaskMapper {
     public abstract TaskBaseObjectRevisionDto mapTariffRevisionToTaskBaseObjectRevisionDto(TariffRevision tariffRevision);
     @Mapping(source = "contract.name", target = "baseName")
     public abstract TaskBaseObjectRevisionDto mapContractRevisionToTaskBaseObjectRevisionDto(ContractRevision contractRevision);
+    @Mapping(source = "storage.name", target = "baseName")
+    public abstract TaskBaseObjectRevisionDto mapStorageRevisionToTaskBaseObjectRevisionDto(StorageRevision storageRevision);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "readOnly", ignore = true)
@@ -60,5 +62,9 @@ public abstract class TaskMapper {
 
     public ContractRevision mapTaskBaseObjectRevisionDtoToContractRevision(TaskBaseObjectRevisionDto dto) {
         return contractService.getBaseObjectRevision(dto.baseName(), dto.revisionNumber());
+    }
+
+    public StorageRevision mapTaskBaseObjectRevisionDtoToStorageRevision(TaskBaseObjectRevisionDto dto) {
+        return storageService.getBaseObjectRevision(dto.baseName(), dto.revisionNumber());
     }
 }
