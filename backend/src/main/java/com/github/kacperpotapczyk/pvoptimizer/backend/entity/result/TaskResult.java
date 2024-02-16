@@ -50,6 +50,9 @@ public class TaskResult {
     @OneToMany(mappedBy = "taskResult", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContractResult> contractResults;
 
+    @OneToMany(mappedBy = "taskResult", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StorageResult> storageResults;
+
     @Column(name = "created_date_time")
     @CreationTimestamp
     private LocalDateTime createdDateTime;
@@ -72,5 +75,15 @@ public class TaskResult {
 
         this.contractResults.add(contractResult);
         contractResult.setTaskResult(this);
+    }
+
+    public void addStorageResult(StorageResult storageResults) {
+
+        if (this.storageResults == null) {
+            this.storageResults = new ArrayList<>();
+        }
+
+        this.storageResults.add(storageResults);
+        storageResults.setTaskResult(this);
     }
 }

@@ -1,11 +1,9 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.service;
 
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultValueDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultStatusDto;
+import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.*;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
 import com.github.kacperpotapczyk.pvoptimizer.backend.mapper.DateMapper;
 import com.github.kacperpotapczyk.pvoptimizer.backend.mapper.TaskCalculationResultMapper;
@@ -113,6 +111,11 @@ public class TaskResultServiceImpl implements TaskResultService {
                 for (TaskCalculationContractResultDto contractResultDto : taskCalculationResult.getContractResults()) {
                     taskResult.addContractResult(mapTaskCalculationContractResultDtoToContractResult(taskCalculationResult, contractResultDto, taskResult));
                 }
+
+                for (TaskCalculationStorageResultDto storageResultDto : taskCalculationResult.getStorageResults()) {
+                    taskResult.addStorageResult(mapTaskCalculationStorageResultDtoToStorageResult(taskCalculationResult, storageResultDto, taskResult));
+                }
+
             } else {
                 log.error("Task with id: {} optimization failed with message: {}", taskId, taskCalculationResult.getOptimizerMessage().toString());
             }
@@ -149,5 +152,32 @@ public class TaskResultServiceImpl implements TaskResultService {
 
         contractResult.setContractResultValues(contractResultValues);
         return contractResult;
+    }
+
+    private StorageResult mapTaskCalculationStorageResultDtoToStorageResult(TaskCalculationResultDto taskCalculationResult, TaskCalculationStorageResultDto taskCalculationStorageResultDto, TaskResult taskResult) {
+
+        StorageRevision storageRevision = taskRepository.getStorageRevisionByTaskIdAndStorageId(
+                taskCalculationResult.getId(),
+                taskCalculationStorageResultDto.getId()
+        );
+
+        StorageResult storageResult = new StorageResult();
+        storageResult.setStorageRevision(storageRevision);
+        storageResult.setTaskResult(taskResult);
+
+        List<StorageResultValue> storageResultValues = new ArrayList<>();
+
+        List<TaskCalculationStorageResultValueDto> storageResultValueDtoListSorted = taskCalculationStorageResultDto.getStorageResultValues().stream()
+                .sorted(Comparator.comparing(v -> dateMapper.asLocalDateTime(v.getDateTimeStart())))
+                .toList();
+
+        for (TaskCalculationStorageResultValueDto storageResultValueDto : storageResultValueDtoListSorted) {
+            StorageResultValue storageResultValue = taskCalculationResultMapper.mapTaskCalculationStorageResultValueDtoToStorageResultValue(storageResultValueDto);
+            storageResultValue.setStorageResult(storageResult);
+            storageResultValues.add(storageResultValue);
+        }
+
+        storageResult.setStorageResultValues(storageResultValues);
+        return storageResult;
     }
 }

@@ -306,6 +306,7 @@ INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_t
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(10, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(10, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(10, 1);
+INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(10, 1);
 
 
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)

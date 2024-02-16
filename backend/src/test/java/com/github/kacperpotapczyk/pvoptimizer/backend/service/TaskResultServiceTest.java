@@ -1,9 +1,6 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.service;
 
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationContractResultValueDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.TaskCalculationResultStatusDto;
+import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
 import jakarta.transaction.Transactional;
@@ -133,6 +130,7 @@ class TaskResultServiceTest {
 
         TaskResult taskResult = taskResultService.addCalculationResult(taskCalculationResultDto);
 
+        // task result assertions
         assertEquals("toAddCalculationResult", taskResult.getTask().getName());
         assertEquals(ResultStatus.SOLUTION_FOUND, taskResult.getResultStatus());
         assertEquals(100.0, taskResult.getObjectiveFunctionValue());
@@ -140,6 +138,7 @@ class TaskResultServiceTest {
         assertEquals(0.1, taskResult.getRelativeGap());
         assertEquals("Solution found", taskResult.getOptimizerMessage());
 
+        // contract result assertions
         assertEquals(1, taskResult.getContractResults().size());
         ContractResult contractResult = taskResult.getContractResults().get(0);
 
@@ -165,6 +164,31 @@ class TaskResultServiceTest {
         assertEquals(20.0, contractResultValue2.getPower());
         assertEquals(5.0, contractResultValue2.getEnergy());
         assertEquals(0.5, contractResultValue2.getCost());
+
+        // storage result assertions
+        assertEquals(1, taskResult.getStorageResults().size());
+        StorageResult storageResult = taskResult.getStorageResults().get(0);
+
+        assertEquals(1, storageResult.getStorageRevision().getId());
+        assertEquals(1, storageResult.getStorageRevision().getId());
+        assertEquals(3, storageResult.getTaskResult().getId());
+        assertEquals(2, storageResult.getStorageResultValues().size());
+
+        StorageResultValue storageResultValue1 = storageResult.getStorageResultValues().get(0);
+        assertEquals(LocalDateTime.parse("2023-01-01T10:00:00"), storageResultValue1.getDateTimeStart());
+        assertEquals(LocalDateTime.parse("2023-01-01T10:15:00"), storageResultValue1.getDateTimeEnd());
+        assertEquals(5.0, storageResultValue1.getCharge());
+        assertEquals(0.0, storageResultValue1.getDischarge());
+        assertEquals(30.5, storageResultValue1.getEnergy());
+        assertEquals(StorageMode.CHARGING, storageResultValue1.getStorageMode());
+
+        StorageResultValue storageResultValue2 = storageResult.getStorageResultValues().get(1);
+        assertEquals(LocalDateTime.parse("2023-01-01T10:15:00"), storageResultValue2.getDateTimeStart());
+        assertEquals(LocalDateTime.parse("2023-01-01T10:30:00"), storageResultValue2.getDateTimeEnd());
+        assertEquals(0.0, storageResultValue2.getCharge());
+        assertEquals(10.0, storageResultValue2.getDischarge());
+        assertEquals(20.5, storageResultValue2.getEnergy());
+        assertEquals(StorageMode.DISCHARGING, storageResultValue2.getStorageMode());
     }
 
     @Test
@@ -201,14 +225,15 @@ class TaskResultServiceTest {
     private TaskCalculationResultDto getTaskCalculationResultDto() {
         TaskCalculationResultDto.Builder resultBuilder = TaskCalculationResultDto.newBuilder();
 
-        resultBuilder.setId(10L);
-        resultBuilder.setResultStatus(TaskCalculationResultStatusDto.SOLUTION_FOUND);
-        resultBuilder.setObjectiveFunctionValue(100.0);
-        resultBuilder.setElapsedTime(1.2);
-        resultBuilder.setRelativeGap(0.1);
-        resultBuilder.setOptimizerMessage("Solution found");
-        resultBuilder.setDateTimeStart("2023-01-01T10:00:00");
-        resultBuilder.setDateTimeEnd("2023-01-01T10:30:00");
+        resultBuilder
+                .setId(10L)
+                .setResultStatus(TaskCalculationResultStatusDto.SOLUTION_FOUND)
+                .setObjectiveFunctionValue(100.0)
+                .setElapsedTime(1.2)
+                .setRelativeGap(0.1)
+                .setOptimizerMessage("Solution found")
+                .setDateTimeStart("2023-01-01T10:00:00")
+                .setDateTimeEnd("2023-01-01T10:30:00");
 
         TaskCalculationContractResultDto.Builder contractResultBuilder = TaskCalculationContractResultDto.newBuilder();
         contractResultBuilder.setId(1L);
@@ -232,8 +257,33 @@ class TaskResultServiceTest {
 
         List<TaskCalculationContractResultDto> taskCalculationContractResultDtoList = new ArrayList<>();
         taskCalculationContractResultDtoList.add(contractResultBuilder.build());
-
         resultBuilder.setContractResults(taskCalculationContractResultDtoList);
+
+        TaskCalculationStorageResultDto.Builder storageResultBuilder = TaskCalculationStorageResultDto.newBuilder();
+        storageResultBuilder.setId(1L);
+
+        List<TaskCalculationStorageResultValueDto> storageResultValueDtoList = new ArrayList<>();
+        storageResultValueDtoList.add(new TaskCalculationStorageResultValueDto(
+                "2023-01-01T10:00:00",
+                "2023-01-01T10:15:00",
+                5.0,
+                0.0,
+                30.5,
+                TaskCalculationStorageModeDto.CHARGING
+        ));
+        storageResultValueDtoList.add(new TaskCalculationStorageResultValueDto(
+                "2023-01-01T10:15:00",
+                "2023-01-01T10:30:00",
+                0.0,
+                10.0,
+                20.5,
+                TaskCalculationStorageModeDto.DISCHARGING
+        ));
+        storageResultBuilder.setStorageResultValues(storageResultValueDtoList);
+
+        List<TaskCalculationStorageResultDto> taskCalculationStorageResultDtoList = new ArrayList<>();
+        taskCalculationStorageResultDtoList.add(storageResultBuilder.build());
+        resultBuilder.setStorageResults(taskCalculationStorageResultDtoList);
 
         return resultBuilder.build();
     }

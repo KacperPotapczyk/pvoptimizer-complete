@@ -1,6 +1,7 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.repository;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "JOIN cr.contract c " +
             "WHERE t.id = :taskId AND c.id = :contractId")
     ContractRevision getContractRevisionByTaskIdAndContractId(@Param("taskId") long taskId, @Param("contractId") long contractId);
+
+    @Query("SELECT sr " +
+            "FROM Task t " +
+            "JOIN t.storageRevisions sr " +
+            "JOIN sr.storage s " +
+            "WHERE t.id = :taskId AND s.id = :storageId")
+    StorageRevision getStorageRevisionByTaskIdAndStorageId(@Param("taskId") long taskId, @Param("storageId") long storageId);
 }
