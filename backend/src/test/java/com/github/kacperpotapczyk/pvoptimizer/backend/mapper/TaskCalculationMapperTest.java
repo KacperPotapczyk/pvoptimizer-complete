@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -17,13 +19,13 @@ class TaskCalculationMapperTest {
 
     private final TaskService taskService;
     private final TaskCalculationMapper taskCalculationMapper;
-    private final DateMapper dateMapper;
+    private final DateTimeMapper dateTimeMapper;
 
     @Autowired
-    TaskCalculationMapperTest(TaskService taskService, TaskCalculationMapper taskCalculationMapper, DateMapper dateMapper) {
+    TaskCalculationMapperTest(TaskService taskService, TaskCalculationMapper taskCalculationMapper, DateTimeMapper dateTimeMapper) {
         this.taskService = taskService;
         this.taskCalculationMapper = taskCalculationMapper;
-        this.dateMapper = dateMapper;
+        this.dateTimeMapper = dateTimeMapper;
     }
 
     @Test
@@ -35,8 +37,8 @@ class TaskCalculationMapperTest {
         TaskCalculationDto taskCalculationDto = taskCalculationMapper.mapTaskToTaskCalculationDto(task);
 
         assertEquals(task.getId(), taskCalculationDto.getId());
-        assertEquals(dateMapper.asCharSequence(task.getDateTimeStart()), taskCalculationDto.getDateTimeStart());
-        assertEquals(dateMapper.asCharSequence(task.getDateTimeEnd()), taskCalculationDto.getDateTimeEnd());
+        assertEquals(dateTimeMapper.dateTimeAsCharSequence(task.getDateTimeStart()), taskCalculationDto.getDateTimeStart());
+        assertEquals(dateTimeMapper.dateTimeAsCharSequence(task.getDateTimeEnd()), taskCalculationDto.getDateTimeEnd());
 
         assertEquals(2, taskCalculationDto.getContracts().size());
         assertEquals(1, taskCalculationDto.getDemands().size());
@@ -94,6 +96,29 @@ class TaskCalculationMapperTest {
         assertEquals(1, taskTariffDto.getId());
         assertEquals("queryOnly", taskTariffDto.getName());
         assertEquals(0.02, taskTariffDto.getDefaultPrice());
+        assertEquals(2, taskTariffDto.getCyclicalDailyValues().size());
+
+        CyclicalDailyValueDto cyclicalDailyValueDto1 = taskTariffDto.getCyclicalDailyValues().stream()
+                .filter(dailyValueDto -> dailyValueDto.getDayOfTheWeek() == WeekdaysDto.MONDAY_TO_FRIDAY)
+                .findAny().orElseThrow();
+        assertEquals(2, cyclicalDailyValueDto1.getDailyTimeValues().size());
+
+        List<DailyTimeValueDto> dailyTimeValueList1 = cyclicalDailyValueDto1.getDailyTimeValues();
+        assertEquals(0.03, dailyTimeValueList1.get(0).getCurrentValue());
+        assertEquals("06:00:00", dailyTimeValueList1.get(0).getStartTime().toString());
+        assertEquals(0.01, dailyTimeValueList1.get(1).getCurrentValue());
+        assertEquals("22:00:00", dailyTimeValueList1.get(1).getStartTime().toString());
+
+        CyclicalDailyValueDto cyclicalDailyValueDto2 = taskTariffDto.getCyclicalDailyValues().stream()
+                .filter(dailyValueDto -> dailyValueDto.getDayOfTheWeek() == WeekdaysDto.WEEKEND)
+                .findAny().orElseThrow();
+        assertEquals(2, cyclicalDailyValueDto2.getDailyTimeValues().size());
+
+        List<DailyTimeValueDto> dailyTimeValueList2 = cyclicalDailyValueDto2.getDailyTimeValues();
+        assertEquals(0.025, dailyTimeValueList2.get(0).getCurrentValue());
+        assertEquals("08:00:00", dailyTimeValueList2.get(0).getStartTime().toString());
+        assertEquals(0.005, dailyTimeValueList2.get(1).getCurrentValue());
+        assertEquals("23:30:00", dailyTimeValueList2.get(1).getStartTime().toString());
 
         TaskStorageDto taskStorageDto = taskCalculationDto.getStorages().get(0);
         assertEquals(1, taskStorageDto.getRevisionNumber());

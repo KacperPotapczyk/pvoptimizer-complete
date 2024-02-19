@@ -1,13 +1,13 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.Revision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.cyclicalvalue.CyclicalDailyValue;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +25,9 @@ public class TariffRevision extends Revision {
 
     @Column(name = "default_price", nullable = false, columnDefinition = "float(53) default 0.0")
     private double defaultPrice;
+
+    @OneToMany(mappedBy = "tariffRevision", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CyclicalDailyValue> cyclicalDailyValues;
 
     public TariffRevision(Long revisionNumber, double defaultPrice) {
         super(revisionNumber);

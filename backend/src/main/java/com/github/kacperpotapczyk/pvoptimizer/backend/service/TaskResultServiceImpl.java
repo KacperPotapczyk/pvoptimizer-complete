@@ -5,7 +5,7 @@ import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRe
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
-import com.github.kacperpotapczyk.pvoptimizer.backend.mapper.DateMapper;
+import com.github.kacperpotapczyk.pvoptimizer.backend.mapper.DateTimeMapper;
 import com.github.kacperpotapczyk.pvoptimizer.backend.mapper.TaskCalculationResultMapper;
 import com.github.kacperpotapczyk.pvoptimizer.backend.repository.TaskRepository;
 import com.github.kacperpotapczyk.pvoptimizer.backend.repository.TaskResultRepository;
@@ -26,14 +26,14 @@ public class TaskResultServiceImpl implements TaskResultService {
     private final TaskResultRepository resultRepository;
     private final TaskRepository taskRepository;
     private final TaskCalculationResultMapper taskCalculationResultMapper;
-    private final DateMapper dateMapper;
+    private final DateTimeMapper dateTimeMapper;
 
     @Autowired
-    public TaskResultServiceImpl(TaskResultRepository resultRepository, TaskRepository taskRepository, TaskCalculationResultMapper taskCalculationResultMapper, DateMapper dateMapper) {
+    public TaskResultServiceImpl(TaskResultRepository resultRepository, TaskRepository taskRepository, TaskCalculationResultMapper taskCalculationResultMapper, DateTimeMapper dateTimeMapper) {
         this.resultRepository = resultRepository;
         this.taskRepository = taskRepository;
         this.taskCalculationResultMapper = taskCalculationResultMapper;
-        this.dateMapper = dateMapper;
+        this.dateTimeMapper = dateTimeMapper;
     }
 
     @Override
@@ -140,7 +140,7 @@ public class TaskResultServiceImpl implements TaskResultService {
         List<ContractResultValue> contractResultValues = new ArrayList<>();
 
         List<TaskCalculationContractResultValueDto> contractResultValueDtoListSorted = taskCalculationContractResultDto.getContractResultValues().stream()
-                .sorted(Comparator.comparing(v -> dateMapper.asLocalDateTime(v.getDateTimeStart())))
+                .sorted(Comparator.comparing(v -> dateTimeMapper.dateTimeAsLocalDateTime(v.getDateTimeStart())))
                 .toList();
 
         for (TaskCalculationContractResultValueDto contractResultValueDto : contractResultValueDtoListSorted) {
@@ -168,7 +168,7 @@ public class TaskResultServiceImpl implements TaskResultService {
         List<StorageResultValue> storageResultValues = new ArrayList<>();
 
         List<TaskCalculationStorageResultValueDto> storageResultValueDtoListSorted = taskCalculationStorageResultDto.getStorageResultValues().stream()
-                .sorted(Comparator.comparing(v -> dateMapper.asLocalDateTime(v.getDateTimeStart())))
+                .sorted(Comparator.comparing(v -> dateTimeMapper.dateTimeAsLocalDateTime(v.getDateTimeStart())))
                 .toList();
 
         for (TaskCalculationStorageResultValueDto storageResultValueDto : storageResultValueDtoListSorted) {

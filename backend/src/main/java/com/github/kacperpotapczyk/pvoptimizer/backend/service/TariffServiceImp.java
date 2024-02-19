@@ -1,5 +1,6 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.service;
 
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.cyclicalvalue.CyclicalDailyValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.Tariff;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.repository.TariffRepository;
@@ -52,6 +53,7 @@ public class TariffServiceImp implements TariffService {
                     .orElseThrow(() -> new IllegalArgumentException("Base object must have one revision"));
             tariffRevision.setRevisionNumber(1L);
             tariffRevision.setTariff(tariff);
+            addCyclicalDailyValuesToTariffRevision(tariffRevision);
 
             tariff.setRevisions(Set.of(tariffRevision));
 
@@ -71,6 +73,7 @@ public class TariffServiceImp implements TariffService {
         Long lastRevisionNumber = tariff.getLastRevisionNumber().orElse(0L);
         revision.setRevisionNumber(lastRevisionNumber + 1L);
         revision.setTariff(tariff);
+        addCyclicalDailyValuesToTariffRevision(revision);
 
         tariff.addRevision(revision);
 
@@ -127,5 +130,25 @@ public class TariffServiceImp implements TariffService {
         tariffRevision.softDelete();
 
         return tariff;
+    }
+
+    private void addCyclicalDailyValuesToTariffRevision(TariffRevision tariffRevision) {
+
+        if (tariffRevision.getCyclicalDailyValues() != null) {
+            tariffRevision.getCyclicalDailyValues().forEach(cyclicalDailyValue -> {
+                cyclicalDailyValue.setTariffRevision(tariffRevision);
+                addDailyTimeValueToCyclicalDailyValue(cyclicalDailyValue);
+            });
+
+        }
+    }
+
+    private void addDailyTimeValueToCyclicalDailyValue(CyclicalDailyValue cyclicalDailyValue) {
+
+        if (cyclicalDailyValue.getDailyTimeValues() != null) {
+            cyclicalDailyValue.getDailyTimeValues().forEach(dailyTimeValue -> dailyTimeValue.setCyclicalDailyValues(cyclicalDailyValue));
+        } else {
+            throw new IllegalArgumentException("CyclicalDailyValue must have at least one dailyTimeValue");
+        }
     }
 }
