@@ -17,9 +17,9 @@ public class TariffValidation {
     public void validate(List<TaskTariffDto> taskTariffDtoList, ValidationMessages.ValidationMessagesBuilder builder) {
 
         checkTariffIds(builder, taskTariffDtoList);
+        checkTariffNames(builder, taskTariffDtoList);
     }
 
-    // TODO check tariff name uniqueness. Contracts find their tariff by name
     private void checkTariffIds(ValidationMessages.ValidationMessagesBuilder builder, List<TaskTariffDto> taskTariffDtoList) {
 
         Set<Long> uniqueIds = new HashSet<>(taskTariffDtoList.size());
@@ -33,6 +33,23 @@ public class TariffValidation {
                         taskTariffDto.getId(),
                         taskTariffDto.getRevisionNumber(),
                         "Not unique base object id: " + taskTariffDto.getId()));
+            }
+        }
+    }
+
+    private void checkTariffNames(ValidationMessages.ValidationMessagesBuilder builder, List<TaskTariffDto> taskTariffDtoList) {
+
+        Set<String> uniqueIds = new HashSet<>(taskTariffDtoList.size());
+        for (TaskTariffDto taskTariffDto : taskTariffDtoList) {
+
+            if (!uniqueIds.add(taskTariffDto.getName().toString())) {
+                builder.message(new ValidationMessage(
+                        ValidationMessageLevel.ERROR,
+                        ObjectType.TARIFF,
+                        taskTariffDto.getName().toString(),
+                        taskTariffDto.getId(),
+                        taskTariffDto.getRevisionNumber(),
+                        "Not unique tariff name: " + taskTariffDto.getName().toString()));
             }
         }
     }

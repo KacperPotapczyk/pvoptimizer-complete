@@ -5,6 +5,7 @@ import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.Task
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.constraint.TimeWindowConstraint;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractType;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.cyclicalvalue.CyclicalDailyValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = DateMapper.class)
+@Mapper(componentModel = "spring", uses = DateTimeMapper.class)
 public abstract class TaskCalculationMapper {
 
     public abstract TaskContractTypeDto mapContractTypeToTaskContractTypeDto(ContractType contractType);
@@ -32,16 +33,18 @@ public abstract class TaskCalculationMapper {
 
     public abstract TaskProductionValueDto mapProductionValueToTaskProductionValueDto(ProductionValue productionValue);
 
+    public abstract CyclicalDailyValueDto mapCyclicalDailyValueToCyclicalDailyValueDto(CyclicalDailyValue cyclicalDailyValue);
+
     public TaskCalculationDto mapTaskToTaskCalculationDto(Task task) {
 
-        DateMapper dateMapper = new DateMapper();
+        DateTimeMapper dateTimeMapper = new DateTimeMapper();
         LocalDateTime taskDateTimeStart = task.getDateTimeStart();
         LocalDateTime taskDateTimeEnd = task.getDateTimeEnd();
 
         return new TaskCalculationDto(
                 task.getId(),
-                dateMapper.asCharSequence(taskDateTimeStart),
-                dateMapper.asCharSequence(task.getDateTimeEnd()),
+                dateTimeMapper.dateTimeAsCharSequence(taskDateTimeStart),
+                dateTimeMapper.dateTimeAsCharSequence(task.getDateTimeEnd()),
                 task.getContractRevisions().stream()
                         .map(contractRevision -> this.mapContractRevisionToTaskContractDto(contractRevision, taskDateTimeStart, taskDateTimeEnd))
                         .toList(),
@@ -129,7 +132,10 @@ public abstract class TaskCalculationMapper {
                 tariffRevision.getTariff().getId(),
                 tariffRevision.getTariff().getName(),
                 tariffRevision.getRevisionNumber(),
-                tariffRevision.getDefaultPrice()
+                tariffRevision.getDefaultPrice(),
+                tariffRevision.getCyclicalDailyValues().stream()
+                        .map(this::mapCyclicalDailyValueToCyclicalDailyValueDto)
+                        .toList()
         );
     }
 }

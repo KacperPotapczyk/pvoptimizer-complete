@@ -253,6 +253,55 @@
               "name": "defaultPrice",
               "type": "double",
               "doc": "Default unit price"
+            },
+            {
+              "name": "cyclicalDailyValues",
+              "doc": "List of cyclical tariff values",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "CyclicalDailyValueDto",
+                  "doc": "Daily cyclical tariff value",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "dayOfTheWeek",
+                      "doc": "To which day given values apply",
+                      "type": {
+                        "name": "WeekdaysDto",
+                        "type": "enum",
+                        "symbols": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY", "ALL", "MONDAY_TO_FRIDAY", "WEEKEND"],
+                        "doc": "Defines days of week"
+                      }
+                    },
+                    {
+                      "name": "dailyTimeValues",
+                      "doc": "Daily values for given day",
+                      "type": {
+                        "type": "array",
+                        "items": {
+                          "type": "record",
+                          "name": "DailyTimeValueDto",
+                          "doc": "Value starting at given time",
+                          "fields": [
+                            {
+                              "name": "startTime",
+                              "type": "string",
+                              "doc": "Value starting time"
+                            },
+                            {
+                              "name": "currentValue",
+                              "type": "double",
+                              "doc": "Value applicable since startTime"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "default": []
             }
           ]
         }

@@ -9,7 +9,7 @@ import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.StorageResul
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = DateMapper.class)
+@Mapper(componentModel = "spring", uses = DateTimeMapper.class)
 public interface TaskCalculationResultMapper {
 
     ResultStatus mapTaskCalculationResultStatusDtoToResultStatus(TaskCalculationResultStatusDto taskCalculationResultStatusDto);

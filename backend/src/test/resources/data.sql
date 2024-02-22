@@ -101,6 +101,15 @@ INSERT INTO production_value(revision_id, date_time, production) VALUES(10, '202
 ------------------------------------------------------------------------ Tariffs
 INSERT INTO tariff(name) VALUES('queryOnly');   -- Tariff #1
 INSERT INTO tariff_revision(revision_number, created_date, base_id, default_price) VALUES(1, '2023-10-15T12:00:00', 1, 0.02);  -- TariffRevision #1
+
+INSERT INTO cyclical_daily_value(tariff_revision, day_of_the_week) VALUES(1, 8);    -- CyclicalDailyValue #1
+INSERT INTO daily_time_value(daily_value_id, start_time, current_value) VALUES(1, '06:00:00', 0.03);  -- DailyTimeValue #1
+INSERT INTO daily_time_value(daily_value_id, start_time, current_value) VALUES(1, '22:00:00', 0.01);  -- DailyTimeValue #2
+
+INSERT INTO cyclical_daily_value(tariff_revision, day_of_the_week) VALUES(1, 9);    -- CyclicalDailyValue #2
+INSERT INTO daily_time_value(daily_value_id, start_time, current_value) VALUES(2, '08:00:00', 0.025);  -- DailyTimeValue #3
+INSERT INTO daily_time_value(daily_value_id, start_time, current_value) VALUES(2, '23:30:00', 0.005);  -- DailyTimeValue #4
+
 INSERT INTO tariff_revision(revision_number, created_date, base_id, default_price) VALUES(2, '2023-10-15T13:42:00', 1, 0.056);  -- TariffRevision #2
 
 
