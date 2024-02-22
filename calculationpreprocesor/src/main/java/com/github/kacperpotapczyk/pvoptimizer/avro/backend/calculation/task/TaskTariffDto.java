@@ -15,10 +15,10 @@ import org.apache.avro.message.SchemaStore;
 /** Contract tariff */
 @org.apache.avro.specific.AvroGenerated
 public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 2458413558604998624L;
+  private static final long serialVersionUID = -2310036296193621392L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskTariffDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task\",\"doc\":\"Contract tariff\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Tariff id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Tariff name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Tariff revision number\"},{\"name\":\"defaultPrice\",\"type\":\"double\",\"doc\":\"Default unit price\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskTariffDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task\",\"doc\":\"Contract tariff\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Tariff id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Tariff name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Tariff revision number\"},{\"name\":\"defaultPrice\",\"type\":\"double\",\"doc\":\"Default unit price\"},{\"name\":\"cyclicalDailyValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"CyclicalDailyValueDto\",\"doc\":\"Daily cyclical tariff value\",\"fields\":[{\"name\":\"dayOfTheWeek\",\"type\":{\"type\":\"enum\",\"name\":\"WeekdaysDto\",\"doc\":\"Defines days of week\",\"symbols\":[\"MONDAY\",\"TUESDAY\",\"WEDNESDAY\",\"THURSDAY\",\"FRIDAY\",\"SATURDAY\",\"SUNDAY\",\"ALL\",\"MONDAY_TO_FRIDAY\",\"WEEKEND\"]},\"doc\":\"To which day given values apply\"},{\"name\":\"dailyTimeValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"DailyTimeValueDto\",\"doc\":\"Value starting at given time\",\"fields\":[{\"name\":\"startTime\",\"type\":\"string\",\"doc\":\"Value starting time\"},{\"name\":\"currentValue\",\"type\":\"double\",\"doc\":\"Value applicable since startTime\"}]}},\"doc\":\"Daily values for given day\"}]}},\"doc\":\"List of cyclical tariff values\",\"default\":[]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -82,6 +82,8 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
   private long revisionNumber;
   /** Default unit price */
   private double defaultPrice;
+  /** List of cyclical tariff values */
+  private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> cyclicalDailyValues;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -96,12 +98,14 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
    * @param name Tariff name
    * @param revisionNumber Tariff revision number
    * @param defaultPrice Default unit price
+   * @param cyclicalDailyValues List of cyclical tariff values
    */
-  public TaskTariffDto(java.lang.Long id, java.lang.CharSequence name, java.lang.Long revisionNumber, java.lang.Double defaultPrice) {
+  public TaskTariffDto(java.lang.Long id, java.lang.CharSequence name, java.lang.Long revisionNumber, java.lang.Double defaultPrice, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> cyclicalDailyValues) {
     this.id = id;
     this.name = name;
     this.revisionNumber = revisionNumber;
     this.defaultPrice = defaultPrice;
+    this.cyclicalDailyValues = cyclicalDailyValues;
   }
 
   @Override
@@ -118,6 +122,7 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
     case 1: return name;
     case 2: return revisionNumber;
     case 3: return defaultPrice;
+    case 4: return cyclicalDailyValues;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -131,6 +136,7 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
     case 1: name = (java.lang.CharSequence)value$; break;
     case 2: revisionNumber = (java.lang.Long)value$; break;
     case 3: defaultPrice = (java.lang.Double)value$; break;
+    case 4: cyclicalDailyValues = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto>)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -208,6 +214,24 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
   }
 
   /**
+   * Gets the value of the 'cyclicalDailyValues' field.
+   * @return List of cyclical tariff values
+   */
+  public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> getCyclicalDailyValues() {
+    return cyclicalDailyValues;
+  }
+
+
+  /**
+   * Sets the value of the 'cyclicalDailyValues' field.
+   * List of cyclical tariff values
+   * @param value the value to set.
+   */
+  public void setCyclicalDailyValues(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> value) {
+    this.cyclicalDailyValues = value;
+  }
+
+  /**
    * Creates a new TaskTariffDto RecordBuilder.
    * @return A new TaskTariffDto RecordBuilder
    */
@@ -256,6 +280,8 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
     private long revisionNumber;
     /** Default unit price */
     private double defaultPrice;
+    /** List of cyclical tariff values */
+    private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> cyclicalDailyValues;
 
     /** Creates a new Builder */
     private Builder() {
@@ -284,6 +310,10 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
         this.defaultPrice = data().deepCopy(fields()[3].schema(), other.defaultPrice);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
+      if (isValidValue(fields()[4], other.cyclicalDailyValues)) {
+        this.cyclicalDailyValues = data().deepCopy(fields()[4].schema(), other.cyclicalDailyValues);
+        fieldSetFlags()[4] = other.fieldSetFlags()[4];
+      }
     }
 
     /**
@@ -307,6 +337,10 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
       if (isValidValue(fields()[3], other.defaultPrice)) {
         this.defaultPrice = data().deepCopy(fields()[3].schema(), other.defaultPrice);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.cyclicalDailyValues)) {
+        this.cyclicalDailyValues = data().deepCopy(fields()[4].schema(), other.cyclicalDailyValues);
+        fieldSetFlags()[4] = true;
       }
     }
 
@@ -483,6 +517,50 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
       return this;
     }
 
+    /**
+      * Gets the value of the 'cyclicalDailyValues' field.
+      * List of cyclical tariff values
+      * @return The value.
+      */
+    public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> getCyclicalDailyValues() {
+      return cyclicalDailyValues;
+    }
+
+
+    /**
+      * Sets the value of the 'cyclicalDailyValues' field.
+      * List of cyclical tariff values
+      * @param value The value of 'cyclicalDailyValues'.
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto.Builder setCyclicalDailyValues(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> value) {
+      validate(fields()[4], value);
+      this.cyclicalDailyValues = value;
+      fieldSetFlags()[4] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'cyclicalDailyValues' field has been set.
+      * List of cyclical tariff values
+      * @return True if the 'cyclicalDailyValues' field has been set, false otherwise.
+      */
+    public boolean hasCyclicalDailyValues() {
+      return fieldSetFlags()[4];
+    }
+
+
+    /**
+      * Clears the value of the 'cyclicalDailyValues' field.
+      * List of cyclical tariff values
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto.Builder clearCyclicalDailyValues() {
+      cyclicalDailyValues = null;
+      fieldSetFlags()[4] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public TaskTariffDto build() {
@@ -492,6 +570,7 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
         record.name = fieldSetFlags()[1] ? this.name : (java.lang.CharSequence) defaultValue(fields()[1]);
         record.revisionNumber = fieldSetFlags()[2] ? this.revisionNumber : (java.lang.Long) defaultValue(fields()[2]);
         record.defaultPrice = fieldSetFlags()[3] ? this.defaultPrice : (java.lang.Double) defaultValue(fields()[3]);
+        record.cyclicalDailyValues = fieldSetFlags()[4] ? this.cyclicalDailyValues : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto>) defaultValue(fields()[4]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -532,6 +611,19 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
 
     out.writeDouble(this.defaultPrice);
 
+    long size0 = this.cyclicalDailyValues.size();
+    out.writeArrayStart();
+    out.setItemCount(size0);
+    long actualSize0 = 0;
+    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto e0: this.cyclicalDailyValues) {
+      actualSize0++;
+      out.startItem();
+      e0.customEncode(out);
+    }
+    out.writeArrayEnd();
+    if (actualSize0 != size0)
+      throw new java.util.ConcurrentModificationException("Array-size written was " + size0 + ", but element count was " + actualSize0 + ".");
+
   }
 
   @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
@@ -547,8 +639,26 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
 
       this.defaultPrice = in.readDouble();
 
+      long size0 = in.readArrayStart();
+      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> a0 = this.cyclicalDailyValues;
+      if (a0 == null) {
+        a0 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto>((int)size0, SCHEMA$.getField("cyclicalDailyValues").schema());
+        this.cyclicalDailyValues = a0;
+      } else a0.clear();
+      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> ga0 = (a0 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto>)a0 : null);
+      for ( ; 0 < size0; size0 = in.arrayNext()) {
+        for ( ; size0 != 0; size0--) {
+          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto e0 = (ga0 != null ? ga0.peek() : null);
+          if (e0 == null) {
+            e0 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto();
+          }
+          e0.customDecode(in);
+          a0.add(e0);
+        }
+      }
+
     } else {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 5; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.id = in.readLong();
@@ -564,6 +674,26 @@ public class TaskTariffDto extends org.apache.avro.specific.SpecificRecordBase i
 
         case 3:
           this.defaultPrice = in.readDouble();
+          break;
+
+        case 4:
+          long size0 = in.readArrayStart();
+          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> a0 = this.cyclicalDailyValues;
+          if (a0 == null) {
+            a0 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto>((int)size0, SCHEMA$.getField("cyclicalDailyValues").schema());
+            this.cyclicalDailyValues = a0;
+          } else a0.clear();
+          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto> ga0 = (a0 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto>)a0 : null);
+          for ( ; 0 < size0; size0 = in.arrayNext()) {
+            for ( ; size0 != 0; size0--) {
+              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto e0 = (ga0 != null ? ga0.peek() : null);
+              if (e0 == null) {
+                e0 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.CyclicalDailyValueDto();
+              }
+              e0.customDecode(in);
+              a0.add(e0);
+            }
+          }
           break;
 
         default:

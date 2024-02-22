@@ -103,13 +103,15 @@
       "id": 2,
       "name": "tariff1",
       "revisionNumber": 1,
-      "defaultPrice": 0.05
+      "defaultPrice": 0.05,
+      "cyclicalDailyValues": []
     },
     {
       "id": 2,
       "name": "tariff2",
       "revisionNumber": 2,
-      "defaultPrice": 0.15
+      "defaultPrice": 0.15,
+      "cyclicalDailyValues": []
     }
   ],
   "storages": [

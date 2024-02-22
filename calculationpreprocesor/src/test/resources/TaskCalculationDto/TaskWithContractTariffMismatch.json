@@ -96,7 +96,8 @@
       "id": 2,
       "name": "other tariff",
       "revisionNumber": 1,
-      "defaultPrice": 0.05
+      "defaultPrice": 0.05,
+      "cyclicalDailyValues": []
     }
   ],
   "storages": []

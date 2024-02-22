@@ -1,0 +1,86 @@
+{
+  "id": 3,
+  "dateTimeStart": "2023-01-01T23:35",
+  "dateTimeEnd": "2023-01-02T00:15",
+  "contracts": [
+    {
+      "id": 1,
+      "name": "contract2",
+      "revisionNumber": 1,
+      "contractType": "PURCHASE",
+      "tariffName": "tariff_cyclic",
+      "minPowerConstraints": [],
+      "maxPowerConstraints": [],
+      "minEnergyConstraints": [],
+      "maxEnergyConstraints": []
+    }
+  ],
+  "demands":[
+    {
+      "id":2,
+      "name":"demand1",
+      "revisionNumber":1,
+      "demandValues":[
+        {
+          "value":10,
+          "dateTime":"2023-01-01T10:00:00"
+        }
+      ]
+    }
+  ],
+  "productions": [],
+  "tariffs": [
+    {
+      "id": 2,
+      "name": "tariff_cyclic",
+      "revisionNumber": 1,
+      "defaultPrice": 0.05,
+      "cyclicalDailyValues": [
+        {
+          "dayOfTheWeek": "ALL",
+          "dailyTimeValues": [
+            {
+              "startTime": "06:00:00",
+              "currentValue": 0.3
+            },
+            {
+              "startTime": "16:00:00",
+              "currentValue": 0.5
+            },
+            {
+              "startTime": "22:00:00",
+              "currentValue": 0.2
+            }
+          ]
+        },
+        {
+          "dayOfTheWeek": "WEEKEND",
+          "dailyTimeValues": [
+            {
+              "startTime": "08:00:00",
+              "currentValue": 10
+            },
+            {
+              "startTime": "23:00:00",
+              "currentValue": 10
+            }
+          ]
+        },
+        {
+          "dayOfTheWeek": "SUNDAY",
+          "dailyTimeValues": [
+            {
+              "startTime": "10:10:00",
+              "currentValue": 0.3
+            },
+            {
+              "startTime": "23:40:00",
+              "currentValue": 0.1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "storages": []
+}

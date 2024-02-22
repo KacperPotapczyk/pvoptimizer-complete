@@ -9,8 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -55,8 +54,8 @@ public class TaskPreProcessImp implements TaskPreProcess {
         builder.setIntervals(
                 intervals.stream()
                         .map(interval -> new IntervalDto(
-                                dateTimeMapper.mapToCharSequence(interval.dateTimeStart()),
-                                dateTimeMapper.mapToCharSequence(interval.dateTimeEnd())
+                                dateTimeMapper.mapDateTimeToCharSequence(interval.dateTimeStart()),
+                                dateTimeMapper.mapDateTimeToCharSequence(interval.dateTimeEnd())
                         ))
                         .toList()
         );
@@ -162,7 +161,7 @@ public class TaskPreProcessImp implements TaskPreProcess {
 
         contractBuilder.setUnitPrice(
                 intervals.stream()
-                        .map(dummy -> contractTariff.getDefaultPrice())
+                        .map(interval -> calculateUnitPriceForInterval(interval, contractTariff))
                         .toList()
         );
 
@@ -570,6 +569,132 @@ public class TaskPreProcessImp implements TaskPreProcess {
         return subIntervalsValue;
     }
 
+    private double calculateUnitPriceForInterval(Interval interval, TaskTariffDto contractTariff) {
+
+        List<IntervalValue> unitPriceValues = new ArrayList<>();
+
+        if (interval.dateTimeStart().toLocalDate().isEqual(interval.dateTimeEnd().toLocalDate())) {
+            unitPriceValues.addAll(findActiveDailyValuesForInterval(interval, contractTariff));
+        }
+        else {
+            long numberOfDaysInInterval = interval.dateTimeStart().until(interval.dateTimeEnd(), ChronoUnit.DAYS);
+            Interval firstDay = new Interval(
+                    interval.index(),
+                    interval.dateTimeStart(),
+                    interval.dateTimeStart().toLocalDate().plusDays(1).atStartOfDay()
+            );
+            unitPriceValues.addAll(findActiveDailyValuesForInterval(firstDay, contractTariff));
+
+            for (long i=1; i<numberOfDaysInInterval; i++) {
+                Interval middleInterval = new Interval(
+                        interval.index(),
+                        interval.dateTimeStart().toLocalDate().plusDays(i).atStartOfDay(),
+                        interval.dateTimeStart().toLocalDate().plusDays(i+1).atStartOfDay()
+                );
+                unitPriceValues.addAll(findActiveDailyValuesForInterval(middleInterval, contractTariff));
+            }
+
+            Interval secondDay = new Interval(
+                    interval.index(),
+                    interval.dateTimeStart().toLocalDate().plusDays(1).atStartOfDay(),
+                    interval.dateTimeEnd()
+            );
+            unitPriceValues.addAll(findActiveDailyValuesForInterval(secondDay, contractTariff));
+        }
+
+        return averageService.weighted(unitPriceValues);
+    }
+
+    private List<IntervalValue> findActiveDailyValuesForInterval(Interval interval, TaskTariffDto contractTariff) {
+
+        Optional<CyclicalDailyValueDto> cyclicalDailyValuesInInterval = contractTariff.getCyclicalDailyValues().stream()
+                .filter(dailyValueDto -> matchingIntervalDayOfWeek(interval.dateTimeStart().getDayOfWeek(), dailyValueDto.getDayOfTheWeek()))
+                .findFirst();
+        if (cyclicalDailyValuesInInterval.isPresent()) {
+            return getTariffPriceSubValuesForInterval(interval, cyclicalDailyValuesInInterval.get());
+        }
+
+        Optional<CyclicalDailyValueDto> cyclicalDailyValuesInRange = contractTariff.getCyclicalDailyValues().stream()
+                .filter(dailyValueDto -> matchingIntervalWithRange(interval.dateTimeStart().getDayOfWeek(), dailyValueDto.getDayOfTheWeek()))
+                .findFirst();
+        if (cyclicalDailyValuesInRange.isPresent()) {
+            return getTariffPriceSubValuesForInterval(interval, cyclicalDailyValuesInRange.get());
+        }
+
+        Optional<CyclicalDailyValueDto> cyclicalDailyValuesInAll = contractTariff.getCyclicalDailyValues().stream()
+                .filter(dailyValueDto -> dailyValueDto.getDayOfTheWeek() == WeekdaysDto.ALL)
+                .findFirst();
+        if (cyclicalDailyValuesInAll.isPresent()) {
+            return getTariffPriceSubValuesForInterval(interval, cyclicalDailyValuesInAll.get());
+        }
+
+        List<IntervalValue> intervalValues = new ArrayList<>();
+        intervalValues.add(new IntervalValue(interval, contractTariff.getDefaultPrice()));
+        return intervalValues;
+    }
+
+    private List<IntervalValue> getTariffPriceSubValuesForInterval(Interval interval, CyclicalDailyValueDto cyclicalDailyValuesInInterval) {
+
+        List<IntervalValue> subValues = new ArrayList<>();
+        List<DailyTimeValueDto> dailyTimeValues = cyclicalDailyValuesInInterval.getDailyTimeValues();
+
+        double startValue = dailyTimeValues.stream()
+                .filter(value -> isBeforeOrEqual(dateTimeMapper.mapToLocalTime(value.getStartTime()), interval.dateTimeStart().toLocalTime()))
+                .max((v1, v2) -> dateTimeMapper.mapToLocalTime(v1.getStartTime()).compareTo(dateTimeMapper.mapToLocalTime(v2.getStartTime())))
+                .map(DailyTimeValueDto::getCurrentValue)
+                .orElse(dailyTimeValues.get(dailyTimeValues.size() - 1).getCurrentValue());
+
+        List<DailyTimeValueDto> intervalBreaks = dailyTimeValues.stream()
+                .filter(dailyTimeValueDto -> dateTimeMapper.mapToLocalTime(dailyTimeValueDto.getStartTime()).isAfter(interval.dateTimeStart().toLocalTime()) &&
+                        dateTimeMapper.mapToLocalTime(dailyTimeValueDto.getStartTime()).isBefore(interval.dateTimeEnd().toLocalTime()))
+                .toList();
+
+        if (intervalBreaks.isEmpty()) {
+            subValues.add(new IntervalValue(interval, startValue));
+        } else {
+
+            LocalDate currentDate = interval.dateTimeStart().toLocalDate();
+            LocalDateTime firstEndDateTime = LocalDateTime.of(
+                    currentDate,
+                    dateTimeMapper.mapToLocalTime(intervalBreaks.get(0).getStartTime())
+            );
+            subValues.add(new IntervalValue(interval.dateTimeStart(), firstEndDateTime, startValue));
+
+            for (int i=1; i<intervalBreaks.size()-1; i++) {
+
+                LocalDateTime startDateTime = LocalDateTime.of(
+                        currentDate,
+                        dateTimeMapper.mapToLocalTime(intervalBreaks.get(i).getStartTime())
+                );
+                LocalDateTime endDateTime = LocalDateTime.of(
+                        currentDate,
+                        dateTimeMapper.mapToLocalTime(intervalBreaks.get(i+1).getStartTime())
+                );
+                subValues.add(new IntervalValue(startDateTime, endDateTime, intervalBreaks.get(i).getCurrentValue()));
+            }
+
+            LocalDateTime lastStartDateTime = LocalDateTime.of(
+                    currentDate,
+                    dateTimeMapper.mapToLocalTime(intervalBreaks.get(intervalBreaks.size()-1).getStartTime())
+            );
+            subValues.add(new IntervalValue(lastStartDateTime, interval.dateTimeEnd(), intervalBreaks.get(intervalBreaks.size()-1).getCurrentValue()));
+        }
+
+        return subValues;
+    }
+
+    private boolean matchingIntervalDayOfWeek(DayOfWeek dayOfWeek, WeekdaysDto weekdaysDto) {
+
+        return dayOfWeek.getValue() == weekdaysDto.ordinal()+1;
+    }
+
+    private boolean matchingIntervalWithRange(DayOfWeek dayOfWeek, WeekdaysDto weekdaysDto) {
+
+        if (dayOfWeek.getValue() <= 5 && weekdaysDto == WeekdaysDto.MONDAY_TO_FRIDAY) {
+            return true;
+        } else return dayOfWeek.getValue() > 5 && weekdaysDto == WeekdaysDto.WEEKEND;
+    }
+
     private boolean dateTimeRangeInInterval(Interval interval, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd) {
 
         if (isIntervalFullyCovered(interval, dateTimeStart, dateTimeEnd)) {
@@ -587,6 +712,11 @@ public class TaskPreProcessImp implements TaskPreProcess {
     private boolean isBeforeOrEqual(LocalDateTime dt1, LocalDateTime dt2) {
 
         return dt1.isBefore(dt2) || dt1.isEqual(dt2);
+    }
+
+    private boolean isBeforeOrEqual(LocalTime dt1, LocalTime dt2) {
+
+        return dt1.isBefore(dt2) || dt1.equals(dt2);
     }
 
     private boolean isAfterOrEqual(LocalDateTime dt1, LocalDateTime dt2) {

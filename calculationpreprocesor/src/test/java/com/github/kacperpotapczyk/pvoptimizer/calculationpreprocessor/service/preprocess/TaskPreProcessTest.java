@@ -174,6 +174,31 @@ class TaskPreProcessTest {
         assertEquals(80.0, storageDto.getMaxEnergyConstraints().get("1"), 1e-9);
     }
 
+    @Test
+    public void mapTaskWithCyclicTariff() throws IOException {
+
+        TaskCalculationDto taskCalculationDto = getTaskCalculationDtoFromFile("TaskCalculationDto/TaskWithCyclicTariff.json");
+        PreProcessResult preProcessResult = taskPreProcess.preProcess(taskCalculationDto);
+        TaskDto taskDto = preProcessResult.taskDto();
+
+        assertEquals(3, taskDto.getIntervals().size());
+        assertEquals(0.25, taskDto.getIntervals().get(0));
+        assertEquals(0.25, taskDto.getIntervals().get(1));
+        assertEquals(0.166666666666667, taskDto.getIntervals().get(2), 1e-6);
+
+
+        assertEquals(1, taskDto.getContracts().size());
+        ContractDto contractDto = taskDto.getContracts().get(0);
+        assertEquals("contract2", contractDto.getName().toString());
+        assertEquals(1, contractDto.getId());
+        assertEquals(ContractDirectionDto.PURCHASE, contractDto.getContractDirection());
+
+        assertEquals(3, contractDto.getUnitPrice().size());
+        assertEquals(0.166666666666667, contractDto.getUnitPrice().get(0), 1e-6);
+        assertEquals(0.133333333333333, contractDto.getUnitPrice().get(1), 1e-6);
+        assertEquals(0.2, contractDto.getUnitPrice().get(2), 1e-6);
+    }
+
     private TaskCalculationDto getTaskCalculationDtoFromFile(String fileName) throws IOException {
 
         File file = new ClassPathResource(fileName).getFile();
