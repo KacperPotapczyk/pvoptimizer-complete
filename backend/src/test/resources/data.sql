@@ -245,6 +245,47 @@ INSERT INTO storage_max_discharge_constraint(constraint_value, date_time_start, 
             VALUES(15, '2024-02-09T17:00:00', '2024-02-09T17:15:00', 9);
 
 
+------------------------------------------------------------------------ Movable demands
+INSERT INTO movable_demand(name) VALUES('queryOnly');                                       -- movableDemand #1
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 1);  -- movableDemandRevision #1
+INSERT INTO movable_demand_start(revision_id, start) VALUES(1, '2023-01-01T10:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(1, '2023-01-01T10:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(1, 1, 10, 5.0);
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(1, 2, 5, 3.0);
+
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(2, '2023-10-05T12:00:00', 1);  -- movableDemandRevision #2
+INSERT INTO movable_demand_start(revision_id, start) VALUES(2, '2023-01-01T09:55:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(2, '2023-01-01T10:10:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(2, 1, 10, 10.0);
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(2, 2, 15, 5.0);
+
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id, is_deleted) VALUES(3, '2023-10-05T12:00:00', 1, TRUE);  -- movableDemandRevision #3
+INSERT INTO movable_demand_start(revision_id, start) VALUES(3, '2023-01-01T10:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(3, '2023-01-01T10:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(3, 1, 15, 5.0);
+
+
+INSERT INTO movable_demand(name) VALUES('addRevisionTest');                                 -- movableDemand #2
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 2);  -- movableDemandRevision #4
+INSERT INTO movable_demand_start(revision_id, start) VALUES(4, '2023-01-01T10:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(4, '2023-01-01T10:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(4, 1, 15, 5.0);
+
+
+INSERT INTO movable_demand(name) VALUES('toBeDeleted');                                 -- movableDemand #3
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 3);  -- movableDemandRevision #5
+INSERT INTO movable_demand_start(revision_id, start) VALUES(5, '2023-01-01T10:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(5, '2023-01-01T10:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(5, 1, 15, 5.0);
+
+
+INSERT INTO movable_demand(name) VALUES('revisionToBeDeleted');                                 -- movableDemand #4
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 4);  -- movableDemandRevision #6
+INSERT INTO movable_demand_start(revision_id, start) VALUES(6, '2023-01-01T10:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(6, '2023-01-01T10:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(6, 1, 15, 5.0);
+
+
 ------------------------------------------------------------------------ Tasks
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
             VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #1
