@@ -286,6 +286,25 @@ INSERT INTO movable_demand_start(revision_id, start) VALUES(6, '2023-01-01T10:15
 INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(6, 1, 15, 5.0);
 
 
+INSERT INTO movable_demand(name) VALUES('toBeDeletedHttpRequest');                                 -- movableDemand #5
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 5);  -- movableDemandRevision #7
+INSERT INTO movable_demand_start(revision_id, start) VALUES(7, '2023-01-01T10:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(7, '2023-01-01T10:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(7, 1, 15, 5.0);
+
+
+INSERT INTO movable_demand(name) VALUES('revisionToBeDeletedHttpRequest');                                 -- movableDemand #6
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 6);  -- movableDemandRevision #8
+INSERT INTO movable_demand_start(revision_id, start) VALUES(8, '2023-01-01T10:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(8, '2023-01-01T10:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(8, 1, 15, 5.0);
+
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(2, '2023-10-05T12:10:00', 6);  -- movableDemandRevision #9
+INSERT INTO movable_demand_start(revision_id, start) VALUES(9, '2023-01-01T15:00:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(9, '2023-01-01T15:15:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(9, 1, 10, 3.0);
+
+
 ------------------------------------------------------------------------ Tasks
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
             VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #1
