@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Entity
@@ -39,16 +37,6 @@ public class MovableDemandValue implements Comparable<MovableDemandValue> {
         this.order = order;
         this.value = value;
         this.durationMinutes = durationMinutes;
-    }
-
-    public boolean isActiveInTimeWindow(LocalDateTime demandStart ,LocalDateTime windowStart, LocalDateTime windowEnd) {
-
-        return isBetweenClosedRange(demandStart.plusMinutes(durationMinutes), windowStart, windowEnd);
-    }
-
-    private boolean isBetweenClosedRange(LocalDateTime dateTime, LocalDateTime windowStart, LocalDateTime windowEnd) {
-
-        return (windowStart.isBefore(dateTime) && dateTime.isBefore(windowEnd)) || dateTime.isEqual(windowStart) || dateTime.isEqual(windowEnd);
     }
 
     @Override

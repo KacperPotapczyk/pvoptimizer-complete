@@ -35,22 +35,32 @@ public class MovableDemandRevision extends Revision {
         this.movableDemandValues = movableDemandValues;
     }
 
-    public List<MovableDemandValue> getMovableDemandValuesForTimeWindowAndStartDateTime(LocalDateTime startDateTime ,LocalDateTime windowStart, LocalDateTime windowEnd) {
+    public List<MovableDemandStart> getMovableDemandStartsForTimeWindow(LocalDateTime windowStart, LocalDateTime windowEnd) {
 
-        List<MovableDemandValue> movableDemandValueList = new ArrayList<>();
+        long profileLengthMinutes = this.movableDemandValues.stream()
+                .map(MovableDemandValue::getDurationMinutes)
+                .reduce(0L, Long::sum);
 
-        Optional<MovableDemandValue> movableDemandValueBeforeWindowStart = movableDemandValues.stream()
-                .filter(movableDemandValue -> startDateTime.plusMinutes(movableDemandValue.getDurationMinutes()).isAfter(windowStart))
-                .max(Comparator.comparing(movableDemandValue -> startDateTime.plusMinutes(movableDemandValue.getDurationMinutes())));
-        movableDemandValueBeforeWindowStart.ifPresent(movableDemandValueList::add);
+        return this.movableDemandStarts.stream()
+                .filter(movableDemandStart -> isActiveInTimeWindow(
+                        movableDemandStart.getStart(),
+                        movableDemandStart.getStart().plusMinutes(profileLengthMinutes),
+                        windowStart,
+                        windowEnd))
+                .toList();
+    }
 
-        movableDemandValueList.addAll(movableDemandValues.stream()
-                .filter(movableDemandValue -> movableDemandValue.isActiveInTimeWindow(startDateTime, windowStart, windowEnd))
-                .sorted()
-                .toList()
-        );
+    private boolean isActiveInTimeWindow(LocalDateTime rangeStart, LocalDateTime rangeEnd, LocalDateTime windowStart, LocalDateTime windowEnd) {
 
-        return movableDemandValueList;
+        if (rangeStart.isBefore(windowStart) && rangeEnd.isAfter(windowEnd)) {
+            return true;
+        }
+        return isBetweenClosedRange(rangeStart, windowStart, windowEnd) || isBetweenClosedRange(rangeEnd, windowStart, windowEnd);
+    }
+
+    private boolean isBetweenClosedRange(LocalDateTime dateTime, LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return (windowStart.isBefore(dateTime) && dateTime.isBefore(windowEnd)) || dateTime.isEqual(windowStart) || dateTime.isEqual(windowEnd);
     }
 
     @Override

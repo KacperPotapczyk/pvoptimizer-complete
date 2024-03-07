@@ -305,6 +305,14 @@ INSERT INTO movable_demand_start(revision_id, start) VALUES(9, '2023-01-01T15:15
 INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(9, 1, 10, 3.0);
 
 
+INSERT INTO movable_demand(name) VALUES('forTask');                                       -- movableDemand #7
+INSERT INTO movable_demand_revision(revision_number, created_date, base_id) VALUES(1, '2023-10-05T12:00:00', 7);  -- movableDemandRevision #10
+INSERT INTO movable_demand_start(revision_id, start) VALUES(10, '2023-12-24T13:55:00');
+INSERT INTO movable_demand_start(revision_id, start) VALUES(10, '2023-12-24T15:00:00');
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(10, 1, 10, 5.0);
+INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VALUES(10, 2, 5, 3.0);
+
+
 ------------------------------------------------------------------------ Tasks
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
             VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #1
@@ -315,6 +323,7 @@ INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(1, 3);
 INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(1, 1);
+INSERT INTO task_movable_demand_revisions(task_id, revision_id) VALUES(1, 10);
 
 
 INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
