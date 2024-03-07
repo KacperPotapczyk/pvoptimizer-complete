@@ -80,19 +80,7 @@ public class TaskControllerTest {
         LocalDateTime dateTimeStart = LocalDateTime.parse("2023-10-05T11:00:00");
         LocalDateTime dateTimeEnd = LocalDateTime.parse("2023-10-05T23:00:00");
 
-        Set<TaskBaseObjectRevisionDto> contractRevisionsDto = new HashSet<>();
-        contractRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
-
-        TaskDto taskDto = new TaskDto(
-                taskName,
-                dateTimeStart,
-                dateTimeEnd,
-                Collections.emptySet(),
-                Collections.emptySet(),
-                Collections.emptySet(),
-                contractRevisionsDto,
-                Collections.emptySet()
-        );
+        TaskDto taskDto = getTaskDto(taskName, dateTimeStart, dateTimeEnd);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/tasks")
@@ -105,9 +93,11 @@ public class TaskControllerTest {
         assertEquals(taskName, task.getName());
         assertEquals(dateTimeStart, task.getDateTimeStart());
         assertEquals(dateTimeEnd, task.getDateTimeEnd());
-        assertEquals(0, task.getDemandRevisions().size());
+        assertEquals(1, task.getDemandRevisions().size());
         assertEquals(0, task.getTariffRevisions().size());
         assertEquals(1, task.getContractRevisions().size());
+        assertEquals(0, task.getStorageRevisions().size());
+        assertEquals(0, task.getMovableDemandRevisions().size());
     }
 
     @Test
@@ -121,22 +111,7 @@ public class TaskControllerTest {
         LocalDateTime dateTimeStart = task.getDateTimeStart();
         LocalDateTime dateTimeEnd = LocalDateTime.parse("2023-10-06T23:00:00");
 
-        Set<TaskBaseObjectRevisionDto> demandRevisionsDto = new HashSet<>();
-        demandRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
-
-        Set<TaskBaseObjectRevisionDto> contractRevisionsDto = new HashSet<>();
-        contractRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
-
-        TaskDto taskDto = new TaskDto(
-                taskName,
-                dateTimeStart,
-                dateTimeEnd,
-                demandRevisionsDto,
-                Collections.emptySet(),
-                Collections.emptySet(),
-                contractRevisionsDto,
-                Collections.emptySet()
-        );
+        TaskDto taskDto = getTaskDto(taskName, dateTimeStart, dateTimeEnd);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/api/tasks")
@@ -154,6 +129,8 @@ public class TaskControllerTest {
         assertEquals(0, updatedTask.getProductionRevisions().size());
         assertEquals(0, updatedTask.getTariffRevisions().size());
         assertEquals(1, updatedTask.getContractRevisions().size());
+        assertEquals(0, task.getStorageRevisions().size());
+        assertEquals(0, task.getMovableDemandRevisions().size());
     }
 
     @Test
@@ -281,5 +258,23 @@ public class TaskControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tasks/{name}/result", "queryOnly"))
                 .andExpect(status().isNotFound());
+    }
+
+    private TaskDto getTaskDto(String taskName, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd) {
+
+        Set<TaskBaseObjectRevisionDto> demandRevisionsDto = new HashSet<>();
+        demandRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
+
+        Set<TaskBaseObjectRevisionDto> contractRevisionsDto = new HashSet<>();
+        contractRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
+
+        return new TaskDto(taskName, dateTimeStart, dateTimeEnd,
+                demandRevisionsDto,
+                Collections.emptySet(),
+                Collections.emptySet(),
+                contractRevisionsDto,
+                Collections.emptySet(),
+                Collections.emptySet()
+        );
     }
 }
