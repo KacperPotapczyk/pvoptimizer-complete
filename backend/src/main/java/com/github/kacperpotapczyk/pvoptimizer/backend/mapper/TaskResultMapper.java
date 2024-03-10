@@ -1,9 +1,11 @@
 package com.github.kacperpotapczyk.pvoptimizer.backend.mapper;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.dto.result.ContractResultDto;
+import com.github.kacperpotapczyk.pvoptimizer.backend.dto.result.MovableDemandResultDto;
 import com.github.kacperpotapczyk.pvoptimizer.backend.dto.result.StorageResultDto;
 import com.github.kacperpotapczyk.pvoptimizer.backend.dto.result.TaskResultDto;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.ContractResult;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.MovableDemandResult;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.StorageResult;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.TaskResult;
 import org.mapstruct.Mapper;
@@ -22,4 +24,8 @@ public interface TaskResultMapper {
     @Mapping(target = "storageName", source = "storageRevision.storage.name")
     @Mapping(target = "revisionNumber", source = "storageRevision.revisionNumber")
     StorageResultDto mapStorageResultToStorageResultDto(StorageResult storageResult);
+
+    @Mapping(target = "movableDemandName", source = "movableDemandRevision.movableDemand.name")
+    @Mapping(target = "revisionNumber", source = "movableDemandRevision.revisionNumber")
+    MovableDemandResultDto mapMovableDemandResultToMovableDemandResultDto(MovableDemandResult movableDemandResult);
 }

@@ -39,6 +39,7 @@
       ]
     }
   ],
+  "movableDemands": [],
   "productions": [],
   "tariffs": [],
   "storages": []

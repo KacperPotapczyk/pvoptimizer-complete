@@ -45,6 +45,7 @@ class TaskCalculationMapperTest {
         assertEquals(1, taskCalculationDto.getProductions().size());
         assertEquals(1, taskCalculationDto.getTariffs().size());
         assertEquals(1, taskCalculationDto.getStorages().size());
+        assertEquals(1, taskCalculationDto.getMovableDemands().size());
 
         TaskContractDto taskContractDto = taskCalculationDto.getContracts().stream()
                 .filter(contractDto -> contractDto.getRevisionNumber() == 1)
@@ -134,5 +135,16 @@ class TaskCalculationMapperTest {
         assertEquals(0, taskStorageDto.getMaxDischargeConstraints().size());
         assertEquals(0, taskStorageDto.getMinEnergyConstraints().size());
         assertEquals(0, taskStorageDto.getMaxEnergyConstraints().size());
+
+        TaskMovableDemandDto taskMovableDemandDto = taskCalculationDto.getMovableDemands().get(0);
+        assertEquals(1, taskMovableDemandDto.getRevisionNumber());
+        assertEquals(7, taskMovableDemandDto.getId());
+        assertEquals("forTask", taskMovableDemandDto.getName());
+        assertEquals(2, taskMovableDemandDto.getMovableDemandStarts().size());
+        assertEquals("2023-12-24T13:55:00", taskMovableDemandDto.getMovableDemandStarts().get(0).getStart());
+        assertEquals("2023-12-24T15:00:00", taskMovableDemandDto.getMovableDemandStarts().get(1).getStart());
+        assertEquals(2, taskMovableDemandDto.getMovableDemandValues().size());
+        assertEquals(5.0, taskMovableDemandDto.getMovableDemandValues().get(0).getValue());
+        assertEquals(3.0, taskMovableDemandDto.getMovableDemandValues().get(1).getValue());
     }
 }

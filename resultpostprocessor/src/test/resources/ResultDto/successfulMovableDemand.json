@@ -1,0 +1,25 @@
+{
+  "id":2,
+  "optimizationStatus":"SOLUTION_FOUND",
+  "objectiveFunctionValue":1.4166666666666663,
+  "relativeGap":1e-10,
+  "elapsedTime":0,
+  "errorMessage":"",
+  "contractResults":[
+    {
+      "id":2,
+      "name":"purchase1",
+      "power":[8.333333333333332,31.666666666666664],
+      "energy":[2.083333333333333,7.916666666666666],
+      "cost":[0.6249999999999999,0.7916666666666666]
+    }
+  ],
+  "storageResults":[],
+  "movableDemandResults":[
+    {
+      "id":1,
+      "name":"movableDemand1",
+      "startInterval":1
+    }
+  ]
+}

@@ -177,6 +177,59 @@
         }
       },
       "default": []
+    },
+    {
+      "name": "movableDemandResults",
+      "type": {
+        "type": "array",
+        "items": {
+          "namespace": "com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result",
+          "name": "TaskCalculationMovableDemandResultDto",
+          "type": "record",
+          "doc": "Result for movable demand",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Movable demand identifier"
+            },
+            {
+              "name": "movableDemandResultValues",
+              "doc": "Movable demand result for each interval",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskCalculationMovableDemandResultValueDto",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "dateTimeStart",
+                      "type": "string",
+                      "doc": "Interval start date time"
+                    },
+                    {
+                      "name": "dateTimeEnd",
+                      "type": "string",
+                      "doc": "Interval end date time"
+                    },
+                    {
+                      "name": "power",
+                      "type": "double",
+                      "doc": "Interval demand power"
+                    },
+                    {
+                      "name": "energy",
+                      "type": "double",
+                      "doc": "Interval demand energy"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "default": []
     }
   ]
 }

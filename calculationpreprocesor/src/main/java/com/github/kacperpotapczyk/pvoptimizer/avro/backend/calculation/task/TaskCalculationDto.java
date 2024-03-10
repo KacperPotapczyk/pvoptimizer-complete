@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -8032201127077242890L;
+  private static final long serialVersionUID = 3347789353334447259L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskCalculationDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Task identifier\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Task start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Task end date and time\"},{\"name\":\"contracts\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskContractDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Contract id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Contract name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Revision number of contract\"},{\"name\":\"contractType\",\"type\":{\"type\":\"enum\",\"name\":\"TaskContractTypeDto\",\"symbols\":[\"PURCHASE\",\"SELL\"]},\"doc\":\"Defines if it is purchase or sell contract\"},{\"name\":\"tariffName\",\"type\":\"string\",\"doc\":\"Contract tariff\"},{\"name\":\"minPowerConstraints\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskContractConstraintDto\",\"fields\":[{\"name\":\"constraintValue\",\"type\":\"double\",\"doc\":\"Constraint value\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Date and time of constraint start\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Date and time of constraint end\"}]}},\"doc\":\"Minimal power constraints of contract\",\"default\":[]},{\"name\":\"maxPowerConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskContractConstraintDto\"},\"doc\":\"Maximal power constraints of contract\",\"default\":[]},{\"name\":\"minEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskContractConstraintDto\"},\"doc\":\"Minimal energy constraints of contract\",\"default\":[]},{\"name\":\"maxEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskContractConstraintDto\"},\"doc\":\"Maximal energy constraints of contract\",\"default\":[]}]}},\"doc\":\"List of electricity purchase and sell contracts.\",\"default\":[]},{\"name\":\"demands\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskDemandDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Demand Id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Demand name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Demand revision number\"},{\"name\":\"demandValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskDemandValueDto\",\"fields\":[{\"name\":\"value\",\"type\":\"double\",\"doc\":\"Demand value on timestamp\"},{\"name\":\"dateTime\",\"type\":\"string\",\"doc\":\"Demand value timestamp\"}]}},\"doc\":\"Demand values on timestamp list\",\"default\":[]}]}},\"doc\":\"List of household demands.\",\"default\":[]},{\"name\":\"productions\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskProductionDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Production Id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Production name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Production revision number\"},{\"name\":\"productionsValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskProductionValueDto\",\"fields\":[{\"name\":\"value\",\"type\":\"double\",\"doc\":\"Production value on timestamp\"},{\"name\":\"dateTime\",\"type\":\"string\",\"doc\":\"Production value timestamp\"}]}},\"doc\":\"Production values on timestamp list\",\"default\":[]}]}},\"doc\":\"List of household production sources.\",\"default\":[]},{\"name\":\"tariffs\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskTariffDto\",\"doc\":\"Contract tariff\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Tariff id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Tariff name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Tariff revision number\"},{\"name\":\"defaultPrice\",\"type\":\"double\",\"doc\":\"Default unit price\"},{\"name\":\"cyclicalDailyValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"CyclicalDailyValueDto\",\"doc\":\"Daily cyclical tariff value\",\"fields\":[{\"name\":\"dayOfTheWeek\",\"type\":{\"type\":\"enum\",\"name\":\"WeekdaysDto\",\"doc\":\"Defines days of week\",\"symbols\":[\"MONDAY\",\"TUESDAY\",\"WEDNESDAY\",\"THURSDAY\",\"FRIDAY\",\"SATURDAY\",\"SUNDAY\",\"ALL\",\"MONDAY_TO_FRIDAY\",\"WEEKEND\"]},\"doc\":\"To which day given values apply\"},{\"name\":\"dailyTimeValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"DailyTimeValueDto\",\"doc\":\"Value starting at given time\",\"fields\":[{\"name\":\"startTime\",\"type\":\"string\",\"doc\":\"Value starting time\"},{\"name\":\"currentValue\",\"type\":\"double\",\"doc\":\"Value applicable since startTime\"}]}},\"doc\":\"Daily values for given day\"}]}},\"doc\":\"List of cyclical tariff values\",\"default\":[]}]}},\"doc\":\"List of task tariffs\",\"default\":[]},{\"name\":\"storages\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskStorageDto\",\"doc\":\"Storage object\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Storage id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Storage name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Storage revision number\"},{\"name\":\"capacity\",\"type\":\"double\",\"doc\":\"Capacity of storage\"},{\"name\":\"maxCharge\",\"type\":\"double\",\"doc\":\"Maximal charging power\"},{\"name\":\"maxDischarge\",\"type\":\"double\",\"doc\":\"Maximal discharging power\"},{\"name\":\"initialEnergy\",\"type\":\"double\",\"doc\":\"Initial amount of stored energy at the beginning of optimization horizon\"},{\"name\":\"minChargeConstraints\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskStorageConstraintDto\",\"fields\":[{\"name\":\"constraintValue\",\"type\":\"double\",\"doc\":\"Constraint value\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Date and time of constraint start\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Date and time of constraint end\"}]}},\"doc\":\"Minimal charging power constraints of storage\",\"default\":[]},{\"name\":\"maxChargeConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Maximal charging power constraints of storage\",\"default\":[]},{\"name\":\"minDischargeConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Minimal discharging power constraints of storage\",\"default\":[]},{\"name\":\"maxDischargeConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Maximal discharging power constraints of storage\",\"default\":[]},{\"name\":\"minEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Minimal energy constraints of storage\",\"default\":[]},{\"name\":\"maxEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Maximal energy constraints of storage\",\"default\":[]}]}},\"doc\":\"List of task storages\",\"default\":[]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskCalculationDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Task identifier\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Task start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Task end date and time\"},{\"name\":\"contracts\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskContractDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Contract id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Contract name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Revision number of contract\"},{\"name\":\"contractType\",\"type\":{\"type\":\"enum\",\"name\":\"TaskContractTypeDto\",\"symbols\":[\"PURCHASE\",\"SELL\"]},\"doc\":\"Defines if it is purchase or sell contract\"},{\"name\":\"tariffName\",\"type\":\"string\",\"doc\":\"Contract tariff\"},{\"name\":\"minPowerConstraints\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskContractConstraintDto\",\"fields\":[{\"name\":\"constraintValue\",\"type\":\"double\",\"doc\":\"Constraint value\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Date and time of constraint start\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Date and time of constraint end\"}]}},\"doc\":\"Minimal power constraints of contract\",\"default\":[]},{\"name\":\"maxPowerConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskContractConstraintDto\"},\"doc\":\"Maximal power constraints of contract\",\"default\":[]},{\"name\":\"minEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskContractConstraintDto\"},\"doc\":\"Minimal energy constraints of contract\",\"default\":[]},{\"name\":\"maxEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskContractConstraintDto\"},\"doc\":\"Maximal energy constraints of contract\",\"default\":[]}]}},\"doc\":\"List of electricity purchase and sell contracts.\",\"default\":[]},{\"name\":\"demands\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskDemandDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Demand Id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Demand name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Demand revision number\"},{\"name\":\"demandValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskDemandValueDto\",\"fields\":[{\"name\":\"value\",\"type\":\"double\",\"doc\":\"Demand value on timestamp\"},{\"name\":\"dateTime\",\"type\":\"string\",\"doc\":\"Demand value timestamp\"}]}},\"doc\":\"Demand values on timestamp list\",\"default\":[]}]}},\"doc\":\"List of household demands.\",\"default\":[]},{\"name\":\"movableDemands\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskMovableDemandDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Movable demand Id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Movable demand name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Movable demand revision number\"},{\"name\":\"movableDemandStarts\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskMovableDemandStartDto\",\"doc\":\"Movable demand start option\",\"fields\":[{\"name\":\"start\",\"type\":\"string\",\"doc\":\"Start timestamp\"}]}},\"doc\":\"Movable demand start options\",\"default\":[]},{\"name\":\"movableDemandValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskMovableDemandValueDto\",\"doc\":\"Movable demand profile value\",\"fields\":[{\"name\":\"order\",\"type\":\"long\",\"doc\":\"Profile value ordering number\"},{\"name\":\"durationMinutes\",\"type\":\"long\",\"doc\":\"Profile value duration in minutes\"},{\"name\":\"value\",\"type\":\"double\",\"doc\":\"Demand value of profile\"}]}},\"doc\":\"Movable demand profile\",\"default\":[]}]}},\"doc\":\"List of movable demands\",\"default\":[]},{\"name\":\"productions\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskProductionDto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Production Id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Production name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Production revision number\"},{\"name\":\"productionsValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskProductionValueDto\",\"fields\":[{\"name\":\"value\",\"type\":\"double\",\"doc\":\"Production value on timestamp\"},{\"name\":\"dateTime\",\"type\":\"string\",\"doc\":\"Production value timestamp\"}]}},\"doc\":\"Production values on timestamp list\",\"default\":[]}]}},\"doc\":\"List of household production sources.\",\"default\":[]},{\"name\":\"tariffs\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskTariffDto\",\"doc\":\"Contract tariff\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Tariff id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Tariff name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Tariff revision number\"},{\"name\":\"defaultPrice\",\"type\":\"double\",\"doc\":\"Default unit price\"},{\"name\":\"cyclicalDailyValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"CyclicalDailyValueDto\",\"doc\":\"Daily cyclical tariff value\",\"fields\":[{\"name\":\"dayOfTheWeek\",\"type\":{\"type\":\"enum\",\"name\":\"WeekdaysDto\",\"doc\":\"Defines days of week\",\"symbols\":[\"MONDAY\",\"TUESDAY\",\"WEDNESDAY\",\"THURSDAY\",\"FRIDAY\",\"SATURDAY\",\"SUNDAY\",\"ALL\",\"MONDAY_TO_FRIDAY\",\"WEEKEND\"]},\"doc\":\"To which day given values apply\"},{\"name\":\"dailyTimeValues\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"DailyTimeValueDto\",\"doc\":\"Value starting at given time\",\"fields\":[{\"name\":\"startTime\",\"type\":\"string\",\"doc\":\"Value starting time\"},{\"name\":\"currentValue\",\"type\":\"double\",\"doc\":\"Value applicable since startTime\"}]}},\"doc\":\"Daily values for given day\"}]}},\"doc\":\"List of cyclical tariff values\",\"default\":[]}]}},\"doc\":\"List of task tariffs\",\"default\":[]},{\"name\":\"storages\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskStorageDto\",\"doc\":\"Storage object\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Storage id\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Storage name\"},{\"name\":\"revisionNumber\",\"type\":\"long\",\"doc\":\"Storage revision number\"},{\"name\":\"capacity\",\"type\":\"double\",\"doc\":\"Capacity of storage\"},{\"name\":\"maxCharge\",\"type\":\"double\",\"doc\":\"Maximal charging power\"},{\"name\":\"maxDischarge\",\"type\":\"double\",\"doc\":\"Maximal discharging power\"},{\"name\":\"initialEnergy\",\"type\":\"double\",\"doc\":\"Initial amount of stored energy at the beginning of optimization horizon\"},{\"name\":\"minChargeConstraints\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"TaskStorageConstraintDto\",\"fields\":[{\"name\":\"constraintValue\",\"type\":\"double\",\"doc\":\"Constraint value\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Date and time of constraint start\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Date and time of constraint end\"}]}},\"doc\":\"Minimal charging power constraints of storage\",\"default\":[]},{\"name\":\"maxChargeConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Maximal charging power constraints of storage\",\"default\":[]},{\"name\":\"minDischargeConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Minimal discharging power constraints of storage\",\"default\":[]},{\"name\":\"maxDischargeConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Maximal discharging power constraints of storage\",\"default\":[]},{\"name\":\"minEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Minimal energy constraints of storage\",\"default\":[]},{\"name\":\"maxEnergyConstraints\",\"type\":{\"type\":\"array\",\"items\":\"TaskStorageConstraintDto\"},\"doc\":\"Maximal energy constraints of storage\",\"default\":[]}]}},\"doc\":\"List of task storages\",\"default\":[]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -83,6 +83,8 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
   private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractDto> contracts;
   /** List of household demands. */
   private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskDemandDto> demands;
+  /** List of movable demands */
+  private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> movableDemands;
   /** List of household production sources. */
   private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> productions;
   /** List of task tariffs */
@@ -104,16 +106,18 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
    * @param dateTimeEnd Task end date and time
    * @param contracts List of electricity purchase and sell contracts.
    * @param demands List of household demands.
+   * @param movableDemands List of movable demands
    * @param productions List of household production sources.
    * @param tariffs List of task tariffs
    * @param storages List of task storages
    */
-  public TaskCalculationDto(java.lang.Long id, java.lang.CharSequence dateTimeStart, java.lang.CharSequence dateTimeEnd, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractDto> contracts, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskDemandDto> demands, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> productions, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> tariffs, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> storages) {
+  public TaskCalculationDto(java.lang.Long id, java.lang.CharSequence dateTimeStart, java.lang.CharSequence dateTimeEnd, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractDto> contracts, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskDemandDto> demands, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> movableDemands, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> productions, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> tariffs, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> storages) {
     this.id = id;
     this.dateTimeStart = dateTimeStart;
     this.dateTimeEnd = dateTimeEnd;
     this.contracts = contracts;
     this.demands = demands;
+    this.movableDemands = movableDemands;
     this.productions = productions;
     this.tariffs = tariffs;
     this.storages = storages;
@@ -134,9 +138,10 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     case 2: return dateTimeEnd;
     case 3: return contracts;
     case 4: return demands;
-    case 5: return productions;
-    case 6: return tariffs;
-    case 7: return storages;
+    case 5: return movableDemands;
+    case 6: return productions;
+    case 7: return tariffs;
+    case 8: return storages;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -151,9 +156,10 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     case 2: dateTimeEnd = (java.lang.CharSequence)value$; break;
     case 3: contracts = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractDto>)value$; break;
     case 4: demands = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskDemandDto>)value$; break;
-    case 5: productions = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>)value$; break;
-    case 6: tariffs = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>)value$; break;
-    case 7: storages = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>)value$; break;
+    case 5: movableDemands = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto>)value$; break;
+    case 6: productions = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>)value$; break;
+    case 7: tariffs = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>)value$; break;
+    case 8: storages = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -246,6 +252,24 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
    */
   public void setDemands(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskDemandDto> value) {
     this.demands = value;
+  }
+
+  /**
+   * Gets the value of the 'movableDemands' field.
+   * @return List of movable demands
+   */
+  public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> getMovableDemands() {
+    return movableDemands;
+  }
+
+
+  /**
+   * Sets the value of the 'movableDemands' field.
+   * List of movable demands
+   * @param value the value to set.
+   */
+  public void setMovableDemands(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> value) {
+    this.movableDemands = value;
   }
 
   /**
@@ -353,6 +377,8 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractDto> contracts;
     /** List of household demands. */
     private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskDemandDto> demands;
+    /** List of movable demands */
+    private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> movableDemands;
     /** List of household production sources. */
     private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> productions;
     /** List of task tariffs */
@@ -391,17 +417,21 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
         this.demands = data().deepCopy(fields()[4].schema(), other.demands);
         fieldSetFlags()[4] = other.fieldSetFlags()[4];
       }
-      if (isValidValue(fields()[5], other.productions)) {
-        this.productions = data().deepCopy(fields()[5].schema(), other.productions);
+      if (isValidValue(fields()[5], other.movableDemands)) {
+        this.movableDemands = data().deepCopy(fields()[5].schema(), other.movableDemands);
         fieldSetFlags()[5] = other.fieldSetFlags()[5];
       }
-      if (isValidValue(fields()[6], other.tariffs)) {
-        this.tariffs = data().deepCopy(fields()[6].schema(), other.tariffs);
+      if (isValidValue(fields()[6], other.productions)) {
+        this.productions = data().deepCopy(fields()[6].schema(), other.productions);
         fieldSetFlags()[6] = other.fieldSetFlags()[6];
       }
-      if (isValidValue(fields()[7], other.storages)) {
-        this.storages = data().deepCopy(fields()[7].schema(), other.storages);
+      if (isValidValue(fields()[7], other.tariffs)) {
+        this.tariffs = data().deepCopy(fields()[7].schema(), other.tariffs);
         fieldSetFlags()[7] = other.fieldSetFlags()[7];
+      }
+      if (isValidValue(fields()[8], other.storages)) {
+        this.storages = data().deepCopy(fields()[8].schema(), other.storages);
+        fieldSetFlags()[8] = other.fieldSetFlags()[8];
       }
     }
 
@@ -431,17 +461,21 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
         this.demands = data().deepCopy(fields()[4].schema(), other.demands);
         fieldSetFlags()[4] = true;
       }
-      if (isValidValue(fields()[5], other.productions)) {
-        this.productions = data().deepCopy(fields()[5].schema(), other.productions);
+      if (isValidValue(fields()[5], other.movableDemands)) {
+        this.movableDemands = data().deepCopy(fields()[5].schema(), other.movableDemands);
         fieldSetFlags()[5] = true;
       }
-      if (isValidValue(fields()[6], other.tariffs)) {
-        this.tariffs = data().deepCopy(fields()[6].schema(), other.tariffs);
+      if (isValidValue(fields()[6], other.productions)) {
+        this.productions = data().deepCopy(fields()[6].schema(), other.productions);
         fieldSetFlags()[6] = true;
       }
-      if (isValidValue(fields()[7], other.storages)) {
-        this.storages = data().deepCopy(fields()[7].schema(), other.storages);
+      if (isValidValue(fields()[7], other.tariffs)) {
+        this.tariffs = data().deepCopy(fields()[7].schema(), other.tariffs);
         fieldSetFlags()[7] = true;
+      }
+      if (isValidValue(fields()[8], other.storages)) {
+        this.storages = data().deepCopy(fields()[8].schema(), other.storages);
+        fieldSetFlags()[8] = true;
       }
     }
 
@@ -665,6 +699,50 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     }
 
     /**
+      * Gets the value of the 'movableDemands' field.
+      * List of movable demands
+      * @return The value.
+      */
+    public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> getMovableDemands() {
+      return movableDemands;
+    }
+
+
+    /**
+      * Sets the value of the 'movableDemands' field.
+      * List of movable demands
+      * @param value The value of 'movableDemands'.
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder setMovableDemands(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> value) {
+      validate(fields()[5], value);
+      this.movableDemands = value;
+      fieldSetFlags()[5] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'movableDemands' field has been set.
+      * List of movable demands
+      * @return True if the 'movableDemands' field has been set, false otherwise.
+      */
+    public boolean hasMovableDemands() {
+      return fieldSetFlags()[5];
+    }
+
+
+    /**
+      * Clears the value of the 'movableDemands' field.
+      * List of movable demands
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder clearMovableDemands() {
+      movableDemands = null;
+      fieldSetFlags()[5] = false;
+      return this;
+    }
+
+    /**
       * Gets the value of the 'productions' field.
       * List of household production sources.
       * @return The value.
@@ -681,9 +759,9 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       * @return This builder.
       */
     public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder setProductions(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> value) {
-      validate(fields()[5], value);
+      validate(fields()[6], value);
       this.productions = value;
-      fieldSetFlags()[5] = true;
+      fieldSetFlags()[6] = true;
       return this;
     }
 
@@ -693,7 +771,7 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       * @return True if the 'productions' field has been set, false otherwise.
       */
     public boolean hasProductions() {
-      return fieldSetFlags()[5];
+      return fieldSetFlags()[6];
     }
 
 
@@ -704,7 +782,7 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       */
     public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder clearProductions() {
       productions = null;
-      fieldSetFlags()[5] = false;
+      fieldSetFlags()[6] = false;
       return this;
     }
 
@@ -725,9 +803,9 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       * @return This builder.
       */
     public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder setTariffs(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> value) {
-      validate(fields()[6], value);
+      validate(fields()[7], value);
       this.tariffs = value;
-      fieldSetFlags()[6] = true;
+      fieldSetFlags()[7] = true;
       return this;
     }
 
@@ -737,7 +815,7 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       * @return True if the 'tariffs' field has been set, false otherwise.
       */
     public boolean hasTariffs() {
-      return fieldSetFlags()[6];
+      return fieldSetFlags()[7];
     }
 
 
@@ -748,7 +826,7 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       */
     public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder clearTariffs() {
       tariffs = null;
-      fieldSetFlags()[6] = false;
+      fieldSetFlags()[7] = false;
       return this;
     }
 
@@ -769,9 +847,9 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       * @return This builder.
       */
     public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder setStorages(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> value) {
-      validate(fields()[7], value);
+      validate(fields()[8], value);
       this.storages = value;
-      fieldSetFlags()[7] = true;
+      fieldSetFlags()[8] = true;
       return this;
     }
 
@@ -781,7 +859,7 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       * @return True if the 'storages' field has been set, false otherwise.
       */
     public boolean hasStorages() {
-      return fieldSetFlags()[7];
+      return fieldSetFlags()[8];
     }
 
 
@@ -792,7 +870,7 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       */
     public com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto.Builder clearStorages() {
       storages = null;
-      fieldSetFlags()[7] = false;
+      fieldSetFlags()[8] = false;
       return this;
     }
 
@@ -806,9 +884,10 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
         record.dateTimeEnd = fieldSetFlags()[2] ? this.dateTimeEnd : (java.lang.CharSequence) defaultValue(fields()[2]);
         record.contracts = fieldSetFlags()[3] ? this.contracts : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractDto>) defaultValue(fields()[3]);
         record.demands = fieldSetFlags()[4] ? this.demands : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskDemandDto>) defaultValue(fields()[4]);
-        record.productions = fieldSetFlags()[5] ? this.productions : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>) defaultValue(fields()[5]);
-        record.tariffs = fieldSetFlags()[6] ? this.tariffs : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>) defaultValue(fields()[6]);
-        record.storages = fieldSetFlags()[7] ? this.storages : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>) defaultValue(fields()[7]);
+        record.movableDemands = fieldSetFlags()[5] ? this.movableDemands : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto>) defaultValue(fields()[5]);
+        record.productions = fieldSetFlags()[6] ? this.productions : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>) defaultValue(fields()[6]);
+        record.tariffs = fieldSetFlags()[7] ? this.tariffs : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>) defaultValue(fields()[7]);
+        record.storages = fieldSetFlags()[8] ? this.storages : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>) defaultValue(fields()[8]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -873,11 +952,11 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     if (actualSize1 != size1)
       throw new java.util.ConcurrentModificationException("Array-size written was " + size1 + ", but element count was " + actualSize1 + ".");
 
-    long size2 = this.productions.size();
+    long size2 = this.movableDemands.size();
     out.writeArrayStart();
     out.setItemCount(size2);
     long actualSize2 = 0;
-    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto e2: this.productions) {
+    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto e2: this.movableDemands) {
       actualSize2++;
       out.startItem();
       e2.customEncode(out);
@@ -886,11 +965,11 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     if (actualSize2 != size2)
       throw new java.util.ConcurrentModificationException("Array-size written was " + size2 + ", but element count was " + actualSize2 + ".");
 
-    long size3 = this.tariffs.size();
+    long size3 = this.productions.size();
     out.writeArrayStart();
     out.setItemCount(size3);
     long actualSize3 = 0;
-    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto e3: this.tariffs) {
+    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto e3: this.productions) {
       actualSize3++;
       out.startItem();
       e3.customEncode(out);
@@ -899,11 +978,11 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     if (actualSize3 != size3)
       throw new java.util.ConcurrentModificationException("Array-size written was " + size3 + ", but element count was " + actualSize3 + ".");
 
-    long size4 = this.storages.size();
+    long size4 = this.tariffs.size();
     out.writeArrayStart();
     out.setItemCount(size4);
     long actualSize4 = 0;
-    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto e4: this.storages) {
+    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto e4: this.tariffs) {
       actualSize4++;
       out.startItem();
       e4.customEncode(out);
@@ -911,6 +990,19 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
     out.writeArrayEnd();
     if (actualSize4 != size4)
       throw new java.util.ConcurrentModificationException("Array-size written was " + size4 + ", but element count was " + actualSize4 + ".");
+
+    long size5 = this.storages.size();
+    out.writeArrayStart();
+    out.setItemCount(size5);
+    long actualSize5 = 0;
+    for (com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto e5: this.storages) {
+      actualSize5++;
+      out.startItem();
+      e5.customEncode(out);
+    }
+    out.writeArrayEnd();
+    if (actualSize5 != size5)
+      throw new java.util.ConcurrentModificationException("Array-size written was " + size5 + ", but element count was " + actualSize5 + ".");
 
   }
 
@@ -962,17 +1054,17 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       }
 
       long size2 = in.readArrayStart();
-      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> a2 = this.productions;
+      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> a2 = this.movableDemands;
       if (a2 == null) {
-        a2 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>((int)size2, SCHEMA$.getField("productions").schema());
-        this.productions = a2;
+        a2 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto>((int)size2, SCHEMA$.getField("movableDemands").schema());
+        this.movableDemands = a2;
       } else a2.clear();
-      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> ga2 = (a2 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>)a2 : null);
+      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> ga2 = (a2 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto>)a2 : null);
       for ( ; 0 < size2; size2 = in.arrayNext()) {
         for ( ; size2 != 0; size2--) {
-          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto e2 = (ga2 != null ? ga2.peek() : null);
+          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto e2 = (ga2 != null ? ga2.peek() : null);
           if (e2 == null) {
-            e2 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto();
+            e2 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto();
           }
           e2.customDecode(in);
           a2.add(e2);
@@ -980,17 +1072,17 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       }
 
       long size3 = in.readArrayStart();
-      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> a3 = this.tariffs;
+      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> a3 = this.productions;
       if (a3 == null) {
-        a3 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>((int)size3, SCHEMA$.getField("tariffs").schema());
-        this.tariffs = a3;
+        a3 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>((int)size3, SCHEMA$.getField("productions").schema());
+        this.productions = a3;
       } else a3.clear();
-      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> ga3 = (a3 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>)a3 : null);
+      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> ga3 = (a3 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>)a3 : null);
       for ( ; 0 < size3; size3 = in.arrayNext()) {
         for ( ; size3 != 0; size3--) {
-          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto e3 = (ga3 != null ? ga3.peek() : null);
+          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto e3 = (ga3 != null ? ga3.peek() : null);
           if (e3 == null) {
-            e3 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto();
+            e3 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto();
           }
           e3.customDecode(in);
           a3.add(e3);
@@ -998,25 +1090,43 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
       }
 
       long size4 = in.readArrayStart();
-      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> a4 = this.storages;
+      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> a4 = this.tariffs;
       if (a4 == null) {
-        a4 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>((int)size4, SCHEMA$.getField("storages").schema());
-        this.storages = a4;
+        a4 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>((int)size4, SCHEMA$.getField("tariffs").schema());
+        this.tariffs = a4;
       } else a4.clear();
-      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> ga4 = (a4 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>)a4 : null);
+      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> ga4 = (a4 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>)a4 : null);
       for ( ; 0 < size4; size4 = in.arrayNext()) {
         for ( ; size4 != 0; size4--) {
-          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto e4 = (ga4 != null ? ga4.peek() : null);
+          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto e4 = (ga4 != null ? ga4.peek() : null);
           if (e4 == null) {
-            e4 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto();
+            e4 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto();
           }
           e4.customDecode(in);
           a4.add(e4);
         }
       }
 
+      long size5 = in.readArrayStart();
+      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> a5 = this.storages;
+      if (a5 == null) {
+        a5 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>((int)size5, SCHEMA$.getField("storages").schema());
+        this.storages = a5;
+      } else a5.clear();
+      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> ga5 = (a5 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>)a5 : null);
+      for ( ; 0 < size5; size5 = in.arrayNext()) {
+        for ( ; size5 != 0; size5--) {
+          com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto e5 = (ga5 != null ? ga5.peek() : null);
+          if (e5 == null) {
+            e5 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto();
+          }
+          e5.customDecode(in);
+          a5.add(e5);
+        }
+      }
+
     } else {
-      for (int i = 0; i < 8; i++) {
+      for (int i = 0; i < 9; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.id = in.readLong();
@@ -1072,17 +1182,17 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
 
         case 5:
           long size2 = in.readArrayStart();
-          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> a2 = this.productions;
+          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> a2 = this.movableDemands;
           if (a2 == null) {
-            a2 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>((int)size2, SCHEMA$.getField("productions").schema());
-            this.productions = a2;
+            a2 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto>((int)size2, SCHEMA$.getField("movableDemands").schema());
+            this.movableDemands = a2;
           } else a2.clear();
-          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> ga2 = (a2 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>)a2 : null);
+          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto> ga2 = (a2 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto>)a2 : null);
           for ( ; 0 < size2; size2 = in.arrayNext()) {
             for ( ; size2 != 0; size2--) {
-              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto e2 = (ga2 != null ? ga2.peek() : null);
+              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto e2 = (ga2 != null ? ga2.peek() : null);
               if (e2 == null) {
-                e2 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto();
+                e2 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskMovableDemandDto();
               }
               e2.customDecode(in);
               a2.add(e2);
@@ -1092,17 +1202,17 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
 
         case 6:
           long size3 = in.readArrayStart();
-          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> a3 = this.tariffs;
+          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> a3 = this.productions;
           if (a3 == null) {
-            a3 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>((int)size3, SCHEMA$.getField("tariffs").schema());
-            this.tariffs = a3;
+            a3 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>((int)size3, SCHEMA$.getField("productions").schema());
+            this.productions = a3;
           } else a3.clear();
-          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> ga3 = (a3 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>)a3 : null);
+          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto> ga3 = (a3 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto>)a3 : null);
           for ( ; 0 < size3; size3 = in.arrayNext()) {
             for ( ; size3 != 0; size3--) {
-              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto e3 = (ga3 != null ? ga3.peek() : null);
+              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto e3 = (ga3 != null ? ga3.peek() : null);
               if (e3 == null) {
-                e3 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto();
+                e3 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskProductionDto();
               }
               e3.customDecode(in);
               a3.add(e3);
@@ -1112,20 +1222,40 @@ public class TaskCalculationDto extends org.apache.avro.specific.SpecificRecordB
 
         case 7:
           long size4 = in.readArrayStart();
-          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> a4 = this.storages;
+          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> a4 = this.tariffs;
           if (a4 == null) {
-            a4 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>((int)size4, SCHEMA$.getField("storages").schema());
-            this.storages = a4;
+            a4 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>((int)size4, SCHEMA$.getField("tariffs").schema());
+            this.tariffs = a4;
           } else a4.clear();
-          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> ga4 = (a4 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>)a4 : null);
+          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto> ga4 = (a4 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto>)a4 : null);
           for ( ; 0 < size4; size4 = in.arrayNext()) {
             for ( ; size4 != 0; size4--) {
-              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto e4 = (ga4 != null ? ga4.peek() : null);
+              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto e4 = (ga4 != null ? ga4.peek() : null);
               if (e4 == null) {
-                e4 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto();
+                e4 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto();
               }
               e4.customDecode(in);
               a4.add(e4);
+            }
+          }
+          break;
+
+        case 8:
+          long size5 = in.readArrayStart();
+          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> a5 = this.storages;
+          if (a5 == null) {
+            a5 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>((int)size5, SCHEMA$.getField("storages").schema());
+            this.storages = a5;
+          } else a5.clear();
+          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto> ga5 = (a5 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto>)a5 : null);
+          for ( ; 0 < size5; size5 = in.arrayNext()) {
+            for ( ; size5 != 0; size5--) {
+              com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto e5 = (ga5 != null ? ga5.peek() : null);
+              if (e5 == null) {
+                e5 = new com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskStorageDto();
+              }
+              e5.customDecode(in);
+              a5.add(e5);
             }
           }
           break;

@@ -80,19 +80,7 @@ public class TaskControllerTest {
         LocalDateTime dateTimeStart = LocalDateTime.parse("2023-10-05T11:00:00");
         LocalDateTime dateTimeEnd = LocalDateTime.parse("2023-10-05T23:00:00");
 
-        Set<TaskBaseObjectRevisionDto> contractRevisionsDto = new HashSet<>();
-        contractRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
-
-        TaskDto taskDto = new TaskDto(
-                taskName,
-                dateTimeStart,
-                dateTimeEnd,
-                Collections.emptySet(),
-                Collections.emptySet(),
-                Collections.emptySet(),
-                contractRevisionsDto,
-                Collections.emptySet()
-        );
+        TaskDto taskDto = getTaskDto(taskName, dateTimeStart, dateTimeEnd);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/tasks")
@@ -105,9 +93,11 @@ public class TaskControllerTest {
         assertEquals(taskName, task.getName());
         assertEquals(dateTimeStart, task.getDateTimeStart());
         assertEquals(dateTimeEnd, task.getDateTimeEnd());
-        assertEquals(0, task.getDemandRevisions().size());
+        assertEquals(1, task.getDemandRevisions().size());
         assertEquals(0, task.getTariffRevisions().size());
         assertEquals(1, task.getContractRevisions().size());
+        assertEquals(0, task.getStorageRevisions().size());
+        assertEquals(0, task.getMovableDemandRevisions().size());
     }
 
     @Test
@@ -121,22 +111,7 @@ public class TaskControllerTest {
         LocalDateTime dateTimeStart = task.getDateTimeStart();
         LocalDateTime dateTimeEnd = LocalDateTime.parse("2023-10-06T23:00:00");
 
-        Set<TaskBaseObjectRevisionDto> demandRevisionsDto = new HashSet<>();
-        demandRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
-
-        Set<TaskBaseObjectRevisionDto> contractRevisionsDto = new HashSet<>();
-        contractRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
-
-        TaskDto taskDto = new TaskDto(
-                taskName,
-                dateTimeStart,
-                dateTimeEnd,
-                demandRevisionsDto,
-                Collections.emptySet(),
-                Collections.emptySet(),
-                contractRevisionsDto,
-                Collections.emptySet()
-        );
+        TaskDto taskDto = getTaskDto(taskName, dateTimeStart, dateTimeEnd);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/api/tasks")
@@ -154,6 +129,8 @@ public class TaskControllerTest {
         assertEquals(0, updatedTask.getProductionRevisions().size());
         assertEquals(0, updatedTask.getTariffRevisions().size());
         assertEquals(1, updatedTask.getContractRevisions().size());
+        assertEquals(0, task.getStorageRevisions().size());
+        assertEquals(0, task.getMovableDemandRevisions().size());
     }
 
     @Test
@@ -228,6 +205,7 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("validationMessages", hasSize(0)))
                 .andExpect(jsonPath("contractResults", hasSize(1)))
                 .andExpect(jsonPath("storageResults", hasSize(0)))
+                .andExpect(jsonPath("movableDemandResults", hasSize(0)))
                 .andExpect(jsonPath("contractResults[0].contractName", is("queryOnly")))
                 .andExpect(jsonPath("contractResults[0].revisionNumber", is(1)))
                 .andExpect(jsonPath("contractResults[0].contractResultValues", hasSize(2)))
@@ -259,6 +237,7 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("validationMessages", hasSize(0)))
                 .andExpect(jsonPath("contractResults", hasSize(0)))
                 .andExpect(jsonPath("storageResults", hasSize(1)))
+                .andExpect(jsonPath("movableDemandResults", hasSize(0)))
                 .andExpect(jsonPath("storageResults[0].storageName", is("queryOnly")))
                 .andExpect(jsonPath("storageResults[0].revisionNumber", is(1)))
                 .andExpect(jsonPath("storageResults[0].storageResultValues", hasSize(2)))
@@ -277,9 +256,53 @@ public class TaskControllerTest {
     }
 
     @Test
+    public void getTaskResultWithMovableDemandResult() throws Exception {
+
+        String taskName = "getTaskResultWithMovableDemandResult";
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tasks/{name}/result", taskName))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("taskName", is(taskName)))
+                .andExpect(jsonPath("resultStatus", is(ResultStatusDto.SOLUTION_FOUND.name())))
+                .andExpect(jsonPath("objectiveFunctionValue", is(1.0)))
+                .andExpect(jsonPath("relativeGap", is(0.02)))
+                .andExpect(jsonPath("elapsedTime", is(2.1)))
+                .andExpect(jsonPath("optimizerMessage", is("Optimal solution found")))
+                .andExpect(jsonPath("validationMessages", hasSize(0)))
+                .andExpect(jsonPath("contractResults", hasSize(0)))
+                .andExpect(jsonPath("storageResults", hasSize(0)))
+                .andExpect(jsonPath("movableDemandResults", hasSize(1)))
+                .andExpect(jsonPath("movableDemandResults[0].movableDemandName", is("queryOnly")))
+                .andExpect(jsonPath("movableDemandResults[0].revisionNumber", is(1)))
+                .andExpect(jsonPath("movableDemandResults[0].movableDemandResultValues", hasSize(1)))
+                .andExpect(jsonPath("movableDemandResults[0].movableDemandResultValues[0].dateTimeStart", is("2023-01-01T10:15:00")))
+                .andExpect(jsonPath("movableDemandResults[0].movableDemandResultValues[0].dateTimeEnd", is("2023-01-01T10:30:00")))
+                .andExpect(jsonPath("movableDemandResults[0].movableDemandResultValues[0].power", is(10.0)))
+                .andExpect(jsonPath("movableDemandResults[0].movableDemandResultValues[0].energy", is(2.5)));
+    }
+
+    @Test
     public void taskResultNotExists() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tasks/{name}/result", "queryOnly"))
                 .andExpect(status().isNotFound());
+    }
+
+    private TaskDto getTaskDto(String taskName, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd) {
+
+        Set<TaskBaseObjectRevisionDto> demandRevisionsDto = new HashSet<>();
+        demandRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
+
+        Set<TaskBaseObjectRevisionDto> contractRevisionsDto = new HashSet<>();
+        contractRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
+
+        return new TaskDto(taskName, dateTimeStart, dateTimeEnd,
+                demandRevisionsDto,
+                Collections.emptySet(),
+                Collections.emptySet(),
+                contractRevisionsDto,
+                Collections.emptySet(),
+                Collections.emptySet()
+        );
     }
 }

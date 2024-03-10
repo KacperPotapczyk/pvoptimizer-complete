@@ -199,6 +199,31 @@ class TaskPreProcessTest {
         assertEquals(0.2, contractDto.getUnitPrice().get(2), 1e-6);
     }
 
+    @Test
+    public void mapTaskWithMovableDemand() throws IOException {
+
+        TaskCalculationDto taskCalculationDto = getTaskCalculationDtoFromFile("TaskCalculationDto/TaskWithMovableDemand.json");
+        PreProcessResult preProcessResult = taskPreProcess.preProcess(taskCalculationDto);
+        TaskDto taskDto = preProcessResult.taskDto();
+
+        assertEquals(3, taskDto.getIntervals().size());
+        assertEquals(1, taskDto.getMovableDemands().size());
+
+        MovableDemandDto movableDemandDto = taskDto.getMovableDemands().get(0);
+        assertEquals(2, movableDemandDto.getId());
+        assertEquals("movableDemand1", movableDemandDto.getName().toString());
+
+        List<Double> profile = movableDemandDto.getProfile();
+        assertEquals(2, profile.size());
+        assertEquals(8.333333333, profile.get(0), 1e-6);
+        assertEquals(1.666666667, profile.get(1), 1e-6);
+
+        List<Integer> startIntervals = movableDemandDto.getStartIntervals();
+        assertEquals(2, startIntervals.size());
+        assertEquals(1, startIntervals.get(0));
+        assertEquals(2, startIntervals.get(1));
+    }
+
     private TaskCalculationDto getTaskCalculationDtoFromFile(String fileName) throws IOException {
 
         File file = new ClassPathResource(fileName).getFile();

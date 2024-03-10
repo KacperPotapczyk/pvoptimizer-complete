@@ -4,6 +4,7 @@ import com.github.kacperpotapczyk.pvoptimizer.backend.dto.task.TaskBaseObjectRev
 import com.github.kacperpotapczyk.pvoptimizer.backend.dto.task.TaskDto;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.movabledemand.MovableDemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
@@ -29,6 +30,8 @@ public abstract class TaskMapper {
     ContractService contractService;
     @Autowired
     StorageService storageService;
+    @Autowired
+    MovableDemandService movableDemandService;
 
     public abstract TaskDto mapTaskToTaskDto(Task task);
     @Mapping(source = "demand.name", target = "baseName")
@@ -41,6 +44,8 @@ public abstract class TaskMapper {
     public abstract TaskBaseObjectRevisionDto mapContractRevisionToTaskBaseObjectRevisionDto(ContractRevision contractRevision);
     @Mapping(source = "storage.name", target = "baseName")
     public abstract TaskBaseObjectRevisionDto mapStorageRevisionToTaskBaseObjectRevisionDto(StorageRevision storageRevision);
+    @Mapping(source = "movableDemand.name", target = "baseName")
+    public abstract TaskBaseObjectRevisionDto mapMovableDemandRevisionToTaskBaseObjectRevisionDto(MovableDemandRevision movableDemandRevision);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "readOnly", ignore = true)
@@ -66,5 +71,9 @@ public abstract class TaskMapper {
 
     public StorageRevision mapTaskBaseObjectRevisionDtoToStorageRevision(TaskBaseObjectRevisionDto dto) {
         return storageService.getBaseObjectRevision(dto.baseName(), dto.revisionNumber());
+    }
+
+    public MovableDemandRevision mapTaskBaseObjectRevisionDtoToMovableDemandRevision(TaskBaseObjectRevisionDto dto) {
+        return movableDemandService.getBaseObjectRevision(dto.baseName(), dto.revisionNumber());
     }
 }

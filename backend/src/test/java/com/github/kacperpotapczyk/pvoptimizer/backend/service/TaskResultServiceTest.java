@@ -170,7 +170,7 @@ class TaskResultServiceTest {
         StorageResult storageResult = taskResult.getStorageResults().get(0);
 
         assertEquals(1, storageResult.getStorageRevision().getId());
-        assertEquals(1, storageResult.getStorageRevision().getId());
+        assertEquals(1, storageResult.getStorageRevision().getStorage().getId());
         assertEquals(3, storageResult.getTaskResult().getId());
         assertEquals(2, storageResult.getStorageResultValues().size());
 
@@ -189,6 +189,21 @@ class TaskResultServiceTest {
         assertEquals(10.0, storageResultValue2.getDischarge());
         assertEquals(20.5, storageResultValue2.getEnergy());
         assertEquals(StorageMode.DISCHARGING, storageResultValue2.getStorageMode());
+
+        // movable demand result assertions
+        assertEquals(1, taskResult.getMovableDemandResults().size());
+        MovableDemandResult movableDemandResult = taskResult.getMovableDemandResults().get(0);
+
+        assertEquals(1, movableDemandResult.getMovableDemandRevision().getId());
+        assertEquals(1, movableDemandResult.getMovableDemandRevision().getMovableDemand().getId());
+        assertEquals(3, movableDemandResult.getTaskResult().getId());
+        assertEquals(1, movableDemandResult.getMovableDemandResultValues().size());
+
+        MovableDemandResultValue movableDemandResultValue = movableDemandResult.getMovableDemandResultValues().get(0);
+        assertEquals(LocalDateTime.parse("2023-01-01T10:15:00"), movableDemandResultValue.getDateTimeStart());
+        assertEquals(LocalDateTime.parse("2023-01-01T10:30:00"), movableDemandResultValue.getDateTimeEnd());
+        assertEquals(10.0, movableDemandResultValue.getPower());
+        assertEquals(2.5, movableDemandResultValue.getEnergy());
     }
 
     @Test
@@ -233,10 +248,18 @@ class TaskResultServiceTest {
                 .setRelativeGap(0.1)
                 .setOptimizerMessage("Solution found")
                 .setDateTimeStart("2023-01-01T10:00:00")
-                .setDateTimeEnd("2023-01-01T10:30:00");
+                .setDateTimeEnd("2023-01-01T10:30:00")
+                .setContractResults(getContractResults())
+                .setStorageResults(getStorageResults())
+                .setMovableDemandResults(getMovableDemandResults());
 
-        TaskCalculationContractResultDto.Builder contractResultBuilder = TaskCalculationContractResultDto.newBuilder();
-        contractResultBuilder.setId(1L);
+        return resultBuilder.build();
+    }
+
+    private List<TaskCalculationContractResultDto> getContractResults() {
+
+        TaskCalculationContractResultDto.Builder contractResultBuilder = TaskCalculationContractResultDto.newBuilder()
+                .setId(1L);
 
         List<TaskCalculationContractResultValueDto> contractResultValueDtoList = new ArrayList<>();
         contractResultValueDtoList.add(new TaskCalculationContractResultValueDto(
@@ -257,10 +280,13 @@ class TaskResultServiceTest {
 
         List<TaskCalculationContractResultDto> taskCalculationContractResultDtoList = new ArrayList<>();
         taskCalculationContractResultDtoList.add(contractResultBuilder.build());
-        resultBuilder.setContractResults(taskCalculationContractResultDtoList);
+        return taskCalculationContractResultDtoList;
+    }
 
-        TaskCalculationStorageResultDto.Builder storageResultBuilder = TaskCalculationStorageResultDto.newBuilder();
-        storageResultBuilder.setId(1L);
+    private List<TaskCalculationStorageResultDto> getStorageResults() {
+
+        TaskCalculationStorageResultDto.Builder storageResultBuilder = TaskCalculationStorageResultDto.newBuilder()
+                .setId(1L);
 
         List<TaskCalculationStorageResultValueDto> storageResultValueDtoList = new ArrayList<>();
         storageResultValueDtoList.add(new TaskCalculationStorageResultValueDto(
@@ -283,8 +309,25 @@ class TaskResultServiceTest {
 
         List<TaskCalculationStorageResultDto> taskCalculationStorageResultDtoList = new ArrayList<>();
         taskCalculationStorageResultDtoList.add(storageResultBuilder.build());
-        resultBuilder.setStorageResults(taskCalculationStorageResultDtoList);
+        return taskCalculationStorageResultDtoList;
+    }
 
-        return resultBuilder.build();
+    private List<TaskCalculationMovableDemandResultDto> getMovableDemandResults() {
+
+        TaskCalculationMovableDemandResultDto.Builder movableDemandResultBuilder = TaskCalculationMovableDemandResultDto.newBuilder()
+                .setId(1L);
+
+        List<TaskCalculationMovableDemandResultValueDto> movableDemandResultValueDtoList = new ArrayList<>();
+        movableDemandResultValueDtoList.add(new TaskCalculationMovableDemandResultValueDto(
+                "2023-01-01T10:15:00",
+                "2023-01-01T10:30:00",
+                10.0,
+                2.5
+        ));
+        movableDemandResultBuilder.setMovableDemandResultValues(movableDemandResultValueDtoList);
+
+        List<TaskCalculationMovableDemandResultDto> taskCalculationMovableDemandResultDtoList = new ArrayList<>();
+        taskCalculationMovableDemandResultDtoList.add(movableDemandResultBuilder.build());
+        return taskCalculationMovableDemandResultDtoList;
     }
 }

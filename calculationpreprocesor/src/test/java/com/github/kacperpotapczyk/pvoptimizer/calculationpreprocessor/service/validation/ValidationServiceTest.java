@@ -75,6 +75,29 @@ class ValidationServiceTest {
     }
 
     @Test
+    public void validateMovableDemandTaskHorizonCoverage() throws IOException {
+
+        TaskCalculationDto taskCalculationDto = getTaskCalculationDtoFromFile("TaskCalculationDto/TaskWithMovableDemand.json");
+        ValidationMessages validationMessages = validationService.validate(taskCalculationDto);
+
+        assertEquals(8, validationMessages.getTaskId());
+        assertFalse(validationMessages.hasErrorMessage());
+        assertEquals(2, validationMessages.getMessages().size());
+
+        ValidationMessage validationMessage1 = validationMessages.getMessages().get(0);
+        assertEquals(2, validationMessage1.id());
+        assertEquals(3, validationMessage1.revisionId());
+        assertEquals("movableDemand1", validationMessage1.baseObjectName());
+        assertEquals("Movable demand start option: 2023-01-01T09:55 starts before task horizon start. This option has no effect.", validationMessage1.message());
+
+        ValidationMessage validationMessage2 = validationMessages.getMessages().get(1);
+        assertEquals(2, validationMessage2.id());
+        assertEquals(3, validationMessage2.revisionId());
+        assertEquals("movableDemand1", validationMessage2.baseObjectName());
+        assertEquals("Movable demand start option: 2023-01-01T10:30 ends after task horizon end. Profile will be trimmed.", validationMessage2.message());
+    }
+
+    @Test
     public void duplicatedIds() throws IOException {
 
         TaskCalculationDto taskCalculationDto = getTaskCalculationDtoFromFile("TaskCalculationDto/TaskWithDuplicatedIds.json");
@@ -82,7 +105,7 @@ class ValidationServiceTest {
         ValidationMessages validationMessages = validationService.validate(taskCalculationDto);
         assertEquals(5, validationMessages.getTaskId());
         assertTrue(validationMessages.hasErrorMessage());
-        assertEquals(5, validationMessages.getMessages().size());
+        assertEquals(6, validationMessages.getMessages().size());
 
         ValidationMessage errorDemand = validationMessages.getMessages().stream()
                 .filter(validationMessage -> validationMessage.objectType() == ObjectType.DEMAND)
@@ -129,6 +152,14 @@ class ValidationServiceTest {
         assertEquals(ObjectType.STORAGE, errorStorage.objectType());
         assertEquals(44, errorStorage.id());
         assertEquals("Not unique base object id: 44", errorStorage.message());
+
+        ValidationMessage errorMovableDemand = validationMessages.getMessages().stream()
+                .filter(validationMessage -> validationMessage.objectType() == ObjectType.MOVABLE_DEMAND)
+                .findAny()
+                .orElseThrow();
+        assertEquals(ObjectType.MOVABLE_DEMAND, errorMovableDemand.objectType());
+        assertEquals(69, errorMovableDemand.id());
+        assertEquals("Not unique base object id: 69", errorMovableDemand.message());
     }
 
     private TaskCalculationDto getTaskCalculationDtoFromFile(String fileName) throws IOException {

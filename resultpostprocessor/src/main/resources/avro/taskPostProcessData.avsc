@@ -40,6 +40,47 @@
           ]
         }
       }
+    },
+    {
+      "name": "movableDemands",
+      "doc": "List of profiles generated for movable demands",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "MovableDemandPostProcessDto",
+          "type": "record",
+          "doc": "Movable demand data required for post processing of results",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Movable demand identifier"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "doc": "Movable demand name"
+            },
+            {
+              "name": "demandPowerProfile",
+              "doc": "Profile of power demand",
+              "type": {
+                "type": "array",
+                "items": "double"
+              }
+            },
+            {
+              "name": "demandEnergyProfile",
+              "doc": "Profile of energy demand",
+              "type": {
+                "type": "array",
+                "items": "double"
+              }
+            }
+          ]
+        }
+      },
+      "default": []
     }
   ]
 }

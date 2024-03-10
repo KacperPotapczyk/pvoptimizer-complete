@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 6199383605274936508L;
+  private static final long serialVersionUID = 994292956299416529L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskPostProcessDataDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Task identifier\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Task start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Task end date and time\"},{\"name\":\"intervals\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"IntervalDto\",\"fields\":[{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Interval start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Interval end date and time\"}]}},\"doc\":\"List of intervals\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TaskPostProcessDataDto\",\"namespace\":\"com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Task identifier\"},{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Task start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Task end date and time\"},{\"name\":\"intervals\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"IntervalDto\",\"fields\":[{\"name\":\"dateTimeStart\",\"type\":\"string\",\"doc\":\"Interval start date and time\"},{\"name\":\"dateTimeEnd\",\"type\":\"string\",\"doc\":\"Interval end date and time\"}]}},\"doc\":\"List of intervals\"},{\"name\":\"movableDemands\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"MovableDemandPostProcessDto\",\"doc\":\"Movable demand data required for post processing of results\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"doc\":\"Movable demand identifier\"},{\"name\":\"name\",\"type\":\"string\",\"doc\":\"Movable demand name\"},{\"name\":\"demandPowerProfile\",\"type\":{\"type\":\"array\",\"items\":\"double\"},\"doc\":\"Profile of power demand\"},{\"name\":\"demandEnergyProfile\",\"type\":{\"type\":\"array\",\"items\":\"double\"},\"doc\":\"Profile of energy demand\"}]}},\"doc\":\"List of profiles generated for movable demands\",\"default\":[]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -81,6 +81,8 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
   private java.lang.CharSequence dateTimeEnd;
   /** List of intervals */
   private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.IntervalDto> intervals;
+  /** List of profiles generated for movable demands */
+  private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> movableDemands;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -95,12 +97,14 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
    * @param dateTimeStart Task start date and time
    * @param dateTimeEnd Task end date and time
    * @param intervals List of intervals
+   * @param movableDemands List of profiles generated for movable demands
    */
-  public TaskPostProcessDataDto(java.lang.Long id, java.lang.CharSequence dateTimeStart, java.lang.CharSequence dateTimeEnd, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.IntervalDto> intervals) {
+  public TaskPostProcessDataDto(java.lang.Long id, java.lang.CharSequence dateTimeStart, java.lang.CharSequence dateTimeEnd, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.IntervalDto> intervals, java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> movableDemands) {
     this.id = id;
     this.dateTimeStart = dateTimeStart;
     this.dateTimeEnd = dateTimeEnd;
     this.intervals = intervals;
+    this.movableDemands = movableDemands;
   }
 
   @Override
@@ -117,6 +121,7 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
     case 1: return dateTimeStart;
     case 2: return dateTimeEnd;
     case 3: return intervals;
+    case 4: return movableDemands;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -130,6 +135,7 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
     case 1: dateTimeStart = (java.lang.CharSequence)value$; break;
     case 2: dateTimeEnd = (java.lang.CharSequence)value$; break;
     case 3: intervals = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.IntervalDto>)value$; break;
+    case 4: movableDemands = (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto>)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -207,6 +213,24 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
   }
 
   /**
+   * Gets the value of the 'movableDemands' field.
+   * @return List of profiles generated for movable demands
+   */
+  public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> getMovableDemands() {
+    return movableDemands;
+  }
+
+
+  /**
+   * Sets the value of the 'movableDemands' field.
+   * List of profiles generated for movable demands
+   * @param value the value to set.
+   */
+  public void setMovableDemands(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> value) {
+    this.movableDemands = value;
+  }
+
+  /**
    * Creates a new TaskPostProcessDataDto RecordBuilder.
    * @return A new TaskPostProcessDataDto RecordBuilder
    */
@@ -255,6 +279,8 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
     private java.lang.CharSequence dateTimeEnd;
     /** List of intervals */
     private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.IntervalDto> intervals;
+    /** List of profiles generated for movable demands */
+    private java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> movableDemands;
 
     /** Creates a new Builder */
     private Builder() {
@@ -283,6 +309,10 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
         this.intervals = data().deepCopy(fields()[3].schema(), other.intervals);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
+      if (isValidValue(fields()[4], other.movableDemands)) {
+        this.movableDemands = data().deepCopy(fields()[4].schema(), other.movableDemands);
+        fieldSetFlags()[4] = other.fieldSetFlags()[4];
+      }
     }
 
     /**
@@ -306,6 +336,10 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
       if (isValidValue(fields()[3], other.intervals)) {
         this.intervals = data().deepCopy(fields()[3].schema(), other.intervals);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.movableDemands)) {
+        this.movableDemands = data().deepCopy(fields()[4].schema(), other.movableDemands);
+        fieldSetFlags()[4] = true;
       }
     }
 
@@ -484,6 +518,50 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
       return this;
     }
 
+    /**
+      * Gets the value of the 'movableDemands' field.
+      * List of profiles generated for movable demands
+      * @return The value.
+      */
+    public java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> getMovableDemands() {
+      return movableDemands;
+    }
+
+
+    /**
+      * Sets the value of the 'movableDemands' field.
+      * List of profiles generated for movable demands
+      * @param value The value of 'movableDemands'.
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.TaskPostProcessDataDto.Builder setMovableDemands(java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> value) {
+      validate(fields()[4], value);
+      this.movableDemands = value;
+      fieldSetFlags()[4] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'movableDemands' field has been set.
+      * List of profiles generated for movable demands
+      * @return True if the 'movableDemands' field has been set, false otherwise.
+      */
+    public boolean hasMovableDemands() {
+      return fieldSetFlags()[4];
+    }
+
+
+    /**
+      * Clears the value of the 'movableDemands' field.
+      * List of profiles generated for movable demands
+      * @return This builder.
+      */
+    public com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.TaskPostProcessDataDto.Builder clearMovableDemands() {
+      movableDemands = null;
+      fieldSetFlags()[4] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public TaskPostProcessDataDto build() {
@@ -493,6 +571,7 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
         record.dateTimeStart = fieldSetFlags()[1] ? this.dateTimeStart : (java.lang.CharSequence) defaultValue(fields()[1]);
         record.dateTimeEnd = fieldSetFlags()[2] ? this.dateTimeEnd : (java.lang.CharSequence) defaultValue(fields()[2]);
         record.intervals = fieldSetFlags()[3] ? this.intervals : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.IntervalDto>) defaultValue(fields()[3]);
+        record.movableDemands = fieldSetFlags()[4] ? this.movableDemands : (java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto>) defaultValue(fields()[4]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -544,6 +623,19 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
     if (actualSize0 != size0)
       throw new java.util.ConcurrentModificationException("Array-size written was " + size0 + ", but element count was " + actualSize0 + ".");
 
+    long size1 = this.movableDemands.size();
+    out.writeArrayStart();
+    out.setItemCount(size1);
+    long actualSize1 = 0;
+    for (com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto e1: this.movableDemands) {
+      actualSize1++;
+      out.startItem();
+      e1.customEncode(out);
+    }
+    out.writeArrayEnd();
+    if (actualSize1 != size1)
+      throw new java.util.ConcurrentModificationException("Array-size written was " + size1 + ", but element count was " + actualSize1 + ".");
+
   }
 
   @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
@@ -575,8 +667,26 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
         }
       }
 
+      long size1 = in.readArrayStart();
+      java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> a1 = this.movableDemands;
+      if (a1 == null) {
+        a1 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto>((int)size1, SCHEMA$.getField("movableDemands").schema());
+        this.movableDemands = a1;
+      } else a1.clear();
+      SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> ga1 = (a1 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto>)a1 : null);
+      for ( ; 0 < size1; size1 = in.arrayNext()) {
+        for ( ; size1 != 0; size1--) {
+          com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto e1 = (ga1 != null ? ga1.peek() : null);
+          if (e1 == null) {
+            e1 = new com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto();
+          }
+          e1.customDecode(in);
+          a1.add(e1);
+        }
+      }
+
     } else {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 5; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.id = in.readLong();
@@ -606,6 +716,26 @@ public class TaskPostProcessDataDto extends org.apache.avro.specific.SpecificRec
               }
               e0.customDecode(in);
               a0.add(e0);
+            }
+          }
+          break;
+
+        case 4:
+          long size1 = in.readArrayStart();
+          java.util.List<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> a1 = this.movableDemands;
+          if (a1 == null) {
+            a1 = new SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto>((int)size1, SCHEMA$.getField("movableDemands").schema());
+            this.movableDemands = a1;
+          } else a1.clear();
+          SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto> ga1 = (a1 instanceof SpecificData.Array ? (SpecificData.Array<com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto>)a1 : null);
+          for ( ; 0 < size1; size1 = in.arrayNext()) {
+            for ( ; size1 != 0; size1--) {
+              com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto e1 = (ga1 != null ? ga1.peek() : null);
+              if (e1 == null) {
+                e1 = new com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto();
+              }
+              e1.customDecode(in);
+              a1.add(e1);
             }
           }
           break;

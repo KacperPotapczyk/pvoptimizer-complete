@@ -2,6 +2,7 @@ package com.github.kacperpotapczyk.pvoptimizer.backend.entity.task;
 
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.movabledemand.MovableDemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.tariff.TariffRevision;
@@ -67,6 +68,10 @@ public class Task {
     @ManyToMany
     @JoinTable(name = "task_storage_revisions", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "revision_id"))
     private Set<StorageRevision> storageRevisions;
+
+    @ManyToMany
+    @JoinTable(name = "task_movable_demand_revisions", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "revision_id"))
+    private Set<MovableDemandRevision> movableDemandRevisions;
 
     public Task(String name, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd) {
         this.name = name;

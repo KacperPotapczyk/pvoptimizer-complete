@@ -11,5 +11,6 @@
       "dateTimeStart":"2023-01-01T10:15:00",
       "dateTimeEnd":"2023-01-01T10:30:00"
     }
-  ]
+  ],
+  "movableDemands": []
 }

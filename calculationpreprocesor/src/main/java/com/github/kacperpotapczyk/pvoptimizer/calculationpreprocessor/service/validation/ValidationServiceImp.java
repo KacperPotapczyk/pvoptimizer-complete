@@ -1,16 +1,16 @@
 package com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.service.validation;
 
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskCalculationDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskContractDto;
-import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.TaskTariffDto;
+import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.*;
 import com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.message.ObjectType;
 import com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.message.ValidationMessage;
 import com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.message.ValidationMessageLevel;
 import com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.message.ValidationMessages;
+import com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.service.preprocess.utils.DateTimeMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,14 +24,18 @@ public class ValidationServiceImp implements ValidationService {
     private final TariffValidation tariffValidationService;
     private final ProductionValidation productionValidation;
     private final StorageValidation storageValidation;
+    private final MovableDemandValidation movableDemandValidation;
+    private final DateTimeMapper dateTimeMapper;
 
     @Autowired
-    public ValidationServiceImp(DemandValidation demandValidation, ContractValidation contractValidation, TariffValidation tariffValidation, ProductionValidation productionValidation, StorageValidation storageValidation) {
+    public ValidationServiceImp(DemandValidation demandValidation, ContractValidation contractValidation, TariffValidation tariffValidation, ProductionValidation productionValidation, StorageValidation storageValidation, MovableDemandValidation movableDemandValidation, DateTimeMapper dateTimeMapper) {
         this.demandValidationService = demandValidation;
         this.contractValidationService = contractValidation;
         this.tariffValidationService =  tariffValidation;
         this.productionValidation = productionValidation;
         this.storageValidation = storageValidation;
+        this.movableDemandValidation = movableDemandValidation;
+        this.dateTimeMapper = dateTimeMapper;
     }
 
     @Override
@@ -47,8 +51,10 @@ public class ValidationServiceImp implements ValidationService {
         productionValidation.validate(taskCalculationDto.getProductions(), builder);
         contractValidationService.validate(taskCalculationDto.getContracts(), builder);
         tariffValidationService.validate(taskCalculationDto.getTariffs(), builder);
-        storageValidation.validate(taskCalculationDto.getStorages(), builder);
         validateContractTariffMatching(taskCalculationDto.getContracts(), taskCalculationDto.getTariffs(), builder);
+        storageValidation.validate(taskCalculationDto.getStorages(), builder);
+        movableDemandValidation.validate(taskCalculationDto.getMovableDemands(), builder);
+        validateMovableDemandsTaskHorizonCoverage(taskCalculationDto, builder);
 
         return builder.build();
     }
@@ -106,5 +112,93 @@ public class ValidationServiceImp implements ValidationService {
                 ));
             }
         });
+    }
+
+    private void validateMovableDemandsTaskHorizonCoverage(
+            TaskCalculationDto taskCalculationDto,
+            ValidationMessages.ValidationMessagesBuilder builder
+    ) {
+        LocalDateTime taskStart = dateTimeMapper.mapToLocalDateTime(taskCalculationDto.getDateTimeStart());
+        LocalDateTime taskEnd = dateTimeMapper.mapToLocalDateTime(taskCalculationDto.getDateTimeEnd());
+
+        taskCalculationDto.getMovableDemands().forEach(taskMovableDemandDto -> checkMovableDemandTaskHorizonCoverage(
+                builder,
+                taskMovableDemandDto,
+                taskStart,
+                taskEnd
+        ));
+    }
+
+    private void checkMovableDemandTaskHorizonCoverage(
+            ValidationMessages.ValidationMessagesBuilder builder,
+            TaskMovableDemandDto taskMovableDemandDto,
+            LocalDateTime taskStart,
+            LocalDateTime taskEnd
+    ) {
+
+        long profileLengthInMinutes = taskMovableDemandDto.getMovableDemandValues().stream()
+                .map(TaskMovableDemandValueDto::getDurationMinutes)
+                .reduce(0L, Long::sum);
+
+        boolean isAllOptionsOutsideTaskHorizon = true;
+
+        for (TaskMovableDemandStartDto taskMovableDemandStartDto : taskMovableDemandDto.getMovableDemandStarts()) {
+
+            LocalDateTime movableDemandStart = dateTimeMapper.mapToLocalDateTime(taskMovableDemandStartDto.getStart());
+            LocalDateTime movableDemandEnd = movableDemandStart.plusMinutes(profileLengthInMinutes);
+
+            if (movableDemandStart.isAfter(taskEnd) || movableDemandStart.isEqual(taskEnd)) {
+                builder.message(new ValidationMessage(
+                        ValidationMessageLevel.WARN,
+                        ObjectType.MOVABLE_DEMAND,
+                        taskMovableDemandDto.getName().toString(),
+                        taskMovableDemandDto.getId(),
+                        taskMovableDemandDto.getRevisionNumber(),
+                        "Movable demand start option: " + movableDemandStart + " begins after task horizon end. This option has no effect."
+                ));
+            } else if (movableDemandEnd.isBefore(taskStart) || movableDemandEnd.isEqual(taskStart)) {
+                builder.message(new ValidationMessage(
+                        ValidationMessageLevel.WARN,
+                        ObjectType.MOVABLE_DEMAND,
+                        taskMovableDemandDto.getName().toString(),
+                        taskMovableDemandDto.getId(),
+                        taskMovableDemandDto.getRevisionNumber(),
+                        "Movable demand start option: " + movableDemandStart + " ends before task horizon start. This option has no effect."
+                ));
+            } else if (movableDemandStart.isBefore(taskStart)) {
+                builder.message(new ValidationMessage(
+                        ValidationMessageLevel.WARN,
+                        ObjectType.MOVABLE_DEMAND,
+                        taskMovableDemandDto.getName().toString(),
+                        taskMovableDemandDto.getId(),
+                        taskMovableDemandDto.getRevisionNumber(),
+                        "Movable demand start option: " + movableDemandStart + " starts before task horizon start. This option has no effect."
+                ));
+            } else {
+                isAllOptionsOutsideTaskHorizon = false;
+            }
+
+            if (movableDemandEnd.isAfter(taskEnd)) {
+                builder.message(new ValidationMessage(
+                        ValidationMessageLevel.WARN,
+                        ObjectType.MOVABLE_DEMAND,
+                        taskMovableDemandDto.getName().toString(),
+                        taskMovableDemandDto.getId(),
+                        taskMovableDemandDto.getRevisionNumber(),
+                        "Movable demand start option: " + movableDemandStart + " ends after task horizon end. Profile will be trimmed."
+                ));
+            }
+        }
+
+        if (isAllOptionsOutsideTaskHorizon) {
+            builder.message(new ValidationMessage(
+                    ValidationMessageLevel.ERROR,
+                    ObjectType.MOVABLE_DEMAND,
+                    taskMovableDemandDto.getName().toString(),
+                    taskMovableDemandDto.getId(),
+                    taskMovableDemandDto.getRevisionNumber(),
+                    "All movable demand options are outside task horizon."
+            ));
+        }
     }
 }

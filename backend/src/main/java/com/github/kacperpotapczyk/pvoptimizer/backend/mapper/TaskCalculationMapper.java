@@ -8,6 +8,9 @@ import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractTy
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.cyclicalvalue.CyclicalDailyValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.demand.DemandValue;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.movabledemand.MovableDemandRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.movabledemand.MovableDemandStart;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.movabledemand.MovableDemandValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.production.ProductionValue;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.Storage;
@@ -35,6 +38,9 @@ public abstract class TaskCalculationMapper {
 
     public abstract CyclicalDailyValueDto mapCyclicalDailyValueToCyclicalDailyValueDto(CyclicalDailyValue cyclicalDailyValue);
 
+    public abstract TaskMovableDemandStartDto mapMovableDemandStartToTaskMovableDemandStartDto(MovableDemandStart movableDemandStart);
+    public abstract TaskMovableDemandValueDto mapMovableDemandValueToTaskMovableDemandValueDto(MovableDemandValue movableDemandValue);
+
     public TaskCalculationDto mapTaskToTaskCalculationDto(Task task) {
 
         DateTimeMapper dateTimeMapper = new DateTimeMapper();
@@ -50,6 +56,9 @@ public abstract class TaskCalculationMapper {
                         .toList(),
                 task.getDemandRevisions().stream()
                         .map(demandRevision -> this.mapDemandRevisionToTaskDemandDto(demandRevision, taskDateTimeStart, taskDateTimeEnd))
+                        .toList(),
+                task.getMovableDemandRevisions().stream()
+                        .map(movableDemandRevision -> this.mapMovableDemandRevisionToTaskMovableDemandDto(movableDemandRevision, taskDateTimeStart, taskDateTimeEnd))
                         .toList(),
                 task.getProductionRevisions().stream()
                         .map(productionRevision -> this.mapProductionRevisionToTaskProductionDto(productionRevision, taskDateTimeStart, taskDateTimeEnd))
@@ -108,6 +117,23 @@ public abstract class TaskCalculationMapper {
                         .toList().stream()
                         .sorted(Comparator.comparing(DemandValue::getDateTime))
                         .map(this::mapDemandValueToTaskDemandValueDto)
+                        .toList()
+        );
+    }
+
+    private TaskMovableDemandDto mapMovableDemandRevisionToTaskMovableDemandDto(MovableDemandRevision movableDemandRevision, LocalDateTime windowStart, LocalDateTime windowEnd) {
+
+        return new TaskMovableDemandDto(
+                movableDemandRevision.getMovableDemand().getId(),
+                movableDemandRevision.getMovableDemand().getName(),
+                movableDemandRevision.getRevisionNumber(),
+                movableDemandRevision.getMovableDemandStartsForTimeWindow(windowStart, windowEnd).stream()
+                        .sorted()
+                        .map(this::mapMovableDemandStartToTaskMovableDemandStartDto)
+                        .toList(),
+                movableDemandRevision.getMovableDemandValues().stream()
+                        .sorted()
+                        .map(this::mapMovableDemandValueToTaskMovableDemandValueDto)
                         .toList()
         );
     }
