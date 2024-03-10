@@ -2,6 +2,7 @@ package com.github.kacperpotapczyk.pvoptimizer.backend.service;
 
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.contract.ContractRevision;
+import com.github.kacperpotapczyk.pvoptimizer.backend.entity.movabledemand.MovableDemandRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.storage.StorageRevision;
 import com.github.kacperpotapczyk.pvoptimizer.backend.entity.task.Task;
@@ -116,6 +117,10 @@ public class TaskResultServiceImpl implements TaskResultService {
                     taskResult.addStorageResult(mapTaskCalculationStorageResultDtoToStorageResult(taskCalculationResult, storageResultDto, taskResult));
                 }
 
+                for (TaskCalculationMovableDemandResultDto movableDemandResultDto : taskCalculationResult.getMovableDemandResults()) {
+                    taskResult.addMovableDemandResult(mapTaskCalculationMovableDemandResultDtoToMovableDemandResult(taskCalculationResult, movableDemandResultDto, taskResult));
+                }
+
             } else {
                 log.error("Task with id: {} optimization failed with message: {}", taskId, taskCalculationResult.getOptimizerMessage().toString());
             }
@@ -179,5 +184,31 @@ public class TaskResultServiceImpl implements TaskResultService {
 
         storageResult.setStorageResultValues(storageResultValues);
         return storageResult;
+    }
+
+    private MovableDemandResult mapTaskCalculationMovableDemandResultDtoToMovableDemandResult(TaskCalculationResultDto taskCalculationResult, TaskCalculationMovableDemandResultDto movableDemandResultDto, TaskResult taskResult) {
+
+        MovableDemandRevision movableDemandRevision = taskRepository.getMovableDemandRevisionByTaskIdAndStorageId(
+                taskCalculationResult.getId(),
+                movableDemandResultDto.getId()
+        );
+
+        MovableDemandResult movableDemandResult = new MovableDemandResult();
+        movableDemandResult.setMovableDemandRevision(movableDemandRevision);
+        movableDemandResult.setTaskResult(taskResult);
+
+        List<TaskCalculationMovableDemandResultValueDto> movableDemandResultValueDtoListSorted = movableDemandResultDto.getMovableDemandResultValues().stream()
+                .sorted(Comparator.comparing(v -> dateTimeMapper.dateTimeAsLocalDateTime(v.getDateTimeStart())))
+                .toList();
+
+        List<MovableDemandResultValue> movableDemandResultValues = new ArrayList<>();
+        for (TaskCalculationMovableDemandResultValueDto movableDemandResultValueDto : movableDemandResultValueDtoListSorted) {
+            MovableDemandResultValue movableDemandResultValue = taskCalculationResultMapper.mapTaskCalculationMovableDemandResultValueDtoToMovableDemandResultValue(movableDemandResultValueDto);
+            movableDemandResultValue.setMovableDemandResult(movableDemandResult);
+            movableDemandResultValues.add(movableDemandResultValue);
+        }
+        movableDemandResult.setMovableDemandResultValues(movableDemandResultValues);
+
+        return movableDemandResult;
     }
 }

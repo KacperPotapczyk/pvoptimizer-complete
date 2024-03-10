@@ -11,5 +11,6 @@ public record TaskResultDto(
         Double elapsedTime,
         String optimizerMessage,
         List<ContractResultDto> contractResults,
-        List<StorageResultDto> storageResults
+        List<StorageResultDto> storageResults,
+        List<MovableDemandResultDto> movableDemandResults
 ) {}
