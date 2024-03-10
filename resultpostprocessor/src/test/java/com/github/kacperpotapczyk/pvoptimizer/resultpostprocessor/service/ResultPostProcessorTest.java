@@ -102,6 +102,28 @@ class ResultPostProcessorTest {
     }
 
     @Test
+    public void successfulMovableDemand() throws IOException {
+
+        TaskPostProcessDataDto taskPostProcessDataDto = getTaskPostProcessDataDtoFromFile("TaskPostProcessDataDto/successfulMovableDemand.json");
+        ResultDto resultDto = getResultDtoFromFile("ResultDto/successfulMovableDemand.json");
+
+        TaskCalculationResultDto taskCalculationResult = resultPostProcessor.postProcess(taskPostProcessDataDto, resultDto);
+
+        assertEquals(2, taskCalculationResult.getId());
+        assertEquals("2023-01-01T10:00:00", taskCalculationResult.getDateTimeStart().toString());
+        assertEquals("2023-01-01T10:30:00", taskCalculationResult.getDateTimeEnd().toString());
+        assertEquals(1, taskCalculationResult.getMovableDemandResults().size());
+
+        TaskCalculationMovableDemandResultDto movableDemandResultDto = taskCalculationResult.getMovableDemandResults().get(0);
+        assertEquals(1, movableDemandResultDto.getId());
+        assertEquals(1, movableDemandResultDto.getMovableDemandResultValues().size());
+        assertEquals("2023-01-01T10:15:00", movableDemandResultDto.getMovableDemandResultValues().get(0).getDateTimeStart().toString());
+        assertEquals("2023-01-01T10:30:00", movableDemandResultDto.getMovableDemandResultValues().get(0).getDateTimeEnd().toString());
+        assertEquals(10.0, movableDemandResultDto.getMovableDemandResultValues().get(0).getPower(), 1e-6);
+        assertEquals(2.5, movableDemandResultDto.getMovableDemandResultValues().get(0).getEnergy(), 1e-6);
+    }
+
+    @Test
     public void solutionNotFound() throws IOException {
 
         TaskPostProcessDataDto taskPostProcessDataDto = getTaskPostProcessDataDtoFromFile("TaskPostProcessDataDto/solutionNotFound.json");

@@ -1,0 +1,17 @@
+{
+  "id":2,
+  "dateTimeStart":"2023-01-01T10:00:00",
+  "dateTimeEnd":"2023-01-01T10:30:00",
+  "intervals":[
+    {"dateTimeStart":"2023-01-01T10:00:00","dateTimeEnd":"2023-01-01T10:15:00"},
+    {"dateTimeStart":"2023-01-01T10:15:00","dateTimeEnd":"2023-01-01T10:30:00"}
+  ],
+  "movableDemands":[
+    {
+      "id":1,
+      "name":"movableDemand1",
+      "demandPowerProfile":[10],
+      "demandEnergyProfile":[2.5]
+    }
+  ]
+}

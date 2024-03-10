@@ -1,6 +1,7 @@
 package com.github.kacperpotapczyk.pvoptimizer.resultpostprocessor.service;
 
 import com.github.kacperpotapczyk.pvoptimizer.avro.optimizer.result.*;
+import com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto;
 import com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.TaskPostProcessDataDto;
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.result.*;
 import com.github.kacperpotapczyk.pvoptimizer.resultpostprocessor.mapper.DateTimeMapper;
@@ -29,18 +30,17 @@ public class ResultPostProcessorImpl implements ResultPostProcessor {
         log.debug("Post processing result for task with id: {}", taskPostProcessDataDto.getId());
         TaskCalculationResultDto.Builder builder = TaskCalculationResultDto.newBuilder();
 
-        builder.setId(taskPostProcessDataDto.getId());
-        builder.setDateTimeStart(taskPostProcessDataDto.getDateTimeStart());
-        builder.setDateTimeEnd(taskPostProcessDataDto.getDateTimeEnd());
-
-        builder.setResultStatus(mapOptimizationStatusDtoToTaskCalculationResultStatusDto(resultDto.getOptimizationStatus()));
-        builder.setOptimizerMessage(resultDto.getErrorMessage());
+        builder.setId(taskPostProcessDataDto.getId())
+                .setDateTimeStart(taskPostProcessDataDto.getDateTimeStart())
+                .setDateTimeEnd(taskPostProcessDataDto.getDateTimeEnd())
+                .setResultStatus(mapOptimizationStatusDtoToTaskCalculationResultStatusDto(resultDto.getOptimizationStatus()))
+                .setOptimizerMessage(resultDto.getErrorMessage());
 
         if (builder.getResultStatus() == TaskCalculationResultStatusDto.SOLUTION_FOUND) {
 
-            builder.setObjectiveFunctionValue(resultDto.getObjectiveFunctionValue());
-            builder.setElapsedTime(resultDto.getElapsedTime());
-            builder.setRelativeGap(resultDto.getRelativeGap());
+            builder.setObjectiveFunctionValue(resultDto.getObjectiveFunctionValue())
+                    .setElapsedTime(resultDto.getElapsedTime())
+                    .setRelativeGap(resultDto.getRelativeGap());
 
             List<Interval> intervals = taskPostProcessDataDto.getIntervals().stream()
                     .map(intervalDto -> new Interval(
@@ -49,15 +49,18 @@ public class ResultPostProcessorImpl implements ResultPostProcessor {
                     ))
                     .toList();
 
-            List<TaskCalculationContractResultDto> taskCalculationContractResultDtoList = resultDto.getContractResults().stream()
-                    .map(contractResultDto -> mapContractResult(contractResultDto, intervals))
-                    .toList();
-            builder.setContractResults(taskCalculationContractResultDtoList);
-
-            List<TaskCalculationStorageResultDto> taskCalculationStorageResultDtoList = resultDto.getStorageResults().stream()
-                    .map(storageResultDto -> mapStorageResult(storageResultDto, intervals))
-                    .toList();
-            builder.setStorageResults(taskCalculationStorageResultDtoList);
+            builder.setContractResults(
+                            resultDto.getContractResults().stream()
+                                    .map(contractResultDto -> mapContractResult(contractResultDto, intervals))
+                                    .toList())
+                    .setStorageResults(
+                            resultDto.getStorageResults().stream()
+                                    .map(storageResultDto -> mapStorageResult(storageResultDto, intervals))
+                                    .toList())
+                    .setMovableDemandResults(
+                            resultDto.getMovableDemandResults().stream()
+                                    .map(movableDemandResultDto -> mapMovableDemandResult(taskPostProcessDataDto, movableDemandResultDto, intervals))
+                                    .toList());
         }
 
         return builder.build();
@@ -73,9 +76,8 @@ public class ResultPostProcessorImpl implements ResultPostProcessor {
 
     private TaskCalculationContractResultDto mapContractResult(ContractResultDto contractResultDto, List<Interval> intervals) {
 
-        TaskCalculationContractResultDto.Builder builder = TaskCalculationContractResultDto.newBuilder();
-
-        builder.setId(contractResultDto.getId());
+        TaskCalculationContractResultDto.Builder builder = TaskCalculationContractResultDto.newBuilder()
+                .setId(contractResultDto.getId());
 
         int numberOfResults = contractResultDto.getPower().size();
         List<TaskCalculationContractResultValueDto> taskCalculationContractResultValueDtoList = new ArrayList<>(numberOfResults);
@@ -97,8 +99,8 @@ public class ResultPostProcessorImpl implements ResultPostProcessor {
 
     private TaskCalculationStorageResultDto mapStorageResult(StorageResultDto storageResultDto, List<Interval> intervals) {
 
-        TaskCalculationStorageResultDto.Builder builder = TaskCalculationStorageResultDto.newBuilder();
-        builder.setId(storageResultDto.getId());
+        TaskCalculationStorageResultDto.Builder builder = TaskCalculationStorageResultDto.newBuilder()
+                .setId(storageResultDto.getId());
 
         int numberOfValues = storageResultDto.getStorageMode().size();
         List<TaskCalculationStorageResultValueDto> taskCalculationStorageResultValueDtoList = new ArrayList<>(numberOfValues);
@@ -126,5 +128,34 @@ public class ResultPostProcessorImpl implements ResultPostProcessor {
             case CHARGING -> TaskCalculationStorageModeDto.CHARGING;
             case DISCHARGING -> TaskCalculationStorageModeDto.DISCHARGING;
         };
+    }
+
+    private TaskCalculationMovableDemandResultDto mapMovableDemandResult(
+            TaskPostProcessDataDto taskPostProcessDataDto,
+            MovableDemandResultDto movableDemandResultDto,
+            List<Interval> intervals
+    ) {
+
+        MovableDemandPostProcessDto movableDemandPostProcessData = taskPostProcessDataDto.getMovableDemands().stream()
+                .filter(movableDemandPostProcessDto -> movableDemandPostProcessDto.getId() == movableDemandResultDto.getId())
+                .findFirst()
+                .orElseThrow();
+
+        List<TaskCalculationMovableDemandResultValueDto> movableDemandResultValueDtoList = new ArrayList<>();
+        int startInterval = movableDemandResultDto.getStartInterval();
+
+        for (int i=0; i<movableDemandPostProcessData.getDemandPowerProfile().size(); i++) {
+            movableDemandResultValueDtoList.add(new TaskCalculationMovableDemandResultValueDto(
+                    dateTimeMapper.mapLocalDateTimeToCharSequence(intervals.get(startInterval + i).dateTimeStart()),
+                    dateTimeMapper.mapLocalDateTimeToCharSequence(intervals.get(startInterval + i).dateTimeEnd()),
+                    movableDemandPostProcessData.getDemandPowerProfile().get(i),
+                    movableDemandPostProcessData.getDemandEnergyProfile().get(i)
+            ));
+        }
+
+        return new TaskCalculationMovableDemandResultDto(
+                movableDemandResultDto.getId(),
+                movableDemandResultValueDtoList
+        );
     }
 }
