@@ -62,6 +62,38 @@
       ]
     }
   ],
+  "movableDemands": [
+    {
+      "id":69,
+      "name":"movableDemand1",
+      "revisionNumber":1,
+      "movableDemandStarts":[
+        {"start":"2023-01-01T10:00:00"}
+      ],
+      "movableDemandValues":[
+        {
+          "order":1,
+          "durationMinutes":15,
+          "value":10
+        }
+      ]
+    },
+    {
+      "id":69,
+      "name":"movableDemand2",
+      "revisionNumber":1,
+      "movableDemandStarts":[
+        {"start":"2023-01-01T10:15:00"}
+      ],
+      "movableDemandValues":[
+        {
+          "order":1,
+          "durationMinutes":15,
+          "value":5
+        }
+      ]
+    }
+  ],
   "productions": [
     {
       "id": 10,

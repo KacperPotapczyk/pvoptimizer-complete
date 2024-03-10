@@ -1,0 +1,46 @@
+{
+  "id":8,
+  "dateTimeStart":"2023-01-01T10:00",
+  "dateTimeEnd":"2023-01-01T10:45",
+  "contracts":[],
+  "demands":[
+    {
+      "id":2,
+      "name":"demand1",
+      "revisionNumber":1,
+      "demandValues":[
+        {
+          "value":10,
+          "dateTime":"2023-01-01T10:00:00"
+        }
+      ]
+    }
+  ],
+  "movableDemands": [
+    {
+      "id":2,
+      "name":"movableDemand1",
+      "revisionNumber":3,
+      "movableDemandStarts":[
+        {"start":"2023-01-01T09:55:00"},
+        {"start":"2023-01-01T10:15:00"},
+        {"start":"2023-01-01T10:30:00"}
+      ],
+      "movableDemandValues":[
+        {
+          "order":1,
+          "durationMinutes":10,
+          "value":10
+        },
+        {
+          "order":2,
+          "durationMinutes":10,
+          "value":5
+        }
+      ]
+    }
+  ],
+  "productions": [],
+  "tariffs":[],
+  "storages": []
+}

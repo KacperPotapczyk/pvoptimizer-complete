@@ -172,6 +172,85 @@
       "default": []
     },
     {
+      "name": "movableDemands",
+      "doc": "List of movable demands",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "TaskMovableDemandDto",
+          "type": "record",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "doc": "Movable demand Id"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "doc": "Movable demand name"
+            },
+            {
+              "name": "revisionNumber",
+              "type": "long",
+              "doc": "Movable demand revision number"
+            },
+            {
+              "name": "movableDemandStarts",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskMovableDemandStartDto",
+                  "type": "record",
+                  "doc": "Movable demand start option",
+                  "fields": [
+                    {
+                      "name": "start",
+                      "type": "string",
+                      "doc": "Start timestamp"
+                    }
+                  ]
+                }
+              },
+              "default": [],
+              "doc": "Movable demand start options"
+            },
+            {
+              "name": "movableDemandValues",
+              "doc": "Movable demand profile",
+              "type": {
+                "type": "array",
+                "items": {
+                  "name": "TaskMovableDemandValueDto",
+                  "type": "record",
+                  "doc": "Movable demand profile value",
+                  "fields": [
+                    {
+                      "name": "order",
+                      "type": "long",
+                      "doc": "Profile value ordering number"
+                    },
+                    {
+                      "name": "durationMinutes",
+                      "type": "long",
+                      "doc": "Profile value duration in minutes"
+                    },
+                    {
+                      "name": "value",
+                      "type": "double",
+                      "doc": "Demand value of profile"
+                    }
+                  ]
+                }
+              },
+              "default": []
+            }
+          ]
+        }
+      },
+      "default": []
+    },
+    {
       "name": "productions",
       "doc": "List of household production sources.",
       "type": {

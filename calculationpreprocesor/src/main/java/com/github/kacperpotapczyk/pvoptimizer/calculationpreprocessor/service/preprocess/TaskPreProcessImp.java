@@ -1,6 +1,7 @@
 package com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.service.preprocess;
 
 import com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.IntervalDto;
+import com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.MovableDemandPostProcessDto;
 import com.github.kacperpotapczyk.pvoptimizer.avro.postprocessor.TaskPostProcessDataDto;
 import com.github.kacperpotapczyk.pvoptimizer.avro.backend.calculation.task.*;
 import com.github.kacperpotapczyk.pvoptimizer.calculationpreprocessor.service.preprocess.utils.*;
@@ -20,6 +21,8 @@ public class TaskPreProcessImp implements TaskPreProcess {
 
     private final DateTimeMapper dateTimeMapper;
     private final IntervalValueAverageService averageService;
+    // TODO add as task parameter not fixed value
+    private static final int intervalLengthMinutes = 15;
 
     @Autowired
     public TaskPreProcessImp(DateTimeMapper dateTimeMapper, IntervalValueAverageService averageService) {
@@ -37,19 +40,18 @@ public class TaskPreProcessImp implements TaskPreProcess {
         );
 
         TaskDto taskDto = mapToTaskDto(taskCalculationDto, intervals);
-        TaskPostProcessDataDto taskPostProcessDataDto = generateTaskPostProcessData(taskCalculationDto, intervals);
+        TaskPostProcessDataDto taskPostProcessDataDto = generateTaskPostProcessData(taskDto, taskCalculationDto, intervals);
 
         return new PreProcessResult(taskDto, taskPostProcessDataDto);
     }
 
-    private TaskPostProcessDataDto generateTaskPostProcessData(TaskCalculationDto taskCalculationDto, List<Interval> intervals) {
+    private TaskPostProcessDataDto generateTaskPostProcessData(TaskDto taskDto, TaskCalculationDto taskCalculationDto, List<Interval> intervals) {
 
         log.debug("Creating data for post-processing of task with id: {}", taskCalculationDto.getId());
-        TaskPostProcessDataDto.Builder builder = TaskPostProcessDataDto.newBuilder();
-
-        builder.setId(taskCalculationDto.getId());
-        builder.setDateTimeStart(taskCalculationDto.getDateTimeStart());
-        builder.setDateTimeEnd(taskCalculationDto.getDateTimeEnd());
+        TaskPostProcessDataDto.Builder builder = TaskPostProcessDataDto.newBuilder()
+                .setId(taskCalculationDto.getId())
+                .setDateTimeStart(taskCalculationDto.getDateTimeStart())
+                .setDateTimeEnd(taskCalculationDto.getDateTimeEnd());
 
         builder.setIntervals(
                 intervals.stream()
@@ -60,17 +62,34 @@ public class TaskPreProcessImp implements TaskPreProcess {
                         .toList()
         );
 
+        builder.setMovableDemands(
+                taskDto.getMovableDemands().stream()
+                        .map(this::mapMovableDemandToMovableDemandTaskPostProcessDto)
+                        .toList()
+        );
+
         return builder.build();
+    }
+
+    private MovableDemandPostProcessDto mapMovableDemandToMovableDemandTaskPostProcessDto(MovableDemandDto movableDemandDto) {
+
+        return new MovableDemandPostProcessDto(
+                movableDemandDto.getId(),
+                movableDemandDto.getName(),
+                movableDemandDto.getProfile(),
+                movableDemandDto.getProfile().stream()
+                        .map(value -> value * (intervalLengthMinutes / 60.0))
+                        .toList()
+        );
     }
 
     private TaskDto mapToTaskDto(TaskCalculationDto taskCalculationDto, List<Interval> intervals) {
 
         log.debug("Building solver input data from task with id: {}", taskCalculationDto.getId());
-        TaskDto.Builder taskDtoBuilder = TaskDto.newBuilder();
-
-        taskDtoBuilder.setId(taskCalculationDto.getId());
-        taskDtoBuilder.setRelativeGap(1e-10);
-        taskDtoBuilder.setTimeoutSeconds(100L);
+        TaskDto.Builder taskDtoBuilder = TaskDto.newBuilder()
+                .setId(taskCalculationDto.getId())
+                .setRelativeGap(1e-10)
+                .setTimeoutSeconds(100L);
 
         taskDtoBuilder.setIntervals(
                 intervals.stream()
@@ -98,12 +117,17 @@ public class TaskPreProcessImp implements TaskPreProcess {
                 mapTaskProductionDtoListToProductionDto(taskCalculationDto.getProductions(), intervals)
         );
 
+        taskDtoBuilder.setMovableDemands(
+                taskCalculationDto.getMovableDemands().stream()
+                        .map(taskMovableDemandDto -> mapTaskMovableDemandDtoToMovableDemandDto(taskMovableDemandDto, intervals))
+                        .toList()
+        );
+
         return taskDtoBuilder.build();
     }
 
     private List<Interval> buildIntervalList(LocalDateTime taskStart, LocalDateTime taskEnd) {
 
-        int intervalLengthMinutes = 15;
         List<Interval> intervals = new ArrayList<>();
 
         int index = 0;
@@ -403,6 +427,106 @@ public class TaskPreProcessImp implements TaskPreProcess {
             ));
         }
         return demandIntervalValues;
+    }
+
+    private MovableDemandDto mapTaskMovableDemandDtoToMovableDemandDto(TaskMovableDemandDto taskMovableDemandDto, List<Interval> intervals) {
+
+        return new MovableDemandDto(
+                taskMovableDemandDto.getId(),
+                taskMovableDemandDto.getName(),
+                mapMovableDemandValuesToProfile(taskMovableDemandDto.getMovableDemandValues()),
+                mapMovableDemandStartsToIntervals(taskMovableDemandDto.getMovableDemandStarts(), intervals)
+        );
+    }
+
+    private List<Integer> mapMovableDemandStartsToIntervals(List<TaskMovableDemandStartDto> movableDemandStarts, List<Interval> intervals) {
+
+        Set<Integer> uniqueStartIntervals = new HashSet<>();
+
+        for (TaskMovableDemandStartDto movableDemandStart: movableDemandStarts) {
+            for (Interval interval : intervals) {
+                if (isBetweenLeftClosedRange(
+                        dateTimeMapper.mapToLocalDateTime(movableDemandStart.getStart()),
+                        interval.dateTimeStart(),
+                        interval.dateTimeEnd()
+                )) {
+                    uniqueStartIntervals.add(interval.index());
+                    break;
+                }
+            }
+        }
+
+        return uniqueStartIntervals.stream()
+                .sorted(Integer::compareTo)
+                .toList();
+    }
+
+    private List<Double> mapMovableDemandValuesToProfile(List<TaskMovableDemandValueDto> movableDemandValues) {
+
+        long profileLengthInMinutes = movableDemandValues.stream()
+                .map(TaskMovableDemandValueDto::getDurationMinutes)
+                .reduce(0L, Long::sum);
+
+        int numberOfIntervals = (int) Math.ceil((double) profileLengthInMinutes / intervalLengthMinutes);
+        List<Double> result = new ArrayList<>(numberOfIntervals);
+
+        int valueIndex = 0;
+        long currentValueDurationUsed = 0;
+
+        for (int i=0; i<numberOfIntervals; i++) {
+            long intervalTimeLeft = intervalLengthMinutes;
+            boolean intervalFilled = false;
+
+            List<Double> intervalValues = new ArrayList<>();
+            List<Long> intervalValueDuration = new ArrayList<>();
+
+            if (movableDemandValues.get(valueIndex).getDurationMinutes() - currentValueDurationUsed > intervalLengthMinutes) {
+                intervalValues.add(movableDemandValues.get(valueIndex).getValue());
+                intervalValueDuration.add((long) intervalLengthMinutes);
+                currentValueDurationUsed += intervalLengthMinutes;
+                intervalFilled = true;
+            }
+
+            while (!intervalFilled) {
+
+                long currentValueDuration = movableDemandValues.get(valueIndex).getDurationMinutes();
+                intervalValues.add(movableDemandValues.get(valueIndex).getValue());
+
+                if (currentValueDuration - currentValueDurationUsed > intervalTimeLeft) {
+                    intervalValueDuration.add(intervalTimeLeft);
+                    currentValueDurationUsed += intervalTimeLeft;
+                    intervalFilled = true;
+                } else {
+                    intervalValueDuration.add(currentValueDuration - currentValueDurationUsed);
+                    intervalTimeLeft -= currentValueDuration - currentValueDurationUsed;
+                    currentValueDurationUsed = 0;
+                    valueIndex += 1;
+                }
+
+                if (valueIndex >= movableDemandValues.size()) {
+                    intervalValues.add(0.0);
+                    intervalValueDuration.add(intervalTimeLeft);
+                    intervalFilled = true;
+                }
+            }
+
+            result.add(weightedAverage(intervalValues, intervalValueDuration));
+        }
+
+        return result;
+    }
+
+    private double weightedAverage(List<Double> values, List<Long> weights) {
+
+        double weightedSum = 0;
+        double sumOfWeights = 0;
+
+        for (int i=0; i<values.size(); i++) {
+            weightedSum += values.get(i) * weights.get(i);
+            sumOfWeights += weights.get(i);
+        }
+
+        return weightedSum / sumOfWeights;
     }
 
     private ProductionDto mapTaskProductionDtoListToProductionDto(List<TaskProductionDto> productions, List<Interval> intervals) {
