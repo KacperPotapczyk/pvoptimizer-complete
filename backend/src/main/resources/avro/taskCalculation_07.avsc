@@ -19,6 +19,24 @@
       "doc": "Task end date and time"
     },
     {
+      "name": "timeOutInSeconds",
+      "type": "long",
+      "doc": "Maximum allowed optimization time",
+      "default": 60
+    },
+    {
+      "name": "relativeGap",
+      "type": "double",
+      "doc": "Relative gap between linear solution and best integer solution that stops optimization",
+      "default": 0.1
+    },
+    {
+      "name": "intervalLengthMinutes",
+      "type": "long",
+      "doc": "Task interval length in minutes",
+      "default": 15
+    },
+    {
       "name": "contracts",
       "doc": "List of electricity purchase and sell contracts.",
       "type": {

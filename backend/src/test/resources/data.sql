@@ -314,8 +314,8 @@ INSERT INTO movable_demand_value(revision_id, value_order, duration, demand) VAL
 
 
 ------------------------------------------------------------------------ Tasks
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #1
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('queryOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #1
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_production_revisions(task_id, revision_id) VALUES(1, 1);
@@ -326,60 +326,60 @@ INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(1, 1);
 INSERT INTO task_movable_demand_revisions(task_id, revision_id) VALUES(1, 10);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('readOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #2
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('readOnly', '2023-12-24T14:00:00', '2023-12-24T17:00:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #2
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(2, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(2, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(2, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('toBeDeleted', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #3
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('toBeDeleted', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #3
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(3, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(3, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(3, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('toBeDeletedHttpRequest', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #4
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('toBeDeletedHttpRequest', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #4
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(4, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(4, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(4, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('toBeUpdatedHttpRequest', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #5
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('toBeUpdatedHttpRequest', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #5
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(5, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('sendToCompute', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #6
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('sendToCompute', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #6
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(6, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(6, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(6, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('sendToComputeHttpRequest', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #7
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('sendToComputeHttpRequest', '2023-12-24T14:00:00', '2023-12-24T17:00:00', FALSE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #7
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(7, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('toCreateResults', '2023-12-24T14:00:00', '2023-12-24T17:00:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #8
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('toCreateResults', '2023-12-24T14:00:00', '2023-12-24T17:00:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #8
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('toAddValidationMessage', '2023-12-24T14:00:00', '2023-12-24T17:00:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #9
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('toAddValidationMessage', '2023-12-24T14:00:00', '2023-12-24T17:00:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #9
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('toAddCalculationResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #10
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('toAddCalculationResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #10
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(10, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(10, 1);
@@ -388,39 +388,39 @@ INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(10, 1);
 INSERT INTO task_movable_demand_revisions(task_id, revision_id) VALUES(10, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('addResultToValidationError', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #11
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('addResultToValidationError', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #11
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(11, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(11, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(11, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('addResultSolutionNotFound', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #12
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('addResultSolutionNotFound', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #12
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(12, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(12, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(12, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('getTaskResultWithContractResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #13
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('getTaskResultWithContractResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #13
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(13, 1);
 INSERT INTO task_tariff_revisions(task_id, revision_id) VALUES(13, 1);
 INSERT INTO task_contract_revisions(task_id, revision_id) VALUES(13, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('getTaskResultWithStorageResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #14
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('getTaskResultWithStorageResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #14
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(14, 1);
 INSERT INTO task_storage_revisions(task_id, revision_id) VALUES(14, 1);
 
 
-INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time)
-            VALUES('getTaskResultWithMovableDemandResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00'); -- Task #15
+INSERT INTO task(name, date_time_start, date_time_end, read_only, created_date_time, update_date_time, timeout_seconds, relative_gap, interval_length_minutes)
+            VALUES('getTaskResultWithMovableDemandResult', '2023-01-01T10:00:00', '2023-01-01T10:30:00', TRUE, '2023-12-23T17:00:00', '2023-12-23T17:00:00', 60, 0.01, 15); -- Task #15
 
 INSERT INTO task_demand_revisions(task_id, revision_id) VALUES(15, 1);
 INSERT INTO task_movable_demand_revisions(task_id, revision_id) VALUES(15, 1);

@@ -41,6 +41,15 @@ public class Task {
     @Column(name = "read_only", nullable = false, columnDefinition = "boolean default false")
     private boolean readOnly;
 
+    @Column(name = "timeout_seconds", nullable = false)
+    private long timeOutInSeconds;
+
+    @Column(name = "relative_gap", nullable = false)
+    private double relativeGap;
+
+    @Column(name = "interval_length_minutes", nullable = false)
+    private long intervalLengthMinutes;
+
     @Column(name = "created_date_time")
     @CreationTimestamp
     private LocalDateTime createdDateTime;
@@ -73,10 +82,13 @@ public class Task {
     @JoinTable(name = "task_movable_demand_revisions", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "revision_id"))
     private Set<MovableDemandRevision> movableDemandRevisions;
 
-    public Task(String name, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd) {
+    public Task(String name, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd, long timeOutInSeconds, double relativeGap, long intervalLengthMinutes) {
         this.name = name;
         this.dateTimeStart = dateTimeStart;
         this.dateTimeEnd = dateTimeEnd;
+        this.timeOutInSeconds = timeOutInSeconds;
+        this.relativeGap = relativeGap;
+        this.intervalLengthMinutes = intervalLengthMinutes;
     }
     public void addDemandRevision(DemandRevision demandRevision) {
 

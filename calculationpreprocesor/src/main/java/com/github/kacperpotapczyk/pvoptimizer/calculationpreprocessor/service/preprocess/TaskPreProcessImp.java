@@ -21,8 +21,6 @@ public class TaskPreProcessImp implements TaskPreProcess {
 
     private final DateTimeMapper dateTimeMapper;
     private final IntervalValueAverageService averageService;
-    // TODO add as task parameter not fixed value
-    private static final int intervalLengthMinutes = 15;
 
     @Autowired
     public TaskPreProcessImp(DateTimeMapper dateTimeMapper, IntervalValueAverageService averageService) {
@@ -34,7 +32,9 @@ public class TaskPreProcessImp implements TaskPreProcess {
     public PreProcessResult preProcess(TaskCalculationDto taskCalculationDto) {
 
         log.debug("Pre-processing task with id: {}", taskCalculationDto.getId());
+
         List<Interval> intervals = buildIntervalList(
+                taskCalculationDto.getIntervalLengthMinutes(),
                 dateTimeMapper.mapToLocalDateTime(taskCalculationDto.getDateTimeStart()),
                 dateTimeMapper.mapToLocalDateTime(taskCalculationDto.getDateTimeEnd())
         );
@@ -64,21 +64,24 @@ public class TaskPreProcessImp implements TaskPreProcess {
 
         builder.setMovableDemands(
                 taskDto.getMovableDemands().stream()
-                        .map(this::mapMovableDemandToMovableDemandTaskPostProcessDto)
+                        .map(movableDemandDto -> mapMovableDemandToMovableDemandTaskPostProcessDto(
+                                taskCalculationDto.getIntervalLengthMinutes(),
+                                movableDemandDto
+                        ))
                         .toList()
         );
 
         return builder.build();
     }
 
-    private MovableDemandPostProcessDto mapMovableDemandToMovableDemandTaskPostProcessDto(MovableDemandDto movableDemandDto) {
+    private MovableDemandPostProcessDto mapMovableDemandToMovableDemandTaskPostProcessDto(long intervalLengthInMinutes, MovableDemandDto movableDemandDto) {
 
         return new MovableDemandPostProcessDto(
                 movableDemandDto.getId(),
                 movableDemandDto.getName(),
                 movableDemandDto.getProfile(),
                 movableDemandDto.getProfile().stream()
-                        .map(value -> value * (intervalLengthMinutes / 60.0))
+                        .map(value -> value * (intervalLengthInMinutes / 60.0))
                         .toList()
         );
     }
@@ -88,8 +91,8 @@ public class TaskPreProcessImp implements TaskPreProcess {
         log.debug("Building solver input data from task with id: {}", taskCalculationDto.getId());
         TaskDto.Builder taskDtoBuilder = TaskDto.newBuilder()
                 .setId(taskCalculationDto.getId())
-                .setRelativeGap(1e-10)
-                .setTimeoutSeconds(100L);
+                .setRelativeGap(taskCalculationDto.getRelativeGap())
+                .setTimeoutSeconds(taskCalculationDto.getTimeOutInSeconds());
 
         taskDtoBuilder.setIntervals(
                 intervals.stream()
@@ -119,31 +122,35 @@ public class TaskPreProcessImp implements TaskPreProcess {
 
         taskDtoBuilder.setMovableDemands(
                 taskCalculationDto.getMovableDemands().stream()
-                        .map(taskMovableDemandDto -> mapTaskMovableDemandDtoToMovableDemandDto(taskMovableDemandDto, intervals))
+                        .map(taskMovableDemandDto -> mapTaskMovableDemandDtoToMovableDemandDto(
+                                taskCalculationDto.getIntervalLengthMinutes(),
+                                taskMovableDemandDto,
+                                intervals
+                        ))
                         .toList()
         );
 
         return taskDtoBuilder.build();
     }
 
-    private List<Interval> buildIntervalList(LocalDateTime taskStart, LocalDateTime taskEnd) {
+    private List<Interval> buildIntervalList(long intervalLengthInMinutes, LocalDateTime taskStart, LocalDateTime taskEnd) {
 
         List<Interval> intervals = new ArrayList<>();
 
         int index = 0;
         LocalDateTime currentDateTimeStart = taskStart;
-        LocalDateTime currentDateTimeEnd = taskStart.plusMinutes(intervalLengthMinutes);
+        LocalDateTime currentDateTimeEnd = taskStart.plusMinutes(intervalLengthInMinutes);
 
         while (currentDateTimeEnd.isBefore(taskEnd)) {
             intervals.add(new Interval(
                     index,
                     currentDateTimeStart,
                     currentDateTimeEnd,
-                    Duration.of(intervalLengthMinutes, ChronoUnit.MINUTES)
+                    Duration.of(intervalLengthInMinutes, ChronoUnit.MINUTES)
             ));
             index++;
             currentDateTimeStart = currentDateTimeEnd;
-            currentDateTimeEnd = currentDateTimeEnd.plusMinutes(intervalLengthMinutes);
+            currentDateTimeEnd = currentDateTimeEnd.plusMinutes(intervalLengthInMinutes);
         }
 
         if (currentDateTimeStart.isBefore(taskEnd)) {
@@ -429,12 +436,16 @@ public class TaskPreProcessImp implements TaskPreProcess {
         return demandIntervalValues;
     }
 
-    private MovableDemandDto mapTaskMovableDemandDtoToMovableDemandDto(TaskMovableDemandDto taskMovableDemandDto, List<Interval> intervals) {
+    private MovableDemandDto mapTaskMovableDemandDtoToMovableDemandDto(
+            long intervalLengthInMinutes,
+            TaskMovableDemandDto taskMovableDemandDto,
+            List<Interval> intervals
+    ) {
 
         return new MovableDemandDto(
                 taskMovableDemandDto.getId(),
                 taskMovableDemandDto.getName(),
-                mapMovableDemandValuesToProfile(taskMovableDemandDto.getMovableDemandValues()),
+                mapMovableDemandValuesToProfile(intervalLengthInMinutes, taskMovableDemandDto.getMovableDemandValues()),
                 mapMovableDemandStartsToIntervals(taskMovableDemandDto.getMovableDemandStarts(), intervals)
         );
     }
@@ -461,29 +472,29 @@ public class TaskPreProcessImp implements TaskPreProcess {
                 .toList();
     }
 
-    private List<Double> mapMovableDemandValuesToProfile(List<TaskMovableDemandValueDto> movableDemandValues) {
+    private List<Double> mapMovableDemandValuesToProfile(long intervalLengthInMinutes, List<TaskMovableDemandValueDto> movableDemandValues) {
 
         long profileLengthInMinutes = movableDemandValues.stream()
                 .map(TaskMovableDemandValueDto::getDurationMinutes)
                 .reduce(0L, Long::sum);
 
-        int numberOfIntervals = (int) Math.ceil((double) profileLengthInMinutes / intervalLengthMinutes);
+        int numberOfIntervals = (int) Math.ceil((double) profileLengthInMinutes / intervalLengthInMinutes);
         List<Double> result = new ArrayList<>(numberOfIntervals);
 
         int valueIndex = 0;
         long currentValueDurationUsed = 0;
 
         for (int i=0; i<numberOfIntervals; i++) {
-            long intervalTimeLeft = intervalLengthMinutes;
+            long intervalTimeLeft = intervalLengthInMinutes;
             boolean intervalFilled = false;
 
             List<Double> intervalValues = new ArrayList<>();
             List<Long> intervalValueDuration = new ArrayList<>();
 
-            if (movableDemandValues.get(valueIndex).getDurationMinutes() - currentValueDurationUsed > intervalLengthMinutes) {
+            if (movableDemandValues.get(valueIndex).getDurationMinutes() - currentValueDurationUsed > intervalLengthInMinutes) {
                 intervalValues.add(movableDemandValues.get(valueIndex).getValue());
-                intervalValueDuration.add((long) intervalLengthMinutes);
-                currentValueDurationUsed += intervalLengthMinutes;
+                intervalValueDuration.add(intervalLengthInMinutes);
+                currentValueDurationUsed += intervalLengthInMinutes;
                 intervalFilled = true;
             }
 
