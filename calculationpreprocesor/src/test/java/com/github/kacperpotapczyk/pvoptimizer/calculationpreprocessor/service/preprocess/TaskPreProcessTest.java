@@ -45,6 +45,8 @@ class TaskPreProcessTest {
         for (Double interval : taskDto.getIntervals()) {
             assertEquals(0.25, interval);
         }
+        assertEquals(60, taskDto.getTimeoutSeconds());
+        assertEquals(0.01, taskDto.getRelativeGap());
 
         assertEquals(2, taskDto.getDemand().getDemandProfile().size());
         List<Double> demandProfile = taskDto.getDemand().getDemandProfile();
@@ -74,6 +76,8 @@ class TaskPreProcessTest {
         for (Double interval : taskDto.getIntervals()) {
             assertEquals(0.25, interval);
         }
+        assertEquals(60, taskDto.getTimeoutSeconds());
+        assertEquals(0.01, taskDto.getRelativeGap());
 
         assertEquals(2, taskDto.getDemand().getDemandProfile().size());
         List<Double> demandProfile = taskDto.getDemand().getDemandProfile();
@@ -102,6 +106,9 @@ class TaskPreProcessTest {
         for (Double interval : taskDto.getIntervals()) {
             assertEquals(0.25, interval);
         }
+        assertEquals(300, taskDto.getTimeoutSeconds());
+        assertEquals(0.1, taskDto.getRelativeGap());
+
         assertEquals(2, taskDto.getDemand().getDemandProfile().size());
 
         assertEquals(2, taskDto.getProduction().getProductionProfile().size());

@@ -2,6 +2,9 @@
   "id": 4,
   "dateTimeStart": "2023-01-01T10:00",
   "dateTimeEnd": "2023-01-01T10:30",
+  "timeOutInSeconds": 60,
+  "relativeGap": 0.01,
+  "intervalLengthMinutes": 15,
   "contracts": [
     {
       "id": 1,
