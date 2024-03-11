@@ -62,7 +62,11 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("tariffRevisions", hasSize(1)))
                 .andExpect(jsonPath("contractRevisions", hasSize(2)))
                 .andExpect(jsonPath("dateTimeStart", is("2023-12-24T14:00:00")))
-                .andExpect(jsonPath("dateTimeEnd", is("2023-12-24T17:00:00")));
+                .andExpect(jsonPath("dateTimeEnd", is("2023-12-24T17:00:00")))
+                .andExpect(jsonPath("readOnly", is(false)))
+                .andExpect(jsonPath("timeOutInSeconds", is(60)))
+                .andExpect(jsonPath("relativeGap", is(0.01)))
+                .andExpect(jsonPath("intervalLengthMinutes", is(15)));
     }
 
     @Test
@@ -296,7 +300,7 @@ public class TaskControllerTest {
         Set<TaskBaseObjectRevisionDto> contractRevisionsDto = new HashSet<>();
         contractRevisionsDto.add(new TaskBaseObjectRevisionDto("queryOnly", 1));
 
-        return new TaskDto(taskName, dateTimeStart, dateTimeEnd,
+        return new TaskDto(taskName, dateTimeStart, dateTimeEnd, false, 300, 0.01, 15,
                 demandRevisionsDto,
                 Collections.emptySet(),
                 Collections.emptySet(),

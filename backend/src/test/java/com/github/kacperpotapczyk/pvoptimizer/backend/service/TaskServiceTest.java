@@ -46,6 +46,9 @@ public class TaskServiceTest {
         String taskName = "New task 1";
         LocalDateTime dateTimeStart = LocalDateTime.parse("2023-10-05T11:00:00");
         LocalDateTime dateTimeEnd = LocalDateTime.parse("2023-10-05T23:00:00");
+        long timeOut = 45;
+        double relativeGap = 0.01;
+        long intervalLength = 15;
 
         ContractRevision contractRevision = contractService.getBaseObjectRevision("queryOnly", 1);
         TariffRevision tariffRevision = tariffService.getBaseObjectRevision("queryOnly", 1);
@@ -53,7 +56,7 @@ public class TaskServiceTest {
         DemandRevision demandRevision2 = demandService.getBaseObjectRevision("addRevisionTest", 1);
         ProductionRevision productionRevision = productionService.getBaseObjectRevision("queryOnly", 1);
 
-        Task task = new Task(taskName, dateTimeStart, dateTimeEnd);
+        Task task = new Task(taskName, dateTimeStart, dateTimeEnd, timeOut, relativeGap, intervalLength);
         task.addContractRevision(contractRevision);
         task.addTariffRevision(tariffRevision);
         task.addDemandRevision(demandRevision1);
@@ -74,6 +77,9 @@ public class TaskServiceTest {
         assertEquals(dateTimeStart, dbTask.getDateTimeStart());
         assertEquals(dateTimeEnd, dbTask.getDateTimeEnd());
         assertFalse(dbTask.isReadOnly());
+        assertEquals(timeOut, dbTask.getTimeOutInSeconds());
+        assertEquals(relativeGap, dbTask.getRelativeGap());
+        assertEquals(intervalLength, dbTask.getIntervalLengthMinutes());
     }
 
     @Test
@@ -83,8 +89,11 @@ public class TaskServiceTest {
         String taskName = "Task to be updated";
         LocalDateTime dateTimeStart = LocalDateTime.parse("2023-10-05T11:00:00");
         LocalDateTime dateTimeEnd = LocalDateTime.parse("2023-10-05T23:00:00");
+        long timeOut = 45;
+        double relativeGap = 0.01;
+        long intervalLength = 15;
 
-        Task task = new Task(taskName, dateTimeStart, dateTimeEnd);
+        Task task = new Task(taskName, dateTimeStart, dateTimeEnd, timeOut, relativeGap, intervalLength);
 
         taskService.newTask(task);
 

@@ -51,6 +51,9 @@ public abstract class TaskCalculationMapper {
                 task.getId(),
                 dateTimeMapper.dateTimeAsCharSequence(taskDateTimeStart),
                 dateTimeMapper.dateTimeAsCharSequence(task.getDateTimeEnd()),
+                task.getTimeOutInSeconds(),
+                task.getRelativeGap(),
+                task.getIntervalLengthMinutes(),
                 task.getContractRevisions().stream()
                         .map(contractRevision -> this.mapContractRevisionToTaskContractDto(contractRevision, taskDateTimeStart, taskDateTimeEnd))
                         .toList(),
